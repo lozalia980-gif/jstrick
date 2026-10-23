@@ -7,7 +7,7 @@
       code: '<h1>Hola, mundo</h1>\n<p>Mi primera <b>página</b>.</p>\n<a href="https://js-trick.dev">Visitar</a>', out: 'Hola, mundo' },
     css:    { ex: 10, xs: 10, q: 8, topics: ['Selectores y colores', 'Caja: margen y relleno', 'Flexbox', 'Animaciones'], file: 'style.css', lang: 'css', run: 'Se ve en la pantalla',
       code: '.boton {\n  background: #61afef;\n  border-radius: 12px;\n  padding: 10px 18px;\n}', out: 'botón azul redondeado' },
-    js:     { ex: 71, xs: 30, q: 6, topics: ['Repaso de bases', 'JSON y Web Storage', 'AJAX', 'jQuery y Angular'], file: 'app.js', lang: 'js', run: 'Se ejecuta de verdad',
+    js:     { ex: 81, xs: 40, q: 14, topics: ['Repaso de bases', 'JSON y AJAX', 'jQuery y Angular', 'JavaScript moderno'], file: 'app.js', lang: 'js', run: 'Se ejecuta de verdad',
       code: 'const alumno = { nombre: "Ana", edad: 20 };\nconst texto = JSON.stringify(alumno);\nconsole.log(texto);', out: '{"nombre":"Ana","edad":20}' },
     python: { ex: 20, xs: 20, q: 16, topics: ['Variables y tipos', 'Listas y bucles', 'Excepciones y archivos', 'Clases y herencia'], file: 'main.py', lang: 'py', run: 'Se ejecuta de verdad',
       code: 'nombres = ["Ana", "Luis", "Eva"]\nfor n in nombres:\n    print("Hola,", n)', out: 'Hola, Ana\nHola, Luis\nHola, Eva' },

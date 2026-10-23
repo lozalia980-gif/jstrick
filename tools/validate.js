@@ -35,7 +35,7 @@ JT.topics.forEach(t => {
   t.exercises.forEach((xs, i) => {
     const w = t.id + ' ejercicio ' + (i + 1) + ' (' + xs.title + ')';
     checked++;
-    if (xs.steps.length < (t.track && t.track !== 'js' ? 2 : 4)) bad(w, 'pocos pasos');
+    if (xs.steps.length < (t.compact ? 2 : 4)) bad(w, 'pocos pasos');
     const files = Object.assign({}, xs.base || {});
     xs.steps.forEach((s, k) => {
       const sw = w + ' paso ' + (k + 1);

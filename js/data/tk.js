@@ -26,7 +26,7 @@
     if (lang === 'sql') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(),=<>*+\-\/.]) ?/g, '$1').replace(/;+$/, '').replace(/"/g, "'").split(/('[^']*')/).map(function (x, i) { return i % 2 ? x : x.toLowerCase(); }).join('');
     if (lang === 'html') return s.replace(/\s+/g, ' ').trim().replace(/ ?([<>=\/]) ?/g, '$1').replace(/"/g, "'").toLowerCase();
     if (lang === 'css') return s.replace(/\s+/g, ' ').trim().replace(/ ?([{}:;,>+~]) ?/g, '$1').replace(/;}/g, '}').replace(/;$/, '').replace(/"/g, "'").toLowerCase();
-    if (lang === 'tsc' || lang === 'jsx' || lang === 'node') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1').replace(/"|`/g, "'").replace(/;/g, '').replace(/,(?=[)\]}])/g, '');
+    if (lang === 'tsc' || lang === 'jsx' || lang === 'node' || lang === 'js') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1').replace(/"|`/g, "'").replace(/;/g, '').replace(/,(?=[)\]}])/g, '');
     if (lang === 'php') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1').replace(/"/g, "'");
     return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1');
   }
@@ -48,7 +48,7 @@
     var tr = JT.track(o.track), lang = tr.kind === 'term' ? tr.lang : null, term = tr.kind === 'term';
     var t = {
       id: o.id, num: o.num, badge: o.badge, track: o.track, kind: tr.kind, guide: o.guide || tr.name, title: o.title, short: o.short, color: o.color || tr.color,
-      summary: o.summary, seed: o.seed, lib: null,
+      summary: o.summary, seed: o.seed, lib: null, compact: true,
       theory: o.theory.map(function (x) { return { icon: x[0], h: x[1], html: x[2], code: x[3], analogy: x[4] }; }),
       examples: o.ex.map(function (e, i) {
         return { id: o.id + 'e' + (i + 1), title: e.t, short: e.s, lib: null, intro: e.i, parts: mkParts(lang, e.p, o.tight), out: e.out, stdin: e.stdin, notes: e.notes, tryit: e.tryit || [] };
