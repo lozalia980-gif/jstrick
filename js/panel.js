@@ -65,7 +65,7 @@
     { id: 'practitioner', name: 'Practicante', desc: 'Completa 25 ejercicios guiados.', icon: 'target', test: function (T) { return T.xs >= 25; } },
     { id: 'streak3', name: 'Constancia', desc: 'Estudia 3 días seguidos.', icon: 'bolt', test: function () { return JT.streak() >= 3; } },
     { id: 'streak7', name: 'Imparable', desc: 'Estudia 7 días seguidos.', icon: 'bolt', test: function () { return JT.streak() >= 7; } },
-    { id: 'poly', name: 'Políglota', desc: 'Empieza 3 lenguajes distintos.', icon: 'layers', test: function (T) { return T.tracksStarted >= 3; } },
+    { id: 'poly', name: 'Políglota', desc: 'Empieza 3 cursos distintos.', icon: 'layers', test: function (T) { return T.tracksStarted >= 3; } },
     { id: 'master', name: 'Maestro de un lenguaje', desc: 'Completa al 100% un lenguaje.', icon: 'award', test: function () { return JT.tracks.some(function (tr) { var s = trackStats(tr.id); return s.total && s.done >= s.total; }); } },
     { id: 'nohelp', name: 'Sin muletas', desc: 'Termina un ejercicio sin ver la solución.', icon: 'lock', test: function () { return drafts(function (d) { return d.done && !(d.helped || []).some(Boolean); }); } },
     { id: 'perfect', name: 'Reto perfecto', desc: 'Contesta bien todo un reto rápido.', icon: 'star', test: function () { return JT.topics.some(function (t) { return (t.quiz || []).length && (JT.state.quiz[t.id] || 0) >= t.quiz.length; }); } },
@@ -165,7 +165,7 @@
     }
     h += '</div>';
 
-    h += '<div class="sectiontitle">' + ic('layers') + '<h2 style="margin:0">Mis lenguajes</h2><a class="btn sm" style="margin-left:auto" href="#/cursos">Ver todos</a></div><div class="grid g3">' +
+    h += '<div class="sectiontitle">' + ic('layers') + '<h2 style="margin:0">Mis cursos</h2><a class="btn sm" style="margin-left:auto" href="#/cursos">Ver todos</a></div><div class="grid g3">' +
       JT.tracks.map(function (tr) {
         var s = trackStats(tr.id), has = topicsOf(tr.id).length, n = has ? nextInTrack(tr.id) : null;
         return '<a class="card trackcard" href="' + (has ? '#/curso/' + tr.id : '#/cursos') + '" style="--c:' + tr.color + '">' + ring(s.pct, tr.color, 64) + '<div><h3>' + esc(tr.name) + '</h3><div class="muted sm">' + s.ex + '/' + s.exTotal + ' ejemplos · ' + s.xs + '/' + s.xsTotal + ' ejercicios</div><div class="muted sm">' + (n ? 'Sigue: ' + esc(n.title.slice(0, 38)) : s.total ? '¡Completado!' : 'Próximamente') + '</div></div></a>';
@@ -194,8 +194,8 @@
 
   /* ============================== CATÁLOGO ============================== */
   JT.pages.cursos = function (view) {
-    document.title = 'js-trick | Lenguajes';
-    var h = '<div class="crumbs"><a href="#/panel">Mi panel</a>' + ic('right') + '<b>Lenguajes</b></div><div class="thead"><div><h1>Elige tu lenguaje</h1><p>Cada tema tiene conceptos, ejemplos con su desglose, un ejercicio guiado después de cada ejemplo y un reto rápido.</p></div></div><div class="grid g3">' +
+    document.title = 'js-trick | Cursos';
+    var h = '<div class="crumbs"><a href="#/panel">Mi panel</a>' + ic('right') + '<b>Cursos</b></div><div class="thead"><div><h1>Elige tu curso</h1><p>Cada curso tiene conceptos, lecciones (ejemplo con su desglose) con un ejercicio guiado después de cada una y un reto rápido.</p></div></div><div class="grid g3">' +
       JT.tracks.map(function (tr) {
         var ts = topicsOf(tr.id), s = trackStats(tr.id), has = ts.length;
         return '<a class="card catcard" href="' + (has ? '#/curso/' + tr.id : '#/cursos') + '" style="--c:' + tr.color + '"><div class="cc-top"><span class="cc-ic" style="background:' + tr.color + '">' + ic(tr.icon) + '</span><div><h3>' + esc(tr.name) + '</h3><span class="badge">' + (has ? ts.length + ' módulo' + (ts.length > 1 ? 's' : '') : 'Próximamente') + '</span></div></div><p>' + esc(tr.tagline) + '</p><p class="muted sm">' + esc(tr.why) + '</p><div class="meta"><span>' + s.exTotal + ' ejemplos</span><span>' + s.xsTotal + ' ejercicios</span></div><div class="prog"><i style="width:' + s.pct + '%;background:' + tr.color + '"></i></div></a>';
@@ -208,7 +208,7 @@
   JT.pages.curso = function (view, id) {
     var tr = JT.track(id), ts = topicsOf(id), s = trackStats(id), nx = nextInTrack(id);
     document.title = 'js-trick | ' + tr.name;
-    var h = '<div class="crumbs"><a href="#/panel">Mi panel</a>' + ic('right') + '<a href="#/cursos">Lenguajes</a>' + ic('right') + '<b>' + esc(tr.name) + '</b></div>' +
+    var h = '<div class="crumbs"><a href="#/panel">Mi panel</a>' + ic('right') + '<a href="#/cursos">Cursos</a>' + ic('right') + '<b>' + esc(tr.name) + '</b></div>' +
       '<div class="track-hero" style="--c:' + tr.color + '"><span class="cc-ic big" style="background:' + tr.color + '">' + ic(tr.icon) + '</span><div><h1>' + esc(tr.name) + '</h1><p>' + esc(tr.tagline) + '</p><p class="muted">' + esc(tr.why) + '</p></div>' + ring(s.pct, tr.color, 84) + '</div>' +
       (nx ? '<div style="margin:14px 0"><a class="btn primary" href="' + nx.hash + '">' + ic('play') + (s.done ? 'Continuar: ' : 'Empezar: ') + esc(nx.title) + '</a></div>' : '') +
       '<div class="sectiontitle">' + ic('layers') + '<h2 style="margin:0">Módulos</h2></div><div class="list">' +
