@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>runall</title></head>
+<body style="font:13px monospace;background:#111;color:#ddd">
+<pre id="out">ejecutando...</pre>
+<iframe id="f" style="width:600px;height:400px;background:#fff"></iframe>
+<script src="../js/core.js"></script>
+<script src="../js/highlight.js"></script>
+<script src="../js/glossary1.js"></script>
+<script src="../js/glossary2.js"></script>
+<script src="../js/linter.js"></script>
+<script src="../js/lib-prelude.js"></script>
+<script src="../js/lib-jquery.js"></script>
+<script src="../js/lib-angular.js"></script>
+<script src="../js/sandbox.js"></script>
+<script src="../js/data/t0.js"></script>
+<script src="../js/data/t8.js"></script>
+<script src="../js/data/t9.js"></script>
+<script src="../js/data/t10.js"></script>
+<script src="../js/data/t11.js"></script>
+<script src="../js/data/t12.js"></script>
+<script>
+var MARK = 'tu c\u00f3digo aqu\u00ed';
+function strip(files){ var o={}; Object.keys(files).forEach(function(k){ o[k]=String(files[k]).split('\n').filter(function(l){return l.indexOf(MARK)<0;}).join('\n'); }); return o; }
+function finalFiles(xs){
+  var files = Object.assign({}, xs.base||{});
+  xs.steps.forEach(function(s){
+    var text = s.type==='blank' ? s.tpl.replace(/\[\[([\s\S]*?)\]\]/g,function(m,a){return a.split('|')[0].trim();}) : s.sol;
+    var k=s.file||'js', pad=new Array((s.indent||0)+1).join('  '), lines=text.split('\n').map(function(l){return l.trim()?pad+l:l;});
+    var cur=files[k]==null?'':files[k], ls=cur===''?[]:cur.split('\n'), at=-1;
+    for (var i=0;i<ls.length;i++) if (ls[i].indexOf(MARK)>=0 && (!s.at || ls[i].indexOf(s.at)>=0)) { at=i; break; }
+    if (at>=0) ls.splice.apply(ls,[at,0].concat(lines)); else ls=ls.concat(lines);
+    files[k]=ls.join('\n');
+  });
+  return strip(files);
+}
+var jobs=[];
+JT.topics.forEach(function(t){
+  t.examples.forEach(function(e,i){ jobs.push({name:t.id+' e'+(i+1)+' '+e.title, kind:t.kind||'web', lib:e.lib||t.lib, files:JT.filesFromParts(e.parts)}); });
+  t.exercises.forEach(function(x,i){ jobs.push({name:t.id+' x'+(i+1)+' '+x.title, kind:t.kind||'web', lib:x.lib||t.lib, files:finalFiles(x)}); });
+});
+var only = (location.search.match(/only=([\w]+)/)||[])[1];
+if (only) jobs = jobs.filter(function(j){ return j.name.indexOf(only)===0; });
+var res=[], cur=null, iframe=document.getElementById('f');
+var sb = new JT.Sandbox(iframe, function(m){ if(!cur) return; if(m.type==='error') cur.errors.push((m.name||'')+': '+m.message+' (l.'+m.line+')'); else if(m.type==='log'&&m.level==='error') cur.consoleErr.push(m.text); else if (m.type==='log') cur.logs++; });
+function next(i){
+  if(i>=jobs.length){ document.getElementById('out').textContent = JSON.stringify(res,null,1); window.__done=true; return; }
+  var j=jobs[i]; cur={name:j.name,errors:[],consoleErr:[],logs:0,len:0};
+  sb.run({kind:j.kind,lib:j.lib,files:j.files});
+  var wait = /lento/.test(JSON.stringify(j.files)) ? 3300 : 1300;
+  setTimeout(function(){ try{ cur.len = iframe.contentDocument.body.innerText.trim().length; }catch(e){ cur.len=-1; } res.push(cur); document.getElementById('out').textContent='ejecutando '+(i+1)+'/'+jobs.length; next(i+1); }, wait);
+}
+next(0);
+</script></body></html>
