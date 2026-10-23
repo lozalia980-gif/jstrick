@@ -23,14 +23,15 @@
     return function (code, why) { return { f: f, code: code.replace(/^\n/, '').replace(/\s+$/, ''), why: why || '' }; };
   };
   JT.H = mk('html'); JT.C = mk('css'); JT.J = mk('js'); JT.T = mk('ts'); JT.M = mk('mod');
-  JT.FILE_NAMES = { html: 'HTML', css: 'CSS', js: 'JavaScript', ts: 'Componente (.ts)', mod: 'app.module.ts' };
-  JT.FILE_EXT = { html: 'index.html', css: 'estilos.css', js: 'script.js', ts: 'app.component.ts', mod: 'app.module.ts' };
-  JT.FILE_COLOR = { html: '#e06c75', css: '#56b6c2', js: '#e5c07b', ts: '#61afef', mod: '#c678dd' };
+  JT.PY = mk('py'); JT.SQL = mk('sql'); JT.PHP = mk('php'); JT.CC = mk('c'); JT.CPP = mk('cpp'); JT.CS = mk('cs');
+  JT.FILE_NAMES = { html: 'HTML', css: 'CSS', js: 'JavaScript', ts: 'Componente (.ts)', mod: 'app.module.ts', py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#' };
+  JT.FILE_EXT = { html: 'index.html', css: 'estilos.css', js: 'script.js', ts: 'app.component.ts', mod: 'app.module.ts', py: 'main.py', sql: 'consulta.sql', php: 'index.php', c: 'main.c', cpp: 'main.cpp', cs: 'Program.cs' };
+  JT.FILE_COLOR = { html: '#e06c75', css: '#56b6c2', js: '#e5c07b', ts: '#61afef', mod: '#c678dd', py: '#61afef', sql: '#c678dd', php: '#8892bf', c: '#7f8ea3', cpp: '#d19a66', cs: '#98c379' };
 
   /* arma los archivos completos a partir de las partes de un ejemplo */
   JT.filesFromParts = function (parts) {
     var out = {};
-    parts.forEach(function (p) { out[p.f] = (out[p.f] ? out[p.f] + '\n\n' : '') + p.code; });
+    parts.forEach(function (p) { out[p.f] = (out[p.f] ? out[p.f] + (p.tight ? '\n' : '\n\n') : '') + p.code; });
     return out;
   };
 
@@ -60,7 +61,7 @@
 
   /* ---------- estado persistente ---------- */
   var KEY = 'jstrick:estado:v1';
-  JT.state = { done: {}, xp: 0, drafts: {}, quiz: {}, helped: {} };
+  JT.state = { done: {}, xp: 0, drafts: {}, quiz: {}, helped: {}, profile: { name: '', color: '#61afef' }, activity: {}, badges: {}, daily: {} };
   JT.loadState = function () {
     try {
       var raw = localStorage.getItem(KEY);
@@ -71,7 +72,7 @@
     try { localStorage.setItem(KEY, JSON.stringify(JT.state)); } catch (e) { /* ignorar */ }
   };
   JT.resetState = function () {
-    JT.state = { done: {}, xp: 0, drafts: {}, quiz: {}, helped: {} };
+    JT.state = { done: {}, xp: 0, drafts: {}, quiz: {}, helped: {}, profile: { name: '', color: '#61afef' }, activity: {}, badges: {}, daily: {} };
     JT.saveState();
   };
 
@@ -85,8 +86,19 @@
     var cur = JT.LEVELS[lv][0], nxt = JT.LEVELS[lv + 1] ? JT.LEVELS[lv + 1][0] : cur + 1;
     return { n: lv + 1, name: JT.LEVELS[lv][1], pct: lv + 1 >= JT.LEVELS.length ? 100 : Math.round(((xp - cur) / (nxt - cur)) * 100), next: nxt };
   };
+  /* actividad diaria (para la racha y el mapa de calor) */
+  JT.today = function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+  JT.touch = function (n) { var k = JT.today(); JT.state.activity = JT.state.activity || {}; JT.state.activity[k] = (JT.state.activity[k] || 0) + (n || 1); };
+  JT.streak = function () {
+    var a = JT.state.activity || {}, d = new Date(), n = 0;
+    function key(x) { return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2) + '-' + ('0' + x.getDate()).slice(-2); }
+    if (!a[key(d)]) d.setDate(d.getDate() - 1);
+    while (a[key(d)]) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  };
   JT.addXp = function (n, why) {
     if (!n) return;
+    JT.touch(1);
     var before = JT.level(JT.state.xp).n;
     JT.state.xp += n;
     JT.saveState();
@@ -94,6 +106,7 @@
     var after = JT.level(JT.state.xp);
     if (after.n > before) JT.toast('Subiste a nivel ' + after.n + ': <b>' + after.name + '</b>', 'ok');
     if (JT.onProgress) JT.onProgress();
+    if (JT.checkBadges) JT.checkBadges();
   };
   /* marca un elemento como hecho una sola vez y da XP */
   JT.markDone = function (id, xp, why) {

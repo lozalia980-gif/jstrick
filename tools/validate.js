@@ -4,11 +4,13 @@ const root = path.join(__dirname, '..');
 global.window = global; global.document = { getElementById() { return null; } };
 global.localStorage = { getItem() { return null; }, setItem() { } };
 const load = f => vm.runInThisContext(fs.readFileSync(path.join(root, f), 'utf8'), { filename: f });
-['js/core.js', 'js/highlight.js', 'js/glossary1.js', 'js/glossary2.js', 'js/linter.js', 'js/lib-prelude.js', 'js/lib-jquery.js', 'js/lib-angular.js'].forEach(load);
+['js/core.js', 'js/tracks.js', 'js/highlight.js', 'js/glossary1.js', 'js/glossary2.js', 'js/glossary3.js', 'js/hl-langs.js', 'js/linter.js', 'js/lint-langs.js', 'js/lib-prelude.js', 'js/lib-jquery.js', 'js/lib-angular.js'].forEach(load);
 const only = process.argv[2];
-fs.readdirSync(path.join(root, 'js/data')).sort().forEach(f => { if (!only || f.includes(only)) load('js/data/' + f); });
+load('js/data/tk.js');
+fs.readdirSync(path.join(root, 'js/data')).sort().forEach(f => { if (f !== 'tk.js' && (!only || f.includes(only))) load('js/data/' + f); });
 const JT = global.JT;
 let problems = 0, checked = 0;
+const dump = [];
 const bad = (where, msg) => { problems++; console.log('  [X] ' + where + ': ' + msg); };
 
 function orderFiles(t, files) { return files; }
@@ -16,6 +18,8 @@ JT.topics.forEach(t => {
   console.log('== ' + t.id + ' ' + t.title + ' (' + t.examples.length + ' ejemplos, ' + t.exercises.length + ' ejercicios, ' + (t.quiz || []).length + ' preguntas)');
   if (t.examples.length < 10) bad(t.id, 'menos de 10 ejemplos');
   if (t.exercises.length < 5) bad(t.id, 'menos de 5 ejercicios');
+  if (t.kind === 'term' && t.examples.some(e => e.out == null)) bad(t.id, 'ejemplo sin salida esperada (out)');
+  if (t.examples.length !== t.exercises.length && t.track && t.track !== 'js') bad(t.id, 'cada ejemplo debe tener su ejercicio (1 a 1)');
   const kind = t.kind || 'web';
   t.examples.forEach((ex, i) => {
     const w = t.id + ' ejemplo ' + (i + 1) + ' (' + ex.title + ')';
@@ -23,13 +27,15 @@ JT.topics.forEach(t => {
     if (!ex.parts || !ex.parts.length) return bad(w, 'sin partes');
     ex.parts.forEach((p, k) => { if (!p.why) bad(w, 'parte ' + (k + 1) + ' sin explicacion'); });
     const files = JT.filesFromParts(ex.parts);
-    const issues = JT.lint({ files, kind, lib: ex.lib || t.lib });
+    const lang = kind === 'term' ? JT.trackOf(t).lang : undefined;
+    if (lang) dump.push({ id: ex.id, lang, code: files[lang], out: ex.out, seed: t.seed });
+    const issues = JT.lint({ files, kind, lang, lib: ex.lib || t.lib });
     issues.filter(x => x.sev !== 'info').forEach(x => bad(w, x.sev + ' ' + x.file + ':' + x.line + ' ' + x.title + ' -> ' + x.msg.replace(/<[^>]+>/g, '').slice(0, 140)));
   });
   t.exercises.forEach((xs, i) => {
     const w = t.id + ' ejercicio ' + (i + 1) + ' (' + xs.title + ')';
     checked++;
-    if (xs.steps.length < 4) bad(w, 'pocos pasos');
+    if (xs.steps.length < (t.track && t.track !== 'js' ? 2 : 4)) bad(w, 'pocos pasos');
     const files = Object.assign({}, xs.base || {});
     xs.steps.forEach((s, k) => {
       const sw = w + ' paso ' + (k + 1);
@@ -55,10 +61,13 @@ JT.topics.forEach(t => {
       (s.errs || []).forEach(e => { if (e[0].test(JT.norm(text))) bad(sw, 'un patron de error coincide con la solucion: ' + e[0]); });
     });
     Object.keys(files).forEach(k => { files[k] = files[k].split('\n').filter(l => l.indexOf('tu código aquí') < 0).join('\n'); });
-    const issues = JT.lint({ files, kind, lib: xs.lib || t.lib });
+    const lang2 = kind === 'term' ? JT.trackOf(t).lang : undefined;
+    if (lang2) { if (xs.out == null) bad(w, 'sin salida esperada (out)'); dump.push({ id: xs.id, lang: lang2, code: files[lang2], out: xs.out, seed: t.seed }); }
+    const issues = JT.lint({ files, kind, lang: lang2, lib: xs.lib || t.lib });
     issues.filter(x => x.sev !== 'info').forEach(x => bad(w + ' (codigo final)', x.sev + ' ' + x.file + ':' + x.line + ' ' + x.title + ' -> ' + x.msg.replace(/<[^>]+>/g, '').slice(0, 140)));
   });
   (t.quiz || []).forEach((q, i) => { if (q.a < 0 || q.a >= q.opts.length) bad(t.id + ' quiz ' + (i + 1), 'indice de respuesta fuera de rango'); });
 });
+fs.writeFileSync(path.join(__dirname, '.termdump.json'), JSON.stringify(dump));
 console.log('\nRevisados: ' + checked + ' | problemas: ' + problems);
 process.exit(problems ? 1 : 0);

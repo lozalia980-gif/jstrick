@@ -411,6 +411,7 @@
   /* ---------- entrada principal ---------- */
   var DOM_EVENTS = 'click dblclick change input keyup keydown keypress submit focus blur mouseover mouseout mouseenter mouseleave mousedown mouseup scroll select load ngSubmit contextmenu'.split(' ');
   JT.lint = function (spec) {
+    if (spec.kind === 'term') return JT.lintLang(spec.lang, (spec.files || {})[spec.lang], { fragment: !!spec.fragment });
     var f = spec.files || {}, out = [], kind = spec.kind || 'web';
     var htmlRes = f.html != null ? lintHTML(f.html, 'html', { ng: kind === 'ng' }) : { issues: [], ids: [] };
     if (kind === 'ng') htmlRes.issues = htmlRes.issues.filter(function (x) { return x.title.indexOf('Etiqueta desconocida') < 0; });

@@ -12,6 +12,7 @@
 
   /* devuelve { html, offsets } */
   JT.buildDoc = function (spec) {
+    if (spec.kind === 'termdoc') return { html: spec.html, info: {} };
     var f = spec.files || {}, kind = spec.kind || 'web', head = '', body = '', info = {};
     head += '<meta charset="utf-8"><style>' + BASE_CSS + '</style>';
     if (f.css) head += '<style>' + f.css.replace(/<\/style/gi, '<\\/style') + '</style>';

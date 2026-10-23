@@ -1,0 +1,25 @@
+/* js-trick :: datos ligeros para la landing (no carga el contenido de los cursos) */
+(function () {
+  var JT = window.JT = window.JT || {};
+  /* ex = ejemplos, xs = ejercicios, q = preguntas del reto. Actualizar al agregar contenido. */
+  JT.catalog = {
+    html:   { ex: 10, xs: 10, q: 8, topics: ['Etiquetas y estructura', 'Enlaces e imágenes', 'Listas y tablas', 'Formularios'], file: 'index.html', lang: 'html', run: 'Se ve en la pantalla',
+      code: '<h1>Hola, mundo</h1>\n<p>Mi primera <b>página</b>.</p>\n<a href="https://js-trick.dev">Visitar</a>', out: 'Hola, mundo' },
+    css:    { ex: 10, xs: 10, q: 8, topics: ['Selectores y colores', 'Caja: margen y relleno', 'Flexbox', 'Animaciones'], file: 'style.css', lang: 'css', run: 'Se ve en la pantalla',
+      code: '.boton {\n  background: #61afef;\n  border-radius: 12px;\n  padding: 10px 18px;\n}', out: 'botón azul redondeado' },
+    js:     { ex: 71, xs: 30, q: 6, topics: ['Repaso de bases', 'JSON y Web Storage', 'AJAX', 'jQuery y Angular'], file: 'app.js', lang: 'js', run: 'Se ejecuta de verdad',
+      code: 'const alumno = { nombre: "Ana", edad: 20 };\nconst texto = JSON.stringify(alumno);\nconsole.log(texto);', out: '{"nombre":"Ana","edad":20}' },
+    python: { ex: 10, xs: 10, q: 8, topics: ['Variables y tipos', 'Condicionales', 'Listas y bucles', 'Funciones'], file: 'main.py', lang: 'py', run: 'Se ejecuta de verdad',
+      code: 'nombres = ["Ana", "Luis", "Eva"]\nfor n in nombres:\n    print("Hola,", n)', out: 'Hola, Ana\nHola, Luis\nHola, Eva' },
+    sql:    { ex: 10, xs: 10, q: 8, topics: ['SELECT y WHERE', 'ORDER BY y LIMIT', 'JOIN', 'GROUP BY'], file: 'consulta.sql', lang: 'sql', run: 'Se ejecuta de verdad',
+      code: 'SELECT nombre, edad\nFROM alumnos\nWHERE edad >= 18\nORDER BY edad DESC;', out: 'nombre | edad\nLuis   | 22\nAna    | 20' },
+    php:    { ex: 10, xs: 10, q: 8, topics: ['Variables con $', 'Arreglos', 'Funciones', 'Formularios'], file: 'index.php', lang: 'php', run: 'Salida esperada + ejecución en línea',
+      code: '<?php\n$nombre = "Ana";\necho "Hola, $nombre";\n?>', out: 'Hola, Ana' },
+    c:      { ex: 10, xs: 10, q: 8, topics: ['Tipos y printf', 'Condicionales y bucles', 'Arreglos', 'Funciones'], file: 'main.c', lang: 'c', run: 'Salida esperada + ejecución en línea',
+      code: '#include <stdio.h>\n\nint main(void) {\n    printf("Hola, C\\n");\n    return 0;\n}', out: 'Hola, C' },
+    cpp:    { ex: 10, xs: 10, q: 8, topics: ['cout y variables', 'Vectores', 'Funciones', 'Clases'], file: 'main.cpp', lang: 'cpp', run: 'Salida esperada + ejecución en línea',
+      code: '#include <iostream>\n\nint main() {\n    std::cout << "Hola, C++" << std::endl;\n    return 0;\n}', out: 'Hola, C++' },
+    csharp: { ex: 10, xs: 10, q: 8, topics: ['Console y variables', 'Condicionales y bucles', 'Métodos', 'Clases'], file: 'Program.cs', lang: 'cs', run: 'Salida esperada + ejecución en línea',
+      code: 'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hola, C#");\n    }\n}', out: 'Hola, C#' }
+  };
+})();

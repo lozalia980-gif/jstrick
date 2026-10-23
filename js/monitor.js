@@ -19,6 +19,7 @@
       '<button class="btn sm" data-a="reload" title="Vuelve a ejecutar el código">' + JT.icon('refresh') + 'Recargar</button>' +
       '<button class="btn sm" data-a="full" title="Pantalla completa">' + JT.icon('max') + 'Ampliar</button>' +
       '<span class="storage-tools" style="display:none;gap:6px"><button class="btn sm" data-a="newsession" title="Simula cerrar la pestaña: sessionStorage se borra, localStorage se queda">' + JT.icon('x') + 'Cerrar pestaña</button><button class="btn sm" data-a="clearstore">' + JT.icon('trash') + 'Borrar datos</button></span>' +
+      '<button class="btn sm" data-a="online" style="display:none" title="Ejecuta el programa de verdad en un servicio externo (pide permiso la primera vez)">' + JT.icon('globe') + 'Ejecutar en línea</button>' +
       '<span class="server-tools" style="display:none"><button class="btn sm" data-a="resetserver" title="Restaura los datos del servidor de práctica">' + JT.icon('db') + 'Reiniciar servidor</button></span>' +
       '</div>' +
       '<div class="mon-panel"><div class="mon-tabs"><button data-t="console" class="on">Consola<span class="cnt">0</span></button><button data-t="storage">Almacenamiento<span class="cnt">0</span></button></div><div class="mon-body"></div></div>';
@@ -33,6 +34,7 @@
       if (a === 'toggle') M.isOpen ? M.close() : M.open();
       else if (a === 'reload') { if (!M.isOpen) M.open(); else M.run(); }
       else if (a === 'full') M.toggleFull();
+      else if (a === 'online') M.runOnline();
       else if (a === 'newsession') { try { clearPrefix(sessionStorage, 'jt-ss:'); } catch (er) { /* ignorar */ } M.storage.session = {}; if (M.isOpen) M.run(); else M.renderPanel(); JT.toast('Pestaña "cerrada": sessionStorage vacío. localStorage sigue ahi.'); }
       else if (a === 'clearstore') { try { clearPrefix(localStorage, 'jt-ls:'); clearPrefix(sessionStorage, 'jt-ss:'); } catch (er) { /* ignorar */ } M.storage = { local: {}, session: {} }; if (M.isOpen) M.run(); else M.renderPanel(); }
       else if (a === 'resetserver') { try { window.__jtMockDB = undefined; } catch (er) { /* ignorar */ } JT.toast('Servidor de práctica restaurado'); if (M.isOpen) M.run(); }
@@ -52,7 +54,10 @@
     container.appendChild(M.el);
     $('.storage-tools', M.el).style.display = cfg.storage ? 'inline-flex' : 'none';
     $('.server-tools', M.el).style.display = cfg.server ? 'inline-flex' : 'none';
-    M.onError = cfg.onError || null;
+    M.onError = cfg.onError || null; M.cfg = cfg;
+    $('[data-a=online]', M.el).style.display = cfg.term && cfg.lang !== 'sql' ? '' : 'none';
+    M.el.classList.toggle('isterm', !!cfg.term);
+    if (cfg.term) M.tab = 'console';
     M.spec = null; M.logs = []; M.errCount = 0; M.setBlocked(null); M.syncStorage();
     if (M.isOpen) { M.sb.blank(); }
     M.renderPanel();
@@ -83,8 +88,26 @@
     if (!M.spec || !M.isOpen) return;
     M.logs = []; M.errCount = 0;
     M.setBlocked(null);
+    if (M.spec.kind === 'term') { M.runTerm(); return; }
     M.sb.run(M.spec);
     M.renderPanel();
+  };
+  M.runTerm = function () {
+    var spec = M.spec, tok = M.termTok = (M.termTok || 0) + 1;
+    M.sb.run({ kind: 'termdoc', html: JT.term.doc({ status: 'loading', text: '' }, spec.lang) });
+    JT.term.exec(spec).then(function (res) {
+      if (tok !== M.termTok || !M.isOpen) return;
+      M.sb.run({ kind: 'termdoc', html: JT.term.doc(res, spec.lang) });
+      if (res.error && M.onError) M.onError({ name: res.error.type, message: res.error.message, line: res.error.line, term: true });
+      if (res.error) M.logs.push({ level: 'error', text: res.error.type + ': ' + res.error.message });
+      M.renderPanel();
+    });
+  };
+  M.runOnline = function () {
+    if (!M.spec || M.spec.kind !== 'term') return;
+    if (!M.isOpen) { M.open(); }
+    M.spec.online = true; var old = M.spec;
+    setTimeout(function () { M.run(); setTimeout(function () { if (M.spec === old) delete M.spec.online; }, 50); }, M.isOpen ? 0 : 400);
   };
   M.setBlocked = function (txt) {
     M.screen.classList.toggle('blocked', !!txt);

@@ -10,39 +10,17 @@
   function debounce(fn, ms) { var t; return function () { var a = arguments, s = this; clearTimeout(t); t = setTimeout(function () { fn.apply(s, a); }, ms); }; }
 
   /* ============================== utilidades de progreso ============================== */
-  function topicStats(t) {
-    var done = 0, total = 0;
-    (t.examples || []).forEach(function (e) { total++; if (JT.state.done[e.id]) done++; });
-    (t.exercises || []).forEach(function (e) { total++; if (JT.state.done[e.id]) done++; });
-    if ((t.quiz || []).length) { total++; if (JT.state.done['quiz:' + t.id]) done++; }
-    return { done: done, total: total, pct: total ? Math.round(done / total * 100) : 0 };
-  }
+  function topicStats(t) { return JT.stats.topic(t); }
+  function nextHash() { return JT.stats.next().hash; }
   function renderXp() {
     var lv = JT.level(JT.state.xp);
-    $('#xpchip').innerHTML = ic('award') + '<span>Nivel ' + lv.n + ' <b>' + esc(lv.name) + '</b></span><span class="xpbar"><i style="width:' + lv.pct + '%"></i></span><span>' + JT.state.xp + ' XP</span>';
+    $('#xpchip').innerHTML = ic('award') + '<span>Nivel ' + lv.n + ' <b>' + esc(lv.name) + '</b></span><span class="xpbar"><i style="width:' + lv.pct + '%"></i></span><span>' + JT.state.xp + ' XP</span><span class="streakchip" title="Racha de estudio">' + ic('bolt') + JT.streak() + '</span>';
   }
   JT.onProgress = function () { renderXp(); renderSide(); };
 
   /* ============================== barra lateral ============================== */
   var curRoute = { t: null, kind: null, i: null, tab: null };
-  function renderSide() {
-    var h = '<h6>Ruta de estudio</h6>';
-    JT.topics.forEach(function (t) {
-      var st = topicStats(t), active = curRoute.t === t.id;
-      h += '<div class="navtopic' + (active ? ' active' : '') + '"><a class="head" href="#/t/' + t.id + '"><span class="num" style="background:' + t.color + '">' + esc(t.num === 0 ? '0' : t.num) + '</span><span class="tt"><b>' + esc(t.short) + '</b><span>' + st.done + ' de ' + st.total + ' completados</span></span></a><div class="mini"><i style="width:' + st.pct + '%;background:' + t.color + '"></i></div>';
-      if (active) {
-        h += '<div class="navsub"><a href="#/t/' + t.id + '/conceptos" class="' + (curRoute.kind === 'topic' && curRoute.tab === 'conceptos' ? 'cur' : '') + '"><span class="dot"></span>Conceptos</a>';
-        h += '<div class="navgroup">Ejemplos</div>';
-        t.examples.forEach(function (e, i) { h += '<a href="#/t/' + t.id + '/e/' + i + '" class="' + (JT.state.done[e.id] ? 'done ' : '') + (curRoute.kind === 'e' && curRoute.i === i ? 'cur' : '') + '"><span class="dot"></span>' + (i + 1) + '. ' + esc(e.title) + '</a>'; });
-        h += '<div class="navgroup">Ejercicios</div>';
-        t.exercises.forEach(function (e, i) { h += '<a href="#/t/' + t.id + '/x/' + i + '" class="' + (JT.state.done[e.id] ? 'done ' : '') + (curRoute.kind === 'x' && curRoute.i === i ? 'cur' : '') + '"><span class="dot"></span>' + (i + 1) + '. ' + esc(e.title) + '</a>'; });
-        if ((t.quiz || []).length) h += '<div class="navgroup">Reto</div><a href="#/t/' + t.id + '/quiz" class="' + (JT.state.done['quiz:' + t.id] ? 'done ' : '') + (curRoute.kind === 'topic' && curRoute.tab === 'quiz' ? 'cur' : '') + '"><span class="dot"></span>Reto rápido</a>';
-        h += '</div>';
-      }
-      h += '</div>';
-    });
-    $('#side').innerHTML = h;
-  }
+  function renderSide() { JT.pages.side(curRoute); }
 
   /* ============================== router ============================== */
   function go(hash) { if (location.hash === hash) route(); else location.hash = hash; }
@@ -54,49 +32,18 @@
     var p = location.hash.replace(/^#\/?/, '').split('/');
     $('#side').classList.remove('open');
     var t = p[0] === 't' ? JT.topic(p[1]) : null;
-    if (!t) { curRoute = { t: null, kind: 'home' }; renderSide(); pageHome(); }
-    else if (p[2] === 'e' && t.examples[+p[3]]) { curRoute = { t: t.id, kind: 'e', i: +p[3] }; renderSide(); pageExample(t, +p[3]); }
-    else if (p[2] === 'x' && t.exercises[+p[3]]) { curRoute = { t: t.id, kind: 'x', i: +p[3] }; renderSide(); pageExercise(t, +p[3]); }
-    else { var tab = ['conceptos', 'ejemplos', 'ejercicios', 'quiz'].indexOf(p[2]) >= 0 ? p[2] : 'conceptos'; curRoute = { t: t.id, kind: 'topic', tab: tab }; renderSide(); pageTopic(t, tab); }
+    if (p[0] === 'cursos') { curRoute = { kind: 'cursos' }; renderSide(); JT.pages.cursos(view); }
+    else if (p[0] === 'curso' && JT.track(p[1])) { curRoute = { kind: 'curso', track: p[1] }; renderSide(); JT.pages.curso(view, p[1]); }
+    else if (!t) { curRoute = { kind: 'panel' }; renderSide(); JT.pages.panel(view); }
+    else {
+      var trk = t.track || 'js';
+      if (p[2] === 'e' && t.examples[+p[3]]) { curRoute = { t: t.id, track: trk, kind: 'e', i: +p[3] }; remember(t); renderSide(); pageExample(t, +p[3]); }
+      else if (p[2] === 'x' && t.exercises[+p[3]]) { curRoute = { t: t.id, track: trk, kind: 'x', i: +p[3] }; remember(t); renderSide(); pageExercise(t, +p[3]); }
+      else { var tab = ['conceptos', 'ejemplos', 'ejercicios', 'quiz'].indexOf(p[2]) >= 0 ? p[2] : 'conceptos'; curRoute = { t: t.id, track: trk, kind: 'topic', tab: tab }; remember(t); renderSide(); pageTopic(t, tab); }
+    }
     $('#main').scrollTop = 0;
   }
-
-  /* ============================== inicio ============================== */
-  function pageHome() {
-    document.title = 'js-trick | Aprende practicando';
-    var totalEx = 0, totalXs = 0;
-    JT.topics.forEach(function (t) { totalEx += t.examples.length; totalXs += t.exercises.length; });
-    var feats = [
-      ['play', 'Pantalla en vivo', 'Cada ejemplo tiene una computadora que se abre y muestra el resultado de tu código en tiempo real.'],
-      ['help', 'Un "?" en todas partes', 'Toca el signo de pregunta junto a cualquier línea, función u objeto para ver una explicación detallada, o escribe tu propia duda.'],
-      ['alert', 'Errores que enseñan', 'Si escribes algo incorrecto, un cuadro te explica qué está mal, por qué y qué deberías escribir en su lugar.'],
-      ['code', 'Desglose paso a paso', 'El código se explica por partes y luego lo ves completo en un editor donde puedes modificarlo.'],
-      ['target', 'Ejercicios guiados', 'El sistema te dicta qué escribir línea por línea, te dice por qué, y corrige tus errores mientras tecleas.'],
-      ['award', 'Puntos y niveles', 'Ganas XP al completar ejemplos, ejercicios y retos. Tu progreso se guarda en este navegador.']
-    ];
-    view.innerHTML =
-      '<div class="hero"><div><h1>Aprende <em>JavaScript</em> haciendo,<br>no memorizando</h1><p class="lead">Un laboratorio interactivo para las guías 8 a 12: JSON y almacenamiento web, AJAX, jQuery y Angular. Sin bases previas: empiezas desde lo más simple y avanzas escribiendo código de verdad.</p>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><a class="btn primary" href="' + nextHash() + '">' + ic('play') + 'Continuar donde me quedé</a><a class="btn" href="#/t/g0">' + ic('book') + 'Repasar lo básico primero</a></div>' +
-      '<p style="color:var(--muted);font-size:13.5px;margin-top:16px">' + totalEx + ' ejemplos interactivos &middot; ' + totalXs + ' ejercicios guiados &middot; retos rápidos por tema</p></div>' +
-      '<div class="heroart"><div class="bar"><i></i><i></i><i></i></div>' + JT.highlight('const alumno = {\n  nombre: "Ana",\n  guia: 8\n};\n\nconst texto = JSON.stringify(alumno);\nlocalStorage.setItem("alumno", texto);\n\n// ¡y ahora lo lees de vuelta!\nconst otra = JSON.parse(texto);\nconsole.log(otra.nombre);', 'js') + '</div></div>' +
-      '<div class="sectiontitle">' + ic('layers') + '<h2 style="margin:0">Temas</h2></div><div class="grid g3">' +
-      JT.topics.map(function (t) {
-        var st = topicStats(t);
-        return '<a class="card tcard" href="#/t/' + t.id + '"><div class="top"><span class="num" style="background:' + t.color + '">' + (t.num === 0 ? '0' : t.num) + '</span><div><h3>' + esc(t.title) + '</h3><div style="color:var(--muted);font-size:12.5px">' + esc(t.guide) + '</div></div></div><p style="color:#b7bdcc;font-size:14px;margin:0">' + t.summary + '</p><div class="meta"><span>' + t.examples.length + ' ejemplos</span><span>' + t.exercises.length + ' ejercicios</span><span>' + (t.quiz || []).length + ' preguntas</span></div><div class="prog"><i style="width:' + st.pct + '%;background:' + t.color + '"></i></div></a>';
-      }).join('') + '</div>' +
-      '<div class="sectiontitle">' + ic('bolt') + '<h2 style="margin:0">Cómo funciona</h2></div><div class="grid g3">' +
-      feats.map(function (f) { return '<div class="card feat"><div class="fi">' + ic(f[0]) + '</div><h3>' + f[1] + '</h3><p style="color:#b7bdcc;font-size:14px">' + f[2] + '</p></div>'; }).join('') + '</div>' +
-      '<div class="foot">js-trick &middot; hecho para estudiar las guías 8 a 12 &middot; <a href="#/" id="resetProg">Reiniciar mi progreso</a></div>';
-    $('#resetProg').addEventListener('click', function (e) { e.preventDefault(); if (confirm('¿Seguro que quieres borrar todo tu progreso y tus códigos guardados?')) { JT.resetState(); JT.toast('Progreso reiniciado'); route(); renderXp(); } });
-  }
-  function nextHash() {
-    for (var i = 0; i < JT.topics.length; i++) {
-      var t = JT.topics[i];
-      for (var a = 0; a < t.examples.length; a++) if (!JT.state.done[t.examples[a].id]) return '#/t/' + t.id + '/e/' + a;
-      for (var b = 0; b < t.exercises.length; b++) if (!JT.state.done[t.exercises[b].id]) return '#/t/' + t.id + '/x/' + b;
-    }
-    return '#/t/g0';
-  }
+  function remember(t) { JT.state.lastTrack = t.track || 'js'; JT.saveState(); }
 
   /* ============================== página de un tema ============================== */
   function pageTopic(t, tab) {
@@ -127,10 +74,12 @@
 
   /* ============================== helpers de la mesa de trabajo ============================== */
   function orderOf(t, keys) {
+    if (t.kind === 'term') return [JT.trackOf(t).lang];
     var base = t.kind === 'ng' ? ORDER_NG : ORDER_WEB;
     return base.filter(function (k) { return keys.indexOf(k) >= 0; });
   }
   function filesOrder(t, files) {
+    if (t.kind === 'term') return [JT.trackOf(t).lang];
     var base = t.kind === 'ng' ? ORDER_NG : ORDER_WEB;
     return base.filter(function (k) { return files[k] != null && (files[k] !== '' || k === 'js' || k === 'ts'); });
   }
@@ -170,6 +119,14 @@
     return { file: file, line: line };
   }
 
+  /* tarjeta "ahora practica" que sigue a cada ejemplo */
+  function practiceCard(t, i) {
+    var p = JT.pair(t, i);
+    if (p < 0) return '';
+    var xs = t.exercises[p], done = JT.state.done[xs.id];
+    return '<div class="practice-card' + (done ? ' done' : '') + '"><div class="pc-ic">' + ic(done ? 'check' : 'target') + '</div><div class="pc-tx"><h4>' + (done ? 'Práctica completada' : 'Ahora practica lo que viste') + '</h4><p><b>' + esc(xs.title) + '</b> · ' + (xs.short ? esc(xs.short) : '') + '</p></div><a class="btn primary" href="#/t/' + t.id + '/x/' + p + '">' + ic('arrow') + (done ? 'Repetir' : 'Ir al ejercicio') + '</a></div>';
+  }
+
   /* ============================== EJEMPLO ============================== */
   function pageExample(t, idx) {
     var ex = t.examples[idx], files0 = JT.filesFromParts(ex.parts);
@@ -188,12 +145,14 @@
         return '<div class="part"><div class="ph"><span class="no">' + (i + 1) + '</span><span class="badge f-' + p.f + '">' + esc(JT.FILE_NAMES[p.f]) + '</span><span class="spacer"></span><button class="btn sm" data-locate="' + i + '" title="Resalta estas líneas en el código completo">' + ic('eye') + 'Ver en el código completo</button></div><pre>' + JT.highlight(p.code, p.f, { terms: true, once: true }) + '</pre>' + (p.why ? '<div class="why">' + p.why + '</div>' : '') + '</div>';
       }).join('') + '</div>' +
       (ex.notes || []).map(function (n) { return '<div class="callout ' + (n.type || 'tip') + '">' + ic(n.type === 'warn' ? 'warn' : n.type === 'bad' ? 'alert' : n.type === 'info' ? 'info' : 'bulb') + '<div>' + n.html + '</div></div>'; }).join('') +
+      practiceCard(t, idx) +
       (ex.tryit && ex.tryit.length ? '<div class="card" style="margin-top:14px"><h3>' + ic('flask') + 'Experimenta (cambia el código de la derecha)</h3><ul style="margin:6px 0 0;padding-left:20px">' + ex.tryit.map(function (x) { return '<li style="margin-bottom:5px">' + x + '</li>'; }).join('') + '</ul></div>' : '') +
       '</div><div class="right"><div id="edHost"></div><div class="issues" id="issuesHost"></div><div id="monHost"></div></div></div>';
     view.innerHTML = h;
 
     var issues = [], runtimeIssues = [];
-    var spec = function () { return { kind: kind, lib: lib, files: ed.getFiles() }; };
+    var lang = kind === 'term' ? JT.trackOf(t).lang : null;
+    var spec = function () { var sp = { kind: kind, lib: lib, files: ed.getFiles() }; if (kind === 'term') { sp.lang = lang; sp.expected = ex.out; sp.original = files0[lang]; sp.seed = t.seed; sp.stdin = ex.stdin; } return sp; };
     var ed = new JT.Editor($('#edHost'), {
       order: order, onTerms: true,
       onHelp: function (info) { JT.help.openLine(info); },
@@ -204,28 +163,28 @@
     ed.toolsEl.innerHTML = '<button class="btn sm" id="resetBtn" title="Vuelve al código original del ejemplo">' + ic('undo') + 'Restablecer</button>';
     ed.setFiles(draft && JSON.stringify(Object.keys(draft).sort()) === JSON.stringify(Object.keys(files0).sort()) ? Object.assign({}, files0, draft) : files0, order[0]);
     var M = JT.monitor;
-    M.attach($('#monHost'), { storage: !!t.storage, server: !!t.server, onError: onRuntimeError });
+    M.attach($('#monHost'), { storage: !!t.storage, server: !!t.server, term: kind === 'term', lang: lang, onError: onRuntimeError });
     function lintNow() {
       var files = ed.getFiles();
-      issues = JT.lint({ files: files, kind: kind, lib: lib, original: files0 });
+      issues = JT.lint({ files: files, kind: kind, lib: lib, lang: lang, original: files0 });
       ed.setErrors(errorLines(issues.concat(runtimeIssues)));
       renderIssues();
       var errs = issues.filter(function (x) { return x.sev === 'error'; });
       M.setSpec(spec());
       if (M.isOpen) {
-        if (errs.length) { M.setBlocked('Hay ' + errs.length + ' error' + (errs.length > 1 ? 'es' : '') + ' en tu código. Corrígelos (mira el cuadro rojo de abajo) y la pantalla se actualizará sola.'); }
+        if (errs.length && kind !== 'term') { M.setBlocked('Hay ' + errs.length + ' error' + (errs.length > 1 ? 'es' : '') + ' en tu código. Corrígelos (mira el cuadro rojo de abajo) y la pantalla se actualizará sola.'); }
         else runSoon();
       }
     }
     var runSoon = debounce(function () { runtimeIssues = []; M.setSpec(spec()); M.run(); }, 550);
     function renderIssues() { $('#issuesHost').innerHTML = issuesHTML(issues.concat(runtimeIssues)); }
     function onRuntimeError(m) {
-      var s = spec(), where = mapRuntimeLine(m, s, M.sb.info), ex2 = JT.explainRuntime(m, s);
+      var s = spec(), where = m.term ? { file: lang, line: m.line || 0 } : mapRuntimeLine(m, s, M.sb.info), ex2 = m.term ? JT.term.explain(lang, m) : JT.explainRuntime(m, s);
       runtimeIssues.push({ sev: 'error', file: where.file, line: where.line, title: ex2.title, msg: ex2.msg, fix: ex2.fix });
       ed.setErrors(errorLines(issues.concat(runtimeIssues)));
       renderIssues();
     }
-    M.onOpen = function () { var errs = issues.filter(function (x) { return x.sev === 'error'; }); runtimeIssues = []; M.setSpec(spec()); if (errs.length) setTimeout(function () { M.setBlocked('Hay ' + errs.length + ' error(es) en tu código. Corrígelos y la pantalla se actualizará sola.'); }, 300); };
+    M.onOpen = function () { var errs = issues.filter(function (x) { return x.sev === 'error'; }); runtimeIssues = []; M.setSpec(spec()); if (errs.length && kind !== 'term') setTimeout(function () { M.setBlocked('Hay ' + errs.length + ' error(es) en tu código. Corrígelos y la pantalla se actualizará sola.'); }, 300); };
     lintNow();
 
     view.addEventListener('click', onClick);
@@ -267,6 +226,7 @@
   }
   function diagnose(step, raw, n, topic) {
     var solN = JT.norm(step.sol || ''), msg = '';
+    if (step.file === 'sql') { n = n.toLowerCase(); solN = solN.toLowerCase(); }
     if (!solN) return { st: 'bad', msg: 'Todavía no es lo que pide este paso. Lee la instrucción y la pista.' };
     if (solN.indexOf(n) === 0 && n.length < solN.length) return { st: 'part', msg: 'Vas por buen camino. Sigue escribiendo...' };
     if (n.toLowerCase() === solN.toLowerCase()) {
@@ -287,7 +247,11 @@
     return { st: 'bad', msg: 'Tienes las piezas correctas pero el <b>orden o los símbolos</b> no coinciden (paréntesis, comas, comillas, punto y coma). Compara con la pista.' };
   }
   function lintStep(step, raw, topic, prev) {
-    if ((step.file || 'js') !== 'js') return '';
+    if ((step.file || 'js') !== 'js') {
+      if (topic.kind !== 'term' || step.file === 'sql') return ''; /* en SQL cada paso es solo una línea de la consulta: no se revisa suelta */
+      var lli = JT.lintLang(step.file, raw, { fragment: true }).filter(function (x) { return x.sev === 'error' && !/^(Falta cerrar|Comillas sin cerrar|Sobra|Cierre equivocado|Falta ";"|Falta ":"|Falta la|Falta sangr|Sangr)/.test(x.title); })[0];
+      return lli ? '<b>' + esc(lli.title) + '.</b> ' + lli.msg + (lli.fix ? ' <br><b>Mejor así:</b> ' + lli.fix : '') : '';
+    }
     var plugins = []; String(prev || '').replace(/\$\.fn\.([\w$]+)/g, function (m, n) { plugins.push(n); }); var li = JT.lint({ files: { js: raw }, kind: 'web', lib: topic.lib, plugins: plugins, noSyntax: true });
     var bad = li.filter(function (x) { return x.sev === 'error' && !/^(Falta cerrar|Comillas sin cerrar|El código termina|Sobra|Cierre equivocado|Palabra suelta|Símbolo inesperado|Falta un paréntesis|No existe el id|Declaraste)/.test(x.title); })[0];
     return bad ? '<b>' + esc(bad.title) + '.</b> ' + bad.msg + (bad.fix ? ' <br><b>Mejor así:</b> ' + bad.fix : '') : '';
@@ -300,7 +264,7 @@
     var errs = step.errs || [];
     for (var i = 0; i < errs.length; i++) if (errs[i][0].test(n)) return { st: 'bad', msg: errs[i][1] };
     if (bs.mismatch) return { st: 'bad', msg: '<b>Paréntesis o llaves mal cerrados.</b> ' + bs.mismatch };
-    if (step.file === 'js' || !step.file) { var l2 = lintStep(step, raw, topic, prev); if (l2) return { st: 'bad', msg: l2 }; }
+    { var l2 = lintStep(step, raw, topic, prev); if (l2) return { st: 'bad', msg: l2 }; }
     var d = diagnose(step, raw, n, topic);
     if (d.st === 'bad' && (bs.open || bs.quote) && n.length < JT.norm(step.sol || '').length) return { st: 'part', msg: (bs.quote ? 'Falta cerrar unas comillas. ' : '') + (bs.open ? 'Todavía falta cerrar: <code>' + esc(bs.open) + '</code>. ' : '') + 'Sigue escribiendo...' };
     return d;
@@ -327,6 +291,18 @@
     var base = xs.base || {}, keys = Object.keys(base);
     xs.steps.forEach(function (s) { var k = s.file || 'js'; if (keys.indexOf(k) < 0) keys.push(k); });
     var order = xs.tabs || orderOf(t, keys);
+    var lang = kind === 'term' ? JT.trackOf(t).lang : null;
+    function solText(step) { return step.type === 'blank' ? parseTpl(step.tpl).map(function (p) { return p.a ? p.a[0] : p.t; }).join('') : step.sol; }
+    function finalCode() {
+      var files = {}; Object.keys(base).forEach(function (k) { files[k] = base[k]; });
+      xs.steps.forEach(function (stp) { applyStep(files, stp, solText(stp)); });
+      return stripMarks(files);
+    }
+    function mkSpec(pf, partial) {
+      var sp = { kind: kind, lib: lib, files: pf };
+      if (kind === 'term') { sp.lang = lang; sp.expected = xs.out; sp.original = (finalCode()[lang] || ''); sp.seed = t.seed; sp.stdin = xs.stdin; sp.partial = !!partial; }
+      return sp;
+    }
 
     view.innerHTML = '<div class="crumbs"><a href="#/">Inicio</a>' + ic('right') + '<a href="#/t/' + t.id + '/ejercicios">' + esc(t.guide) + '</a>' + ic('right') + '<b>Ejercicio ' + (idx + 1) + ' de ' + t.exercises.length + '</b></div>' +
       '<div class="bench"><div class="left"><div class="navrow">' + (prev ? '<a class="btn sm" href="#/t/' + t.id + '/x/' + (idx - 1) + '">' + ic('left') + 'Anterior</a>' : '') + (next ? '<a class="btn sm" href="#/t/' + t.id + '/x/' + (idx + 1) + '">Siguiente' + ic('right') + '</a>' : '<a class="btn sm" href="#/t/' + t.id + '/quiz">Ir al reto rápido' + ic('right') + '</a>') + '<span class="spacer"></span><button class="btn sm" id="restartX">' + ic('undo') + 'Reiniciar ejercicio</button></div>' +
@@ -336,7 +312,7 @@
     var ed = new JT.Editor($('#edHost'), { order: order, readOnly: !st.done, onHelp: function (info) { JT.help.openLine(info); }, onTerm: function (k) { JT.help.openTerm(k); }, onTerms: true, onChange: function () { if (st.done) freeLint(); } });
     ed.toolsEl.innerHTML = '<span class="badge" id="modeBadge"></span>';
     var M = JT.monitor, runtimeIssues = [], lastRange = null;
-    M.attach($('#monHost'), { storage: !!t.storage, server: !!t.server, onError: onRuntimeError });
+    M.attach($('#monHost'), { storage: !!t.storage, server: !!t.server, term: kind === 'term', lang: lang, onError: onRuntimeError });
 
     function assemble() {
       var files = {}; Object.keys(base).forEach(function (k) { files[k] = base[k]; });
@@ -357,21 +333,21 @@
       else if (!st.done) { ed.setFiles(files, lastRange ? lastRange.file : order[0]); ed.setReadOnly(true); }
       if (flash && lastRange) ed.flash(lastRange.file, lastRange.from, lastRange.to);
       $('#modeBadge').textContent = st.done ? 'Modo libre: ya puedes editar' : 'Se completa paso a paso';
-      var pf = previewFiles(st.done ? ed.getFiles() : files), spec = { kind: kind, lib: lib, files: pf };
-      var li = JT.lint({ files: pf, kind: kind, lib: lib }), errs = li.filter(function (x) { return x.sev === 'error'; });
+      var pf = previewFiles(st.done ? ed.getFiles() : files), spec = mkSpec(pf, !st.done);
+      var li = JT.lint({ files: pf, kind: kind, lib: lib, lang: lang }), errs = li.filter(function (x) { return x.sev === 'error'; });
       M.setSpec(spec);
       if (!st.done) $('#issuesHost').innerHTML = '';
-      if (M.isOpen) { if (errs.length && st.done) M.setBlocked('Hay errores en tu código. Corrígelos y se actualiza sola.'); else runSoon(); }
+      if (M.isOpen) { if (errs.length && st.done && kind !== 'term') M.setBlocked('Hay errores en tu código. Corrígelos y se actualiza sola.'); else runSoon(); }
       if (st.done) { renderFree(li); }
     }
     function freeLint() {
-      var pf = ed.getFiles(), li = JT.lint({ files: pf, kind: kind, lib: lib }), errs = li.filter(function (x) { return x.sev === 'error'; });
-      renderFree(li); M.setSpec({ kind: kind, lib: lib, files: pf });
-      if (M.isOpen) { if (errs.length) M.setBlocked('Hay errores en tu código. Corrígelos y se actualiza sola.'); else runSoon(); }
+      var pf = ed.getFiles(), li = JT.lint({ files: pf, kind: kind, lib: lib, lang: lang }), errs = li.filter(function (x) { return x.sev === 'error'; });
+      renderFree(li); M.setSpec(mkSpec(pf, false));
+      if (M.isOpen) { if (errs.length && kind !== 'term') M.setBlocked('Hay errores en tu código. Corrígelos y se actualiza sola.'); else runSoon(); }
     }
     function renderFree(li) { ed.setErrors(errorLines(li.concat(runtimeIssues))); $('#issuesHost').innerHTML = issuesHTML(li.concat(runtimeIssues)); }
     function onRuntimeError(m) {
-      var s = M.spec, where = mapRuntimeLine(m, s, M.sb.info), e2 = JT.explainRuntime(m, s);
+      var s = M.spec, where = m.term ? { file: lang, line: m.line || 0 } : mapRuntimeLine(m, s, M.sb.info), e2 = m.term ? JT.term.explain(lang, m) : JT.explainRuntime(m, s);
       var item = { sev: st.done ? 'error' : 'warn', file: where.file, line: st.done ? where.line : 0, title: (st.done ? '' : 'Todavía incompleto: ') + e2.title, msg: e2.msg, fix: e2.fix };
       runtimeIssues.push(item);
       if (st.done) freeLint(); else $('#issuesHost').innerHTML = issuesHTML(runtimeIssues);
@@ -391,7 +367,7 @@
         h += '<div class="stepcard past"><div class="sh"><span class="no">' + ic('check') + '</span><span>' + esc(s.title) + '</span><span class="spacer"></span><span class="badge f-' + (s.file || 'js') + '">' + esc(JT.FILE_EXT[s.file || 'js']) + '</span></div><div class="sb"><pre class="done-code">' + JT.highlight(st.texts[i], s.file || 'js') + '</pre>' + (s.after ? '<div class="why" style="margin-top:8px;font-size:13.5px;color:#c5cad6">' + s.after + '</div>' : '') + '</div></div>';
       }
       if (st.done || st.i >= N) {
-        h += '<div class="winbox"><div class="big">' + ic('check') + '</div><h3>¡Ejercicio completado!</h3><p>' + (xs.final || 'Escribiste todo el código tú mismo. Abre la pantalla para ver el resultado y prueba cambiar el código a la derecha: ahora está desbloqueado.') + '</p><div class="btnrow" style="justify-content:center"><button class="btn primary" id="openScreen">' + ic('play') + 'Ver resultado en la pantalla</button>' + (next ? '<a class="btn" href="#/t/' + t.id + '/x/' + (idx + 1) + '">Siguiente ejercicio' + ic('right') + '</a>' : '<a class="btn" href="#/t/' + t.id + '/quiz">Reto rápido' + ic('right') + '</a>') + '</div></div>';
+        h += '<div class="winbox"><div class="big">' + ic('check') + '</div><h3>¡Ejercicio completado!</h3><p>' + (xs.final || 'Escribiste todo el código tú mismo. Abre la pantalla para ver el resultado y prueba cambiar el código a la derecha: ahora está desbloqueado.') + '</p><div class="btnrow" style="justify-content:center"><button class="btn primary" id="openScreen">' + ic('play') + 'Ver resultado en la pantalla</button>' + ((function () { var ei = -1; for (var q = 0; q < t.examples.length; q++) if (JT.pair(t, q) === idx) { ei = q; break; } var nxt = null; for (var q2 = ei + 1; q2 < t.examples.length; q2++) { if (ei >= 0) { nxt = q2; break; } } return (ei >= 0 && t.examples[ei + 1] ? '<a class="btn" href="#/t/' + t.id + '/e/' + (ei + 1) + '">Siguiente ejemplo' + ic('right') + '</a>' : (next ? '<a class="btn" href="#/t/' + t.id + '/x/' + (idx + 1) + '">Siguiente ejercicio' + ic('right') + '</a>' : '<a class="btn" href="#/t/' + t.id + '/quiz">Reto rápido' + ic('right') + '</a>')) + (ei >= 0 ? '<a class="btn" href="#/t/' + t.id + '/e/' + ei + '">' + ic('left') + 'Volver al ejemplo</a>' : ''); })() ) + '</div></div>';
         $('#exLeft').innerHTML = h; return;
       }
       var cs = xs.steps[st.i];
@@ -515,7 +491,8 @@
     function show() {
       if (i >= Q.length) {
         var pct = Math.round(score / Q.length * 100);
-        if (score >= Math.ceil(Q.length * 0.6)) JT.markDone('quiz:' + t.id, 6, 'reto aprobado');
+        JT.state.quiz[t.id] = Math.max(JT.state.quiz[t.id] || 0, score); JT.saveState();
+        if (score >= Math.ceil(Q.length * 0.6)) JT.markDone('quiz:' + t.id, 6, 'reto aprobado'); else JT.checkBadges();
         box.innerHTML = '<div class="winbox"><div class="big">' + ic(pct >= 60 ? 'award' : 'flag') + '</div><h3>' + score + ' de ' + Q.length + ' correctas (' + pct + '%)</h3><p>' + (pct >= 80 ? '¡Excelente! Dominas este tema.' : pct >= 60 ? 'Bien hecho. Repasa los ejemplos que te costaron para afianzar.' : 'Sigue practicando: revisa los conceptos y los ejemplos y vuelve a intentarlo.') + '</p><div class="btnrow" style="justify-content:center"><button class="btn primary" id="qAgain">' + ic('refresh') + 'Intentar de nuevo</button><a class="btn" href="#/t/' + t.id + '/ejemplos">Repasar ejemplos</a></div></div>';
         return;
       }

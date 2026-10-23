@@ -1,11 +1,14 @@
 # js-trick
 
-Laboratorio interactivo para estudiar las **guías 8 a 12** (JSON y Web Storage, AJAX, jQuery y Angular), pensado para quien no recuerda lo básico de JavaScript. Es una página web hecha con HTML, CSS y JavaScript puros: no necesita instalar nada ni tener internet.
+Plataforma interactiva para aprender a programar practicando: **HTML, CSS, JavaScript (guías 8 a 12: JSON, AJAX, jQuery y Angular), Python, SQL, PHP, C, C++ y C#**. Cada ejemplo se explica pieza por pieza y termina con un ejercicio guiado. Está hecha con HTML, CSS y JavaScript puros, sin cuentas ni instalación.
+
+- `index.html`: **landing page** con efectos 3D ligeros (se pausan fuera de pantalla y respetan *reducir movimiento*) y un botón al panel.
+- `app.html`: el **entorno** (panel de usuario con nivel, XP, racha, logros y reto diario; catálogo de lenguajes; ejemplos, ejercicios y retos).
 
 ## Cómo abrirla
 
 - **Recomendado en Windows:** doble clic en `abrir-js-trick.bat`. Inicia un servidor local con Python (si está instalado) y abre el navegador; para detenerlo cierra la ventana negra.
-- **Opción simple:** doble clic en `index.html` (Chrome, Edge o Firefox).
+- **Opción simple:** doble clic en `index.html` (Chrome, Edge o Firefox) y pulsa **Entrar al panel**.
 - **Si algo no carga** (por ejemplo, por restricciones del navegador con archivos locales), abre una terminal en esta carpeta y ejecuta:
 
 ```bash
@@ -14,7 +17,27 @@ python -m http.server 5173
 
 y entra a `http://localhost:5173`.
 
-## Qué incluye
+## Lenguajes nuevos (10 ejemplos, 10 ejercicios y 8 preguntas cada uno)
+
+| Lenguaje | Cómo se ejecuta |
+|---|---|
+| HTML y CSS | Se ven de verdad en la pantalla del resultado |
+| Python | Se ejecuta de verdad con Pyodide (descarga el intérprete la primera vez) |
+| SQL | Se ejecuta de verdad con sql.js sobre una base de ejemplo |
+| PHP, C, C++ y C# | Muestran la salida esperada del ejemplo; el revisor explica errores de sintaxis; el botón *Ejecutar en línea* (opcional, con tu permiso) usa el servicio público ce.judge0.com |
+
+El contenido de cada lenguaje está en `js/data/` (`tk.js` es el constructor compacto de temas). Las salidas esperadas de Python, SQL y C# están verificadas contra su ejecución real; las de C, C++ y PHP están escritas a mano (no hay compilador en el entorno de desarrollo).
+
+## Herramientas para quien edita el contenido
+
+```bash
+node tools/validate.js
+python tools/checkterm.py
+```
+
+`validate.js` revisa estructura, soluciones y errores del revisor; `checkterm.py` ejecuta Python, SQL y C# (si hay .NET) y compara con la salida esperada (`--fill archivo.js` rellena los `'@@'` pendientes).
+
+## Contenido de las guías 8 a 12
 
 | Tema | Ejemplos | Ejercicios guiados | Reto rápido |
 |---|---|---|---|

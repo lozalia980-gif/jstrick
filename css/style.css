@@ -164,6 +164,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .t-tg{color:#e06c75}.t-at{color:#d19a66}.t-sel{color:#e5c07b}.t-pr{color:#56b6c2}.t-va{color:#98c379}.t-ip{color:#56b6c2}
 .t-dir{color:#c678dd}
 .t-rx{color:#56b6c2}
+.t-var{color:#e06c75}.t-pp{color:#c678dd}
 
 /* ---------- Editor ---------- */
 .editor{background:var(--code-bg);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}

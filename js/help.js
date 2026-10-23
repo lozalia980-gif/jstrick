@@ -48,6 +48,7 @@
   /* ---------- explicación genérica de una línea ---------- */
   var CSSP = { color: 'el color del texto', background: 'el fondo', 'background-color': 'el color de fondo', width: 'el ancho', height: 'el alto', margin: 'el espacio exterior', padding: 'el espacio interior', border: 'el borde', 'font-size': 'el tamaño de la letra', 'font-weight': 'el grosor de la letra', 'text-align': 'la alineación del texto', display: 'cómo se muestra el elemento (block, inline, none, flex...)', position: 'cómo se posiciona el elemento', 'border-radius': 'qué tan redondeadas son las esquinas', cursor: 'el icono del cursor al pasar encima', opacity: 'la transparencia', transition: 'la animación suave entre estados', overflow: 'qué pasa con lo que se sale de la caja', flex: 'el reparto de espacio en un contenedor flexible', gap: 'el espacio entre los elementos hijos', 'box-shadow': 'la sombra de la caja', 'list-style': 'el estilo de las viñetas de la lista', 'font-family': 'el tipo de letra' };
   function generic(text, f) {
+    if (JT.genericLang && /^(py|c|cpp|cs|php|sql)$/.test(f)) { var gl = JT.genericLang(text, f); if (gl) return gl; }
     var t = text.trim(), m;
     if (!t) return 'Línea vacía: sirve para separar bloques y que el código se lea mejor. No hace nada.';
     if (f === 'html') {

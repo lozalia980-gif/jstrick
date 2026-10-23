@@ -2,88 +2,265 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>js-trick | Aprende JSON, AJAX, jQuery y Angular practicando</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>js-trick | Aprende a programar practicando</title>
+<meta name="description" content="js-trick: plataforma para aprender HTML, CSS, JavaScript, Python, SQL, PHP, C, C++ y C# con ejemplos explicados, ejercicios guiados y errores que te enseñan. Sin registro, gratis.">
+<meta name="theme-color" content="#14161c">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2361afef'/%3E%3Cstop offset='1' stop-color='%23c678dd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M12 10l-6 6 6 6M20 10l6 6-6 6' fill='none' stroke='%2310131a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/landing.css?v=1">
 </head>
 <body>
-<!-- Iconos (sprite SVG) -->
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
-    <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
-    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
-    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
     <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
-    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
-    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
-    <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
-    <symbol id="i-undo" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></symbol>
-    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
-    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
-    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
-    <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
-    <symbol id="i-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
-    <symbol id="i-left" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
-    <symbol id="i-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-term" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
     <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
     <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
-    <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
-    <symbol id="i-term" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
-    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
-    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></symbol>
-    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-    <symbol id="i-max" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
-    <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6"/><path d="M10 3v6L4 20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1l-6-11V3"/></symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
-    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
     <symbol id="i-cube" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
-    <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
-    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
-    <symbol id="i-skip" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
   </defs>
 </svg>
 
-<div id="app">
-  <header id="top">
-    <button id="menuBtn" aria-label="Menu"><svg class="ic"><use href="#i-menu"/></svg></button>
-    <a class="brand" href="#/"><span class="logo"><svg class="ic"><use href="#i-code"/></svg></span>js-trick<small>aprende practicando</small></a>
-    <span class="spacer"></span>
-    <div class="xpchip" id="xpchip"></div>
-    <button class="iconbtn" id="helpBtn"><svg class="ic"><use href="#i-help"/></svg>Preguntar</button>
-  </header>
-  <nav id="side"></nav>
-  <main id="main"><div class="page" id="view"></div></main>
-</div>
+<div class="cursor-glow" aria-hidden="true"></div>
 
-<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
-<div id="toasts"></div>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="js-trick, inicio"><span class="logo"><svg class="i" aria-hidden="true"><use href="#i-code"/></svg></span><span>js-trick</span></a>
+    <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="#lenguajes">Lenguajes</a>
+      <a href="#metodo">Cómo se aprende</a>
+      <a href="#probar">Pruébalo</a>
+      <a href="#ruta">Ruta</a>
+      <a href="#preguntas">Preguntas</a>
+      <a class="btn btn-primary btn-sm" href="app.html#/panel" data-magnetic><span class="btn-txt">Entrar al panel <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero" aria-labelledby="h1">
+    <canvas class="hero-canvas" id="net" aria-hidden="true"></canvas>
+    <div class="hero-vignette" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow reveal"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Aprende a programar practicando</span>
+        <h1 id="h1" data-split>Escribe código de verdad, <span class="grad">entiéndelo</span> de verdad.</h1>
+        <p class="lead reveal" style="--d:3">Una plataforma para <b>HTML, CSS, JavaScript, Python, SQL, PHP, C, C++ y C#</b>. Cada ejemplo se explica pieza por pieza, cada línea tiene su <b class="qmark">?</b>, y cada ejemplo termina con un ejercicio guiado donde el sistema corrige tus errores <i>mientras escribes</i>.</p>
+        <div class="cta-row reveal" style="--d:4">
+          <a class="btn btn-primary btn-lg" href="app.html#/panel" data-magnetic><span class="btn-fill"></span><span class="btn-txt">Entrar al panel <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+          <a class="btn btn-ghost btn-lg" href="#probar" data-magnetic><span class="btn-fill"></span><span class="btn-txt"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg> Probar código ahora</span></a>
+        </div>
+        <ul class="chips reveal" style="--d:5">
+          <li><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg> Sin registro ni cuentas</li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-term"/></svg> Se ejecuta en tu navegador</li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-alert"/></svg> Errores explicados en español</li>
+        </ul>
+      </div>
+      <div class="stage-wrap reveal" style="--d:2">
+        <div class="stage" id="stage" aria-hidden="true">
+          <div class="win">
+            <div class="win-bar"><i></i><i></i><i></i><span id="win-file">main.py</span><em id="win-lang">Python</em></div>
+            <pre class="win-code" id="win-code"></pre>
+            <div class="win-out"><b>$</b> <span id="win-out"></span><i class="cur"></i></div>
+          </div>
+          <div class="fl fl1">{ }</div><div class="fl fl2">&lt;/&gt;</div><div class="fl fl3">SQL</div><div class="fl fl4">py</div><div class="fl fl5">C++</div><div class="fl fl6">$</div>
+          <div class="pop3d pop-err"><svg class="i" aria-hidden="true"><use href="#i-alert"/></svg><div><b>Error explicado</b><span>Falta ":" al final de la línea 3</span></div></div>
+          <div class="pop3d pop-xp"><svg class="i" aria-hidden="true"><use href="#i-award"/></svg><div><b>+10 XP</b><span>Ejercicio completado</span></div></div>
+          <div class="pop3d pop-q"><svg class="i" aria-hidden="true"><use href="#i-help"/></svg><div><b>¿Qué hace print()?</b><span>Muestra valores en pantalla</span></div></div>
+        </div>
+      </div>
+    </div>
+    <a class="scroll-hint" href="#lenguajes" aria-label="Bajar"><i></i></a>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marq"></div></div>
+
+  <!-- ============ NÚMEROS ============ -->
+  <section class="numbers" aria-label="La plataforma en números">
+    <div class="wrap nums">
+      <div class="num reveal"><b data-count id="n-lang">9</b><span>lenguajes</span></div>
+      <div class="num reveal" style="--d:1"><b data-count id="n-ex">0</b><span>ejemplos explicados</span></div>
+      <div class="num reveal" style="--d:2"><b data-count id="n-xs">0</b><span>ejercicios guiados</span></div>
+      <div class="num reveal" style="--d:3"><b data-count id="n-q">0</b><span>preguntas de reto</span></div>
+      <div class="num reveal" style="--d:4"><b data-count data-to="0" data-label="0">0</b><span>cuentas que crear</span></div>
+    </div>
+  </section>
+
+  <!-- ============ LENGUAJES ============ -->
+  <section id="lenguajes" class="langs" aria-labelledby="t-lang">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Elige tu camino</span>
+        <h2 id="t-lang" data-split>Nueve lenguajes, <span class="grad">una sola plataforma</span></h2>
+        <p>Los más pedidos en empleos, universidades y proyectos reales. Cada uno con su propio mini-curso: conceptos, ejemplos, ejercicios y un reto. Pasa el cursor sobre una tarjeta.</p>
+      </div>
+      <div class="lang-grid" id="lang-grid"></div>
+      <div class="soon-row reveal"><span>En camino:</span><div id="soon-row"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ MÉTODO ============ -->
+  <section id="metodo" class="method" aria-labelledby="t-met">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Cómo se aprende aquí</span>
+        <h2 id="t-met" data-split>Ver, entender, escribir, <span class="grad">equivocarte y mejorar</span></h2>
+        <p>Programar se aprende con las manos. Cada lección sigue siempre el mismo ciclo, pensado para quien no recuerda casi nada.</p>
+      </div>
+      <div class="steps-wrap">
+        <ol class="steps" id="steps">
+          <li class="step on" data-step="0"><span class="sn">1</span><div><h3>Mira un ejemplo explicado</h3><p>El código se desglosa en piezas pequeñas, cada una con su explicación en palabras simples. Después lo ves completo y puedes editarlo.</p></div></li>
+          <li class="step" data-step="1"><span class="sn">2</span><div><h3>Pregunta lo que no entiendas</h3><p>Un botón <b class="qmark">?</b> junto a cada línea, función u objeto abre una explicación detallada. También puedes escribir tu propia duda.</p></div></li>
+          <li class="step" data-step="2"><span class="sn">3</span><div><h3>Practica con un ejercicio guiado</h3><p>Después de cada ejemplo, el sistema te dicta qué escribir paso a paso, te explica el porqué y corrige tus errores en tiempo real.</p></div></li>
+          <li class="step" data-step="3"><span class="sn">4</span><div><h3>Ve el resultado y mejóralo</h3><p>Una computadora se abre y muestra lo que hace tu código. Si algo falla, un cuadro te dice qué está mal, por qué y qué escribir en su lugar.</p></div></li>
+        </ol>
+        <div class="vis" id="vis" aria-hidden="true">
+          <div class="vis-card v0 on"><div class="vc-bar">Desglose</div><div class="vc-body"><div class="pill">1</div><code>var texto = JSON.stringify(alumno);</code><p>JSON.stringify convierte el objeto en texto.</p><div class="pill">2</div><code>localStorage.setItem("a", texto);</code><p>Guarda ese texto en el navegador.</p></div></div>
+          <div class="vis-card v1"><div class="vc-bar">Ayuda</div><div class="vc-body"><code>print(<span class="qb">?</span>"Hola")</code><div class="bubble"><b>print()</b> muestra valores en la pantalla. Puedes pasarle varios separados por comas.</div><div class="askrow"><span>Escribe tu duda...</span><b>Preguntar</b></div></div></div>
+          <div class="vis-card v2"><div class="vc-bar">Ejercicio · paso 2 de 5</div><div class="vc-body"><p>Declara la variable <code>edad</code> con el número 20.</p><div class="ans"><code>edad = 20</code></div><div class="ok"><svg class="i"><use href="#i-check"/></svg> ¡Muy bien! Eso es correcto.</div><div class="bar"><i></i><i></i><i class="cur"></i><i></i><i></i></div></div></div>
+          <div class="vis-card v3"><div class="vc-bar">Resultado</div><div class="vc-body"><div class="screen-mini"><span>Hola, Ana</span></div><div class="err"><svg class="i"><use href="#i-alert"/></svg> <b>Falta ";"</b> al final de la línea 4. Agrega <code>;</code>.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRUEBA ============ -->
+  <section id="probar" class="try" aria-labelledby="t-try">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Sin crear nada</span>
+        <h2 id="t-try" data-split>Escribe código <span class="grad">ahora mismo</span></h2>
+        <p>Este es el mismo tipo de editor de la plataforma. Cambia el código, pulsa <b>Ejecutar</b> y prueba romperlo a propósito para ver cómo te lo explica.</p>
+      </div>
+      <div class="play reveal" id="play">
+        <div class="play-tabs" id="play-tabs"></div>
+        <div class="play-grid">
+          <div class="play-ed" id="play-ed"></div>
+          <div class="play-out">
+            <div class="po-bar"><b>Resultado</b><button class="btn btn-primary btn-sm" id="play-run" type="button"><span class="btn-txt"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg> Ejecutar</span></button></div>
+            <iframe id="play-frame" title="Resultado del código" sandbox="allow-scripts"></iframe>
+            <div class="po-console" id="play-console"></div>
+            <div class="po-issues" id="play-issues"></div>
+          </div>
+        </div>
+        <div class="play-foot"><span>Los ejemplos de la landing están en JavaScript. Dentro de la plataforma también ejecutas Python y SQL de verdad.</span><a class="btn btn-ghost btn-sm" href="app.html#/panel" data-magnetic><span class="btn-txt">Ver todo el entorno <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POR QUÉ ============ -->
+  <section class="why" aria-labelledby="t-why">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Por qué js-trick</span>
+        <h2 id="t-why" data-split>Hecho para <span class="grad">entender</span>, no solo para copiar</h2>
+        <p>La IA escribe código en segundos, pero quien entiende lo que escribe sigue teniendo ventaja. Aquí aprendes a razonar, a leer errores y a decidir.</p>
+      </div>
+      <div class="bento">
+        <article class="tile t-big glass reveal" data-tilt="6"><div class="ic"><svg class="i" aria-hidden="true"><use href="#i-term"/></svg></div><h3>Una computadora en tu pantalla</h3><p>Cada ejemplo tiene una laptop que se abre y muestra el resultado de tu código en tiempo real, con su consola.</p><div class="mini-lap"><i></i></div></article>
+        <article class="tile glass reveal" data-tilt="8" style="--d:1"><div class="ic"><svg class="i" aria-hidden="true"><use href="#i-help"/></svg></div><h3>Un ? en cada línea</h3><p>Toca el signo de pregunta junto a cualquier línea, función o clase para ver qué hace y por qué.</p></article>
+        <article class="tile glass reveal" data-tilt="8" style="--d:2"><div class="ic"><svg class="i" aria-hidden="true"><use href="#i-alert"/></svg></div><h3>Errores que enseñan</h3><p>No solo dice "error": explica por qué está mal y qué deberías escribir en su lugar.</p></article>
+        <article class="tile glass reveal" data-tilt="8" style="--d:3"><div class="ic"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg></div><h3>Ejemplo, luego ejercicio</h3><p>Nada de teoría suelta: cada ejemplo se completa con un ejercicio guiado línea por línea.</p></article>
+        <article class="tile t-wide glass reveal" data-tilt="5" style="--d:4"><div class="ic"><svg class="i" aria-hidden="true"><use href="#i-award"/></svg></div><h3>Tu panel de progreso</h3><p>Nivel, XP, racha de estudio, mapa de actividad, logros y un reto diario. Todo se guarda en tu navegador: sin cuentas ni contraseñas.</p><div class="heat-mini" id="heat-mini"></div></article>
+        <article class="tile glass reveal" data-tilt="8" style="--d:5"><div class="ic"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg></div><h3>Gratis y sin instalar</h3><p>Todo corre en el navegador. Python y SQL se ejecutan de verdad; el resto muestra su salida y puede correrse en línea.</p></article>
+      </div>
+      <div class="compare reveal">
+        <table>
+          <thead><tr><th></th><th>Videos</th><th>Tutoriales de lectura</th><th class="us">js-trick</th></tr></thead>
+          <tbody>
+            <tr><td>Escribes código tú mismo</td><td>A veces</td><td>Casi nunca</td><td class="us"><svg class="i"><use href="#i-check"/></svg> En cada lección</td></tr>
+            <tr><td>Te corrige mientras escribes</td><td>No</td><td>No</td><td class="us"><svg class="i"><use href="#i-check"/></svg> En tiempo real</td></tr>
+            <tr><td>Explica tus errores en español</td><td>Depende del video</td><td>No</td><td class="us"><svg class="i"><use href="#i-check"/></svg> Siempre</td></tr>
+            <tr><td>Ves el resultado al instante</td><td>Solo el del video</td><td>No</td><td class="us"><svg class="i"><use href="#i-check"/></svg> Con tu código</td></tr>
+            <tr><td>Instalar programas</td><td>Casi siempre</td><td>Casi siempre</td><td class="us"><svg class="i"><use href="#i-check"/></svg> No hace falta</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RUTA ============ -->
+  <section id="ruta" class="road" aria-labelledby="t-road">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Tu mapa</span>
+        <h2 id="t-road" data-split>Un camino claro de <span class="grad">cero a programador</span></h2>
+        <p>Puedes empezar por donde quieras, pero esta ruta funciona muy bien si estás empezando.</p>
+      </div>
+      <ol class="timeline" id="timeline">
+        <li class="tl reveal"><span class="tl-dot"></span><div class="tl-card glass" data-tilt="4"><b>1 · Fundamentos web</b><p>HTML y CSS: construye y diseña tu primera página.</p><div class="tags"><span style="--c:#e06c75">HTML</span><span style="--c:#56b6c2">CSS</span></div></div></li>
+        <li class="tl reveal"><span class="tl-dot"></span><div class="tl-card glass" data-tilt="4"><b>2 · Dale vida con JavaScript</b><p>Variables, funciones, DOM, JSON, almacenamiento, AJAX y jQuery.</p><div class="tags"><span style="--c:#e5c07b">JavaScript</span></div></div></li>
+        <li class="tl reveal"><span class="tl-dot"></span><div class="tl-card glass" data-tilt="4"><b>3 · Tu primer lenguaje general</b><p>Python: lógica de programación con la sintaxis más amable.</p><div class="tags"><span style="--c:#61afef">Python</span></div></div></li>
+        <li class="tl reveal"><span class="tl-dot"></span><div class="tl-card glass" data-tilt="4"><b>4 · Datos y servidor</b><p>SQL para hablar con bases de datos y PHP para el lado del servidor.</p><div class="tags"><span style="--c:#c678dd">SQL</span><span style="--c:#8892bf">PHP</span></div></div></li>
+        <li class="tl reveal"><span class="tl-dot"></span><div class="tl-card glass" data-tilt="4"><b>5 · Cómo funciona la computadora</b><p>C y C++: memoria, tipos y rendimiento. Te hacen mejor en todo lo demás.</p><div class="tags"><span style="--c:#7f8ea3">C</span><span style="--c:#d19a66">C++</span></div></div></li>
+        <li class="tl reveal"><span class="tl-dot"></span><div class="tl-card glass" data-tilt="4"><b>6 · Aplicaciones y videojuegos</b><p>C#: el lenguaje de .NET y de Unity.</p><div class="tags"><span style="--c:#98c379">C#</span></div></div></li>
+        <li class="tl reveal"><span class="tl-dot soon"></span><div class="tl-card glass soon" data-tilt="4"><b>7 · Frameworks y móvil <em>pronto</em></b><p>Angular ya tiene su módulo. Vienen React, Node.js, Flutter, Kotlin, Swift y TypeScript.</p><div class="tags"><span style="--c:#e06c75">Angular</span><span style="--c:#61dafb">React</span><span style="--c:#56b6c2">Flutter</span></div></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ PREGUNTAS ============ -->
+  <section id="preguntas" class="faq" aria-labelledby="t-faq">
+    <div class="wrap narrow">
+      <div class="sec-head reveal"><span class="eyebrow">Dudas comunes</span><h2 id="t-faq" data-split>Preguntas <span class="grad">frecuentes</span></h2></div>
+      <div class="faq-list reveal">
+        <details><summary>¿Necesito registrarme?<svg class="i"><use href="#i-down"/></svg></summary><p>No. No hay cuentas ni contraseñas. Tu progreso (nivel, XP, logros y los cambios que hagas en el código) se guarda en tu propio navegador.</p></details>
+        <details><summary>¿Funciona sin internet?<svg class="i"><use href="#i-down"/></svg></summary><p>HTML, CSS, JavaScript, jQuery y Angular funcionan completamente sin conexión. Python y SQL necesitan descargar una sola vez su motor (unos MB) para ejecutar código modificado; las salidas esperadas de los ejemplos se ven sin conexión.</p></details>
+        <details><summary>¿Cómo se ejecutan C, C++, C# y PHP?<svg class="i"><use href="#i-down"/></svg></summary><p>Los navegadores no pueden compilar esos lenguajes por sí solos. Cada ejemplo muestra su salida esperada, y el revisor te explica los errores de sintaxis. Si quieres ejecutarlo de verdad, el botón <b>Ejecutar en línea</b> envía tu código (con tu permiso) a un servicio público gratuito.</p></details>
+        <details><summary>¿Sirve si no recuerdo nada de programación?<svg class="i"><use href="#i-down"/></svg></summary><p>Sí, está pensado para eso. Hay un repaso exprés de lo básico, las explicaciones usan analogías y cada paso de los ejercicios te dice el porqué de lo que escribes.</p></details>
+        <details><summary>¿Y si la IA ya programa por mí?<svg class="i"><use href="#i-down"/></svg></summary><p>La IA ayuda mucho, pero revisar, corregir y decidir sigue siendo trabajo de personas. Quien entiende el código detecta cuándo la IA se equivoca. js-trick te enseña justamente eso: a leer, razonar y depurar.</p></details>
+        <details><summary>¿Qué sigue después?<svg class="i"><use href="#i-down"/></svg></summary><p>Más módulos por lenguaje (intermedio y avanzado) y nuevos temas: React, Node.js, Flutter, Kotlin, Swift y TypeScript.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta" aria-labelledby="t-cta">
+    <div class="wrap">
+      <div class="cta-box glass reveal" data-tilt="3">
+        <h2 id="t-cta">Tu primera línea de código <span class="grad">te espera</span></h2>
+        <p>Entra al panel, elige un lenguaje y escribe tu primer ejemplo en menos de un minuto.</p>
+        <a class="btn btn-primary btn-lg" href="app.html#/panel" data-magnetic><span class="btn-fill"></span><span class="btn-txt">Entrar al panel <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> js-trick · aprende programando</span>
+    <nav class="foot-links" aria-label="Pie"><a href="app.html#/panel">Mi panel</a><a href="app.html#/cursos">Lenguajes</a><a href="#preguntas">Preguntas</a></nav>
+  </div>
+</footer>
 
 <script src="js/core.js"></script>
+<script src="js/tracks.js"></script>
 <script src="js/highlight.js"></script>
 <script src="js/glossary1.js"></script>
-<script src="js/glossary2.js"></script>
+<script src="js/hl-langs.js"></script>
 <script src="js/linter.js"></script>
-<script src="js/lib-prelude.js"></script>
-<script src="js/lib-jquery.js"></script>
-<script src="js/lib-angular.js"></script>
-<script src="js/sandbox.js"></script>
-<script src="js/editor.js"></script>
-<script src="js/monitor.js"></script>
-<script src="js/help.js"></script>
-<script src="js/data/t0.js"></script>
-<script src="js/data/t8.js"></script>
-<script src="js/data/t9.js"></script>
-<script src="js/data/t10.js"></script>
-<script src="js/data/t11.js"></script>
-<script src="js/data/t12.js"></script>
-<script src="js/app.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/landing.js?v=1"></script>
 </body>
 </html>

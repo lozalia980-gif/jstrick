@@ -168,10 +168,11 @@
   }
 
   function tokenize(code, lang) {
+    if (JT.langScan && JT.langScan[lang]) return JT.langAnnotate(JT.langScan[lang](code), lang);
     var toks = lang === 'html' ? scanHTML(code) : lang === 'css' ? scanCSS(code) : scanJS(code);
     return annotate(toks, lang === 'html' || lang === 'css' ? lang : 'js');
   }
-  function langOf(f) { return f === 'html' ? 'html' : f === 'css' ? 'css' : 'js'; }
+  function langOf(f) { return f === 'html' ? 'html' : f === 'css' ? 'css' : (JT.langScan && JT.langScan[f]) ? f : 'js'; }
 
   function wrapTok(t, opts, seen) {
     var cls = 't-' + t.t;
