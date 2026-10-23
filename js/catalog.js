@@ -9,7 +9,7 @@
       code: '.boton {\n  background: #61afef;\n  border-radius: 12px;\n  padding: 10px 18px;\n}', out: 'botón azul redondeado' },
     js:     { ex: 71, xs: 30, q: 6, topics: ['Repaso de bases', 'JSON y Web Storage', 'AJAX', 'jQuery y Angular'], file: 'app.js', lang: 'js', run: 'Se ejecuta de verdad',
       code: 'const alumno = { nombre: "Ana", edad: 20 };\nconst texto = JSON.stringify(alumno);\nconsole.log(texto);', out: '{"nombre":"Ana","edad":20}' },
-    python: { ex: 10, xs: 10, q: 8, topics: ['Variables y tipos', 'Condicionales', 'Listas y bucles', 'Funciones'], file: 'main.py', lang: 'py', run: 'Se ejecuta de verdad',
+    python: { ex: 20, xs: 20, q: 16, topics: ['Variables y tipos', 'Listas y bucles', 'Excepciones y archivos', 'Clases y herencia'], file: 'main.py', lang: 'py', run: 'Se ejecuta de verdad',
       code: 'nombres = ["Ana", "Luis", "Eva"]\nfor n in nombres:\n    print("Hola,", n)', out: 'Hola, Ana\nHola, Luis\nHola, Eva' },
     sql:    { ex: 10, xs: 10, q: 8, topics: ['SELECT y WHERE', 'ORDER BY y LIMIT', 'JOIN', 'GROUP BY'], file: 'consulta.sql', lang: 'sql', run: 'Se ejecuta de verdad',
       code: 'SELECT nombre, edad\nFROM alumnos\nWHERE edad >= 18\nORDER BY edad DESC;', out: 'nombre | edad\nLuis   | 22\nAna    | 20' },

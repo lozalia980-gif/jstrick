@@ -29,7 +29,11 @@ def table(cols, rows):
 
 
 def run_py(code):
-    r = subprocess.run([sys.executable, '-I', '-X', 'utf8', '-c', code], capture_output=True, text=True, encoding='utf8', timeout=20)
+    d = tempfile.mkdtemp()  # los ejemplos que crean archivos lo hacen en una carpeta temporal
+    try:
+        r = subprocess.run([sys.executable, '-I', '-X', 'utf8', '-c', code], capture_output=True, text=True, encoding='utf8', timeout=20, cwd=d)
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
     return (r.stdout + r.stderr).replace('\r', '')
 
 
