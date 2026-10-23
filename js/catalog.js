@@ -11,7 +11,7 @@
       code: 'const alumno = { nombre: "Ana", edad: 20 };\nconst texto = JSON.stringify(alumno);\nconsole.log(texto);', out: '{"nombre":"Ana","edad":20}' },
     python: { ex: 20, xs: 20, q: 16, topics: ['Variables y tipos', 'Listas y bucles', 'Excepciones y archivos', 'Clases y herencia'], file: 'main.py', lang: 'py', run: 'Se ejecuta de verdad',
       code: 'nombres = ["Ana", "Luis", "Eva"]\nfor n in nombres:\n    print("Hola,", n)', out: 'Hola, Ana\nHola, Luis\nHola, Eva' },
-    sql:    { ex: 10, xs: 10, q: 8, topics: ['SELECT y WHERE', 'ORDER BY y LIMIT', 'JOIN', 'GROUP BY'], file: 'consulta.sql', lang: 'sql', run: 'Se ejecuta de verdad',
+    sql:    { ex: 20, xs: 20, q: 16, topics: ['SELECT y WHERE', 'JOIN y GROUP BY', 'Subconsultas', 'Vistas y transacciones'], file: 'consulta.sql', lang: 'sql', run: 'Se ejecuta de verdad',
       code: 'SELECT nombre, edad\nFROM alumnos\nWHERE edad >= 18\nORDER BY edad DESC;', out: 'nombre | edad\nLuis   | 22\nAna    | 20' },
     ts:     { ex: 10, xs: 10, q: 8, topics: ['Entorno en VS Code', 'Tipos e interfaces', 'Funciones tipadas', 'Genéricos'], file: 'index.ts', lang: 'tsc', run: 'Se practica aquí y se prueba en VS Code',
       code: 'function sumar(a: number, b: number): number {\n  return a + b;\n}\nconsole.log(sumar(2, 3));', out: '5' },
