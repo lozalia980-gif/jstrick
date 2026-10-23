@@ -24,9 +24,9 @@
   };
   JT.H = mk('html'); JT.C = mk('css'); JT.J = mk('js'); JT.T = mk('ts'); JT.M = mk('mod');
   JT.PY = mk('py'); JT.SQL = mk('sql'); JT.PHP = mk('php'); JT.CC = mk('c'); JT.CPP = mk('cpp'); JT.CS = mk('cs');
-  JT.FILE_NAMES = { html: 'HTML', css: 'CSS', js: 'JavaScript', ts: 'Componente (.ts)', mod: 'app.module.ts', py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#' };
-  JT.FILE_EXT = { html: 'index.html', css: 'estilos.css', js: 'script.js', ts: 'app.component.ts', mod: 'app.module.ts', py: 'main.py', sql: 'consulta.sql', php: 'index.php', c: 'main.c', cpp: 'main.cpp', cs: 'Program.cs' };
-  JT.FILE_COLOR = { html: '#e06c75', css: '#56b6c2', js: '#e5c07b', ts: '#61afef', mod: '#c678dd', py: '#61afef', sql: '#c678dd', php: '#8892bf', c: '#7f8ea3', cpp: '#d19a66', cs: '#98c379' };
+  JT.FILE_NAMES = { html: 'HTML', css: 'CSS', js: 'JavaScript', ts: 'Componente (.ts)', mod: 'app.module.ts', py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', tsc: 'TypeScript', jsx: 'React (JSX)', node: 'Node.js' };
+  JT.FILE_EXT = { html: 'index.html', css: 'estilos.css', js: 'script.js', ts: 'app.component.ts', mod: 'app.module.ts', py: 'main.py', sql: 'consulta.sql', php: 'index.php', c: 'main.c', cpp: 'main.cpp', cs: 'Program.cs', tsc: 'index.ts', jsx: 'App.jsx', node: 'index.js' };
+  JT.FILE_COLOR = { html: '#e06c75', css: '#56b6c2', js: '#e5c07b', ts: '#61afef', mod: '#c678dd', py: '#61afef', sql: '#c678dd', php: '#8892bf', c: '#7f8ea3', cpp: '#d19a66', cs: '#98c379', tsc: '#3b82c4', jsx: '#61dafb', node: '#98c379' };
 
   /* arma los archivos completos a partir de las partes de un ejemplo */
   JT.filesFromParts = function (parts) {

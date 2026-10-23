@@ -55,7 +55,7 @@
     $('.storage-tools', M.el).style.display = cfg.storage ? 'inline-flex' : 'none';
     $('.server-tools', M.el).style.display = cfg.server ? 'inline-flex' : 'none';
     M.onError = cfg.onError || null; M.cfg = cfg;
-    $('[data-a=online]', M.el).style.display = cfg.term && cfg.lang !== 'sql' ? '' : 'none';
+    $('[data-a=online]', M.el).style.display = cfg.term && cfg.lang !== 'sql' && JT.term.canOnline(cfg.lang) ? '' : 'none';
     M.el.classList.toggle('isterm', !!cfg.term);
     if (cfg.term) M.tab = 'console';
     M.spec = null; M.logs = []; M.errCount = 0; M.setBlocked(null); M.syncStorage();

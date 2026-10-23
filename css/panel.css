@@ -93,3 +93,6 @@ i.hm.l1{background:#27422c}i.hm.l2{background:#2f6a3a}i.hm.l3{background:#3f9a50
 
 .badge.f-py{color:#61afef}.badge.f-sql{color:#c678dd}.badge.f-php{color:#8892bf}.badge.f-c{color:#9aa7ba}.badge.f-cpp{color:#d19a66}.badge.f-cs{color:#98c379}
 .monitor.isterm .mon-tabs{display:none}.monitor.isterm .mon-panel{display:none}
+
+/* bloques de comandos de las guías de entorno */
+pre.cmdlist{background:var(--code-bg);border:1px solid var(--line);border-left:3px solid var(--ok);border-radius:8px;padding:12px 14px;margin:10px 0;overflow-x:auto;white-space:pre;font:13.5px/1.7 var(--mono);color:#d7dae0}

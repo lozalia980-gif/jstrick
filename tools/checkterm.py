@@ -66,6 +66,10 @@ def run_native(lang, code):
             c = subprocess.run([('gcc' if lang == 'c' else 'g++'), src, '-o', exe, '-lm'], capture_output=True, text=True)
             if c.returncode: return 'COMPILE ERROR\n' + c.stderr
             return subprocess.run([exe], capture_output=True, text=True, timeout=10).stdout.replace('\r', '')
+        if lang in ('tsc', 'node') and shutil.which('node'):
+            src = os.path.join(d, 'index.ts' if lang == 'tsc' else 'index.js'); io.open(src, 'w', encoding='utf8').write(code)
+            r = subprocess.run(['node', src], capture_output=True, text=True, encoding='utf8', timeout=20, cwd=d)
+            return (r.stdout + r.stderr).replace('\r', '')
         if lang == 'cs' and shutil.which('dotnet'):
             proj = os.path.join(here, '.cs_tmp')
             os.makedirs(proj, exist_ok=True)

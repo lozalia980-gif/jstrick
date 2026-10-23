@@ -22,6 +22,7 @@
   var OPTIONAL_END = { li: 1, p: 1, td: 1, th: 1, tr: 1, thead: 1, tbody: 1, tfoot: 1, option: 1, dt: 1, dd: 1, body: 1, html: 1, head: 1, colgroup: 1 };
 
   /* ---------- balance de paréntesis, llaves y comillas ---------- */
+  JT.checkBrackets = function (code, file, lang) { return checkBrackets(code, file, lang); };
   function checkBrackets(code, file, lang) {
     var issues = [], stack = [], i = 0, n = code.length, line = 1, last = null;
     var pairs = { ')': '(', ']': '[', '}': '{' }, closer = { '(': ')', '[': ']', '{': '}' };

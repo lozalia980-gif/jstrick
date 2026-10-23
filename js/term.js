@@ -8,9 +8,9 @@
   var PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/';
   var SQLJS = 'https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/';
   var JUDGE = 'https://ce.judge0.com/submissions?base64_encoded=false&wait=true';
-  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98 };
-  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run' };
-  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#' };
+  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98, tsc: 74, node: 63 };
+  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run', tsc: 'npx tsx index.ts', jsx: 'npm run dev', node: 'node index.js' };
+  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', tsc: 'TypeScript', jsx: 'React', node: 'Node.js' };
 
   function loadScript(src) {
     return new Promise(function (res, rej) {
@@ -93,6 +93,7 @@
   function lineFromCompile(raw) { var m = /(?:main\.\w+|prog\.\w+|Main\.cs|script\.\w+|\.php)[:(](\d+)/.exec(String(raw)) || /line (\d+)/i.exec(String(raw)) || /\((\d+),\d+\)/.exec(String(raw)); return m ? +m[1] : 0; }
 
   /* ---------------- ejecución según el caso ---------------- */
+  T.canOnline = function (lang) { return !!JUDGE_IDS[lang]; };
   T.exec = function (spec) {
     var lang = spec.lang, code = (spec.files || {})[lang] || '', same = spec.original != null && JT.norm(code) === JT.norm(spec.original);
     if (spec.partial) return Promise.resolve({ status: 'partial', text: '', note: 'Todavía no terminaste el programa: sigue con los pasos y aquí verás su resultado.' });

@@ -298,6 +298,7 @@
       else if (lang === 'c') out = lintC(code, file, opts, 'c');
       else if (lang === 'cpp') out = lintC(code, file, opts, 'cpp');
       else if (lang === 'cs') out = lintCs(code, file, opts);
+      else if (lang === 'tsc' || lang === 'jsx' || lang === 'node') out = opts.fragment ? [] : JT.checkBrackets(code, lang, 'js');
     } catch (e) { /* un fallo del revisor nunca debe romper la página */ }
     var seen = {}, rank = { error: 0, warn: 1, info: 2 };
     out = out.filter(function (x) { var k = x.sev + x.line + x.title; if (seen[k]) return false; seen[k] = 1; return true; });
