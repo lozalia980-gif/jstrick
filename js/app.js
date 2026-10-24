@@ -436,6 +436,9 @@
         st.done = true;
         var anyHelp = st.helped.some(Boolean);
         JT.markDone(xs.id, anyHelp ? 10 : 20, 'ejercicio completado');
+        /* ejemplo y ejercicio van en pareja: resolver el ejercicio sin ver soluciones da el ejemplo por entendido */
+        var exm = t.examples.length === t.exercises.length && t.examples[+/(\d+)$/.exec(xs.id)[1] - 1];
+        if (exm && !anyHelp) JT.markDone(exm.id, 3, 'ejemplo entendido: "' + exm.title + '"');
         JT.state.drafts['x:' + xs.id] = st; JT.saveState();
       }
       sync(true); renderLeft();
