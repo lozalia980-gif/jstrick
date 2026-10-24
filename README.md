@@ -38,6 +38,12 @@ y entra a `http://localhost:5173`.
 
 El contenido está en `js/data/` (`tk.js` es el constructor compacto de temas). Salidas verificadas contra ejecución real: Python, SQL, C#, Java, TypeScript (con comprobación de tipos con tsc), Node.js, Go y Rust, en los tres niveles. Los cursos avanzados de HTML y CSS se ejecutan en el sandbox del propio proyecto (`tools/runall.html`). Escritas y revisadas a mano (sin compilador en el entorno de desarrollo): C, C++, PHP, React, Flutter, Kotlin y Swift.
 
+## Retos libres
+
+Además de los ejercicios guiados, los temas de Python (3 niveles), SQL (3 niveles) y JavaScript (intermedio y avanzado) tienen una pestaña **Retos libres**: sin pasos, el alumno escribe el programa completo y se **ejecuta de verdad** (Pyodide, sql.js o un Worker) comparando su salida con la de la solución. Se definen en `js/retos-py.js`, `js/retos-sql.js` y `js/retos-js.js` con `JT.retosDef(idTema, { lang, items })`; la salida esperada sale de ejecutar `sol`, y `JT.retos.selfTest()` (en la consola del navegador) comprueba que cada solución pase y que el código inicial no.
+
+Además, resolver el ejercicio guiado de un ejemplo sin ver soluciones marca ese ejemplo como entendido.
+
 ## Herramientas para quien edita el contenido
 
 ```bash

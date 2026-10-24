@@ -102,6 +102,7 @@
               t.exercises.forEach(function (e, i) { h += '<a href="#/t/' + t.id + '/x/' + i + '" class="' + (JT.state.done[e.id] ? 'done ' : '') + (cur.kind === 'x' && cur.i === i ? 'cur' : '') + '"><span class="dot"></span>' + (i + 1) + '. ' + esc(e.title) + '</a>'; });
             }
             if ((t.quiz || []).length) h += '<div class="navgroup">Reto</div><a href="#/t/' + t.id + '/quiz" class="' + (JT.state.done['quiz:' + t.id] ? 'done ' : '') + (cur.kind === 'topic' && cur.tab === 'quiz' ? 'cur' : '') + '"><span class="dot"></span>Reto rápido</a>';
+            if (JT.retosOf(t).length) { h += '<div class="navgroup">Retos libres</div>'; JT.retosOf(t).forEach(function (c, i) { h += '<a href="#/t/' + t.id + '/r/' + i + '" class="' + (JT.state.done['r:' + t.id + ':' + i] ? 'done ' : '') + (cur.kind === 'r' && cur.i === i ? 'cur' : '') + '"><span class="dot"></span>' + (i + 1) + '. ' + esc(c.t) + '</a>'; }); }
             h += '</div>';
           }
           h += '</div>';

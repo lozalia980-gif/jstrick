@@ -39,7 +39,8 @@
       var trk = t.track || 'js';
       if (p[2] === 'e' && t.examples[+p[3]]) { curRoute = { t: t.id, track: trk, kind: 'e', i: +p[3] }; remember(t); renderSide(); pageExample(t, +p[3]); }
       else if (p[2] === 'x' && t.exercises[+p[3]]) { curRoute = { t: t.id, track: trk, kind: 'x', i: +p[3] }; remember(t); renderSide(); pageExercise(t, +p[3]); }
-      else { var tab = ['conceptos', 'ejemplos', 'ejercicios', 'quiz'].indexOf(p[2]) >= 0 ? p[2] : 'conceptos'; curRoute = { t: t.id, track: trk, kind: 'topic', tab: tab }; remember(t); renderSide(); pageTopic(t, tab); }
+      else if (p[2] === 'r' && JT.retosOf(t)[+p[3]]) { curRoute = { t: t.id, track: trk, kind: 'r', i: +p[3] }; remember(t); renderSide(); JT.retos.page(view, t, +p[3], cleanup); }
+      else { var tab = ['conceptos', 'ejemplos', 'ejercicios', 'quiz', 'retos'].indexOf(p[2]) >= 0 ? p[2] : 'conceptos'; curRoute = { t: t.id, track: trk, kind: 'topic', tab: tab }; remember(t); renderSide(); pageTopic(t, tab); }
     }
     $('#main').scrollTop = 0;
   }
@@ -51,7 +52,7 @@
     var st = topicStats(t);
     var h = '<div class="crumbs"><a href="#/">Inicio</a>' + ic('right') + '<b>' + esc(t.guide) + '</b></div>' +
       '<div class="thead"><span class="num" style="background:' + t.color + '">' + (t.num === 0 ? '0' : t.num) + '</span><div><h1>' + esc(t.title) + '</h1><p>' + esc(t.guide) + ' &middot; ' + st.done + ' de ' + st.total + ' actividades completadas</p></div></div>' +
-      '<div class="tabs">' + [['conceptos', 'book', 'Conceptos', t.theory.length], ['ejemplos', 'code', 'Ejemplos', t.examples.length], ['ejercicios', 'target', 'Ejercicios', t.exercises.length], ['quiz', 'flag', 'Reto rápido', (t.quiz || []).length]].map(function (x) { return '<a href="#/t/' + t.id + '/' + x[0] + '" class="' + (tab === x[0] ? 'on' : '') + '">' + ic(x[1]) + x[2] + '<span class="cnt">' + x[3] + '</span></a>'; }).join('') + '</div>';
+      '<div class="tabs">' + [['conceptos', 'book', 'Conceptos', t.theory.length], ['ejemplos', 'code', 'Ejemplos', t.examples.length], ['ejercicios', 'target', 'Ejercicios', t.exercises.length], ['quiz', 'flag', 'Reto rápido', (t.quiz || []).length]].concat(JT.retosOf(t).length ? [['retos', 'bolt', 'Retos libres', JT.retosOf(t).length]] : []).map(function (x) { return '<a href="#/t/' + t.id + '/' + x[0] + '" class="' + (tab === x[0] ? 'on' : '') + '">' + ic(x[1]) + x[2] + '<span class="cnt">' + x[3] + '</span></a>'; }).join('') + '</div>';
     if (tab === 'conceptos') {
       h += '<div class="theory">' + t.theory.map(function (c) {
         return '<div class="card"><h3>' + ic(c.icon || 'bulb') + esc(c.h) + '</h3>' + c.html + (c.analogy ? '<div class="analogy"><b>Piensa así:</b> ' + c.analogy + '</div>' : '') + (c.code ? '<pre class="part" style="margin:10px 0 0;border:0"><code style="all:unset;display:block;font:13px/1.65 var(--mono);white-space:pre;overflow-x:auto;padding:12px 14px;background:var(--code-bg);border-radius:9px">' + JT.highlight(c.code, c.lang || 'js', { terms: true, once: true }) + '</code></pre>' : '') + '</div>';
@@ -68,6 +69,7 @@
         return '<a class="item' + (JT.state.done[e.id] ? ' done' : '') + '" href="#/t/' + t.id + '/x/' + i + '"><span class="idx">' + (JT.state.done[e.id] ? ic('check') : i + 1) + '</span><span class="tx"><b>' + esc(e.title) + '</b><span>' + esc(e.short || '') + '</span></span><span class="badge' + (JT.state.done[e.id] ? ' ok' : '') + '">' + (JT.state.done[e.id] ? 'Completado' : prog + ' / ' + e.steps.length + ' pasos') + '</span>' + ic('right') + '</a>';
       }).join('') + '</div>';
     }
+    else if (tab === 'retos') h += JT.retos.list(t);
     view.innerHTML = h;
     if (tab === 'quiz') pageQuiz(t);
   }
