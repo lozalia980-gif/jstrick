@@ -8,9 +8,9 @@
   var PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/';
   var SQLJS = 'https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/';
   var JUDGE = 'https://ce.judge0.com/submissions?base64_encoded=false&wait=true';
-  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98, tsc: 74, node: 63 };
-  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run', tsc: 'npx tsx index.ts', jsx: 'npm run dev', node: 'node index.js' };
-  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', tsc: 'TypeScript', jsx: 'React', node: 'Node.js' };
+  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98, tsc: 74, node: 63, kt: 78, swift: 83 };
+  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run', tsc: 'npx tsx index.ts', jsx: 'npm run dev', node: 'node index.js', dart: 'flutter run -d chrome', kt: 'kotlinc Main.kt -include-runtime -d main.jar && java -jar main.jar', swift: 'swift main.swift' };
+  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', tsc: 'TypeScript', jsx: 'React', node: 'Node.js', dart: 'Flutter', kt: 'Kotlin', swift: 'Swift' };
 
   function loadScript(src) {
     return new Promise(function (res, rej) {

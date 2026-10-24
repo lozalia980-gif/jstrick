@@ -26,6 +26,8 @@
     if (lang === 'sql') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(),=<>*+\-\/.]) ?/g, '$1').replace(/;+$/, '').replace(/"/g, "'").split(/('[^']*')/).map(function (x, i) { return i % 2 ? x : x.toLowerCase(); }).join('');
     if (lang === 'html') return s.replace(/\s+/g, ' ').trim().replace(/ ?([<>=\/]) ?/g, '$1').replace(/"/g, "'").toLowerCase();
     if (lang === 'css') return s.replace(/\s+/g, ' ').trim().replace(/ ?([{}:;,>+~]) ?/g, '$1').replace(/;}/g, '}').replace(/;$/, '').replace(/"/g, "'").toLowerCase();
+    if (lang === 'dart') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1').replace(/"/g, "'").replace(/,(?=[)\]}])/g, '');
+    if (lang === 'kt' || lang === 'swift') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1').replace(/;/g, '').replace(/,(?=[)\]}])/g, '');
     if (lang === 'tsc' || lang === 'jsx' || lang === 'node' || lang === 'js') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1').replace(/"|`/g, "'").replace(/;/g, '').replace(/,(?=[)\]}])/g, '');
     if (lang === 'php') return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1').replace(/"/g, "'");
     return s.replace(/\s+/g, ' ').trim().replace(/ ?([(){}\[\];,.=+\-*\/<>!%?:&|]) ?/g, '$1');

@@ -200,7 +200,7 @@
         var ts = topicsOf(tr.id), s = trackStats(tr.id), has = ts.length;
         return '<a class="card catcard" href="' + (has ? '#/curso/' + tr.id : '#/cursos') + '" style="--c:' + tr.color + '"><div class="cc-top"><span class="cc-ic" style="background:' + tr.color + '">' + ic(tr.icon) + '</span><div><h3>' + esc(tr.name) + '</h3><span class="badge">' + (has ? ts.length + ' módulo' + (ts.length > 1 ? 's' : '') : 'Próximamente') + '</span></div></div><p>' + esc(tr.tagline) + '</p><p class="muted sm">' + esc(tr.why) + '</p><div class="meta"><span>' + s.exTotal + ' ejemplos</span><span>' + s.xsTotal + ' ejercicios</span></div><div class="prog"><i style="width:' + s.pct + '%;background:' + tr.color + '"></i></div></a>';
       }).join('') + '</div>' +
-      '<div class="sectiontitle">' + ic('flag') + '<h2 style="margin:0">En camino</h2></div><div class="grid g4">' + JT.soon.map(function (x) { return '<div class="card soon" style="--c:' + x.color + '"><span class="soon-dot" style="background:' + x.color + '"></span><h3>' + esc(x.name) + '</h3><p class="muted sm">' + esc(x.tagline) + '</p><span class="badge">Próximamente</span></div>'; }).join('') + '</div>';
+      (JT.soon.length ? '<div class="sectiontitle">' + ic('flag') + '<h2 style="margin:0">En camino</h2></div><div class="grid g4">' + JT.soon.map(function (x) { return '<div class="card soon" style="--c:' + x.color + '"><span class="soon-dot" style="background:' + x.color + '"></span><h3>' + esc(x.name) + '</h3><p class="muted sm">' + esc(x.tagline) + '</p><span class="badge">Próximamente</span></div>'; }).join('') + '</div>' : '');
     view.innerHTML = h;
   };
 

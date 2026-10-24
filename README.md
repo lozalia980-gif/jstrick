@@ -17,16 +17,23 @@ python -m http.server 5173
 
 y entra a `http://localhost:5173`.
 
-## Lenguajes nuevos (10 ejemplos, 10 ejercicios y 8 preguntas cada uno)
+## Cursos (cada nivel: 10 lecciones con su ejercicio guiado y 8 preguntas)
 
-| Lenguaje | Cómo se ejecuta |
-|---|---|
-| HTML y CSS | Se ven de verdad en la pantalla del resultado |
-| Python | Se ejecuta de verdad con Pyodide (descarga el intérprete la primera vez) |
-| SQL | Se ejecuta de verdad con sql.js sobre una base de ejemplo |
-| PHP, C, C++ y C# | Muestran la salida esperada del ejemplo; el revisor explica errores de sintaxis; el botón *Ejecutar en línea* (opcional, con tu permiso) usa el servicio público ce.judge0.com |
+| Curso | Niveles | Cómo se ejecuta |
+|---|---|---|
+| HTML y CSS | Básico | Se ven de verdad en la pantalla del resultado |
+| JavaScript | Guías 8-12 + intermedio | Se ejecuta de verdad en la pantalla del resultado |
+| Python | Básico + intermedio | Se ejecuta de verdad con Pyodide (descarga el intérprete la primera vez) |
+| SQL | Básico + intermedio | Se ejecuta de verdad con sql.js sobre una base de ejemplo |
+| TypeScript y Node.js | Básico + intermedio | Salida esperada; *Ejecutar en línea* opcional; se prueban en VS Code |
+| React | Básico + intermedio | Salida descrita; se practica aquí y se prueba con Vite en VS Code |
+| PHP, C, C++ y C# | Básico | Salida esperada; el revisor explica errores de sintaxis; *Ejecutar en línea* opcional |
+| Flutter | Básico | Salida descrita; se prueba con `flutter run -d chrome` en VS Code |
+| Kotlin y Swift | Básico | Salida esperada; *Ejecutar en línea* opcional |
 
-El contenido de cada lenguaje está en `js/data/` (`tk.js` es el constructor compacto de temas). Las salidas esperadas de Python, SQL y C# están verificadas contra su ejecución real; las de C, C++ y PHP están escritas a mano (no hay compilador en el entorno de desarrollo).
+*Ejecutar en línea* pide permiso y usa el servicio público ce.judge0.com. Los cursos de TypeScript, React, Node.js, Flutter, Kotlin y Swift empiezan con una guía para instalar todo en tu computadora.
+
+El contenido está en `js/data/` (`tk.js` es el constructor compacto de temas). Salidas verificadas contra ejecución real: Python, SQL, C#, TypeScript y Node.js. Escritas y revisadas a mano (sin compilador en el entorno de desarrollo): C, C++, PHP, React, Flutter, Kotlin y Swift.
 
 ## Herramientas para quien edita el contenido
 

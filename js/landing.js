@@ -73,6 +73,7 @@
       '<div class="lc-topics">' + c.topics.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' +
       '<div class="lc-foot"><span>' + (ready ? c.ex + ' ejemplos · ' + c.xs + ' ejercicios' : esc(c.run)) + '</span><a href="app.html#/curso/' + t.id + '">Ver curso ' + icon('i-arrow') + '</a></div></article>';
   }).join('');
+  if (!JT.soon.length) { var sr = $('.soon-row'); if (sr) sr.style.display = 'none'; }
   $('#soon-row').innerHTML = JT.soon.map(function (s) { return '<span style="--c:' + s.color + '"><i></i>' + esc(s.name) + '</span>'; }).join('');
   $$('.lcard').forEach(function (c) { if (seen) seen.observe(c); else c.classList.add('in'); });
 

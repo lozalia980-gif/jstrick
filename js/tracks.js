@@ -11,16 +11,15 @@
     { id: 'ts', name: 'TypeScript', color: '#3b82c4', icon: 'code', kind: 'term', lang: 'tsc', ext: 'ts', file: 'index.ts', tagline: 'JavaScript con tipos: menos errores y mejor ayuda en VS Code', why: 'Es la base de Angular, React moderno y casi todo proyecto web serio.' },
     { id: 'react', name: 'React', color: '#61dafb', icon: 'layers', kind: 'term', lang: 'jsx', ext: 'jsx', file: 'App.jsx', tagline: 'Interfaces web con componentes reutilizables', why: 'La librería de interfaces más usada: componentes, estado y eventos.' },
     { id: 'node', name: 'Node.js', color: '#98c379', icon: 'term', kind: 'term', lang: 'node', ext: 'js', file: 'index.js', tagline: 'JavaScript fuera del navegador: scripts, archivos y servidores', why: 'Permite usar JavaScript para el servidor, herramientas y automatización.' },
+    { id: 'flutter', name: 'Flutter', color: '#56b6c2', icon: 'layers', kind: 'term', lang: 'dart', ext: 'dart', file: 'main.dart', tagline: 'Apps móviles y web con Dart y widgets', why: 'Una sola base de código para Android, iOS y web, con recarga en caliente.' },
+    { id: 'kotlin', name: 'Kotlin', color: '#c678dd', icon: 'code', kind: 'term', lang: 'kt', ext: 'kt', file: 'Main.kt', tagline: 'El lenguaje moderno de Android y del servidor', why: 'Conciso, seguro frente a null y 100% compatible con Java.' },
+    { id: 'swift', name: 'Swift', color: '#e06c75', icon: 'bolt', kind: 'term', lang: 'swift', ext: 'swift', file: 'main.swift', tagline: 'Apps para iPhone, iPad y Mac', why: 'El lenguaje de Apple: rápido, seguro y fácil de leer.' },
     { id: 'php', name: 'PHP', color: '#8892bf', icon: 'globe', kind: 'term', lang: 'php', ext: 'php', file: 'index.php', tagline: 'El lenguaje del servidor detrás de millones de sitios', why: 'WordPress y gran parte de la web funcionan con PHP.' },
     { id: 'c', name: 'C', color: '#7f8ea3', icon: 'cube', kind: 'term', lang: 'c', ext: 'c', file: 'main.c', tagline: 'Cómo funciona realmente una computadora', why: 'Te enseña memoria, tipos y control total. Base de sistemas y microcontroladores.' },
     { id: 'cpp', name: 'C++', color: '#d19a66', icon: 'cube', kind: 'term', lang: 'cpp', ext: 'cpp', file: 'main.cpp', tagline: 'Potencia y rendimiento: videojuegos y software de alto nivel', why: 'C con clases, plantillas y una biblioteca estándar enorme.' },
     { id: 'csharp', name: 'C#', color: '#98c379', icon: 'layers', kind: 'term', lang: 'cs', ext: 'cs', file: 'Program.cs', tagline: 'Apps de escritorio, web y videojuegos con Unity', why: 'Un lenguaje moderno y ordenado del ecosistema .NET.' }
   ];
-  JT.soon = [
-    { name: 'Flutter', color: '#56b6c2', tagline: 'Apps móviles con Dart' },
-    { name: 'Kotlin', color: '#c678dd', tagline: 'Android moderno' },
-    { name: 'Swift', color: '#e06c75', tagline: 'Apps para iPhone y iPad' },
-  ];
+  JT.soon = [];
   JT.track = function (id) { for (var i = 0; i < JT.tracks.length; i++) if (JT.tracks[i].id === id) return JT.tracks[i]; return null; };
   JT.trackOf = function (t) { return JT.track(t.track || 'js'); };
 })();
