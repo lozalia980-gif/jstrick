@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 64" role="img" aria-label="Xidecode">
+  <defs>
+    <linearGradient id="xg" x1="8" y1="0" x2="56" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff7eb6"/>
+      <stop offset="1" stop-color="#4fd8ff"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#xg)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 12 L27.5 32 L10 52"/>
+    <path d="M54 12 L36.5 32 L54 52"/>
+  </g>
+  <text x="76" y="43" font-family="'Segoe UI', Inter, system-ui, -apple-system, Arial, sans-serif" font-size="36" font-weight="800" letter-spacing="-1" fill="#e6e9f2">Xidecode</text>
+</svg>

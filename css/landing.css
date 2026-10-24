@@ -36,7 +36,8 @@ main,footer{position:relative;z-index:1}
 .nav.solid{background:rgba(18,20,26,.82);backdrop-filter:blur(12px);border-color:var(--line)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
 .brand{display:flex;align-items:center;gap:10px;font:800 20px var(--mono);letter-spacing:-.02em}
-.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#61afef,#c678dd);display:grid;place-items:center;color:#10131a;box-shadow:0 6px 20px rgba(97,175,239,.35)}
+.logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;box-shadow:0 6px 20px rgba(255,126,182,.28)}
+.logo img{display:block;width:100%;height:100%}
 .nav-links{display:flex;align-items:center;gap:26px;font-size:15px;color:var(--muted)}
 .nav-links a:not(.btn){position:relative;padding:4px 0;transition:color .2s}
 .nav-links a:not(.btn):hover{color:var(--text)}

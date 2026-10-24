@@ -112,3 +112,7 @@ node tools/validate.js
 ```
 
 revisa que todos los ejemplos no tengan errores y que la solución de cada paso de los ejercicios cumpla su propia validación. `tools/runall.html` (abierta desde un servidor local) ejecuta todos los ejemplos y los códigos finales de los ejercicios en la pantalla y lista los errores de ejecución.
+
+## Marca
+
+Los archivos de la marca están en `assets/brand/`: `xidecode-mark.svg` (símbolo con degradado), `xidecode-icon.svg` (símbolo sobre fondo oscuro, es el favicon y el logo del menú), `xidecode-mark-mono.svg` (una sola tinta, usa `currentColor`) y `xidecode-logo.svg` (símbolo con el nombre; el texto usa la tipografía del sistema). `referencia-gemini.webp` es la imagen que inspiró el diseño. El símbolo son dos corchetes angulares que forman una X partida, `><`, en degradado rosa y cian.
