@@ -3,9 +3,9 @@
   var JT = window.JT = window.JT || {};
   /* ex = ejemplos, xs = ejercicios, q = preguntas del reto. Actualizar al agregar contenido. */
   JT.catalog = {
-    html:   { ex: 10, xs: 10, q: 8, topics: ['Etiquetas y estructura', 'Enlaces e imágenes', 'Listas y tablas', 'Formularios'], file: 'index.html', lang: 'html', run: 'Se ve en la pantalla',
+    html:   { ex: 20, xs: 20, q: 16, topics: ['Estructura semántica', 'Formularios y validación', 'Tablas y accesibilidad', 'Elementos interactivos'], file: 'index.html', lang: 'html', run: 'Se ve en la pantalla',
       code: '<h1>Hola, mundo</h1>\n<p>Mi primera <b>página</b>.</p>\n<a href="https://js-trick.dev">Visitar</a>', out: 'Hola, mundo' },
-    css:    { ex: 10, xs: 10, q: 8, topics: ['Selectores y colores', 'Caja: margen y relleno', 'Flexbox', 'Animaciones'], file: 'style.css', lang: 'css', run: 'Se ve en la pantalla',
+    css:    { ex: 20, xs: 20, q: 16, topics: ['Variables y selectores', 'Flexbox y Grid', 'Diseño responsive', 'Animaciones'], file: 'style.css', lang: 'css', run: 'Se ve en la pantalla',
       code: '.boton {\n  background: #61afef;\n  border-radius: 12px;\n  padding: 10px 18px;\n}', out: 'botón azul redondeado' },
     js:     { ex: 81, xs: 40, q: 14, topics: ['Repaso de bases', 'JSON y AJAX', 'jQuery y Angular', 'JavaScript moderno'], file: 'app.js', lang: 'js', run: 'Se ejecuta de verdad',
       code: 'const alumno = { nombre: "Ana", edad: 20 };\nconst texto = JSON.stringify(alumno);\nconsole.log(texto);', out: '{"nombre":"Ana","edad":20}' },
@@ -25,13 +25,13 @@
       code: 'fun main() {\n    val nombre = "Ana"\n    println("Hola, $nombre")\n}', out: 'Hola, Ana' },
     swift:  { ex: 20, xs: 20, q: 16, topics: ['Opcionales', 'Closures y structs', 'iOS con SwiftUI', 'Datos con async'], file: 'main.swift', lang: 'swift', run: 'Salida esperada + ejecución en línea',
       code: 'let nombre = "Ana"\nprint("Hola, \\(nombre)")', out: 'Hola, Ana' },
-    php:    { ex: 10, xs: 10, q: 8, topics: ['Variables con $', 'Arreglos', 'Funciones', 'Formularios'], file: 'index.php', lang: 'php', run: 'Salida esperada + ejecución en línea',
+    php:    { ex: 20, xs: 20, q: 16, topics: ['Funciones y arreglos', 'Clases y herencia', 'JSON, fechas y archivos', 'Validación de formularios'], file: 'index.php', lang: 'php', run: 'Salida esperada + ejecución en línea',
       code: '<?php\n$nombre = "Ana";\necho "Hola, $nombre";\n?>', out: 'Hola, Ana' },
-    c:      { ex: 10, xs: 10, q: 8, topics: ['Tipos y printf', 'Condicionales y bucles', 'Arreglos', 'Funciones'], file: 'main.c', lang: 'c', run: 'Salida esperada + ejecución en línea',
+    c:      { ex: 20, xs: 20, q: 16, topics: ['Punteros y memoria', 'Estructuras', 'Archivos y recursión', 'Bits y enum'], file: 'main.c', lang: 'c', run: 'Salida esperada + ejecución en línea',
       code: '#include <stdio.h>\n\nint main(void) {\n    printf("Hola, C\\n");\n    return 0;\n}', out: 'Hola, C' },
-    cpp:    { ex: 10, xs: 10, q: 8, topics: ['cout y variables', 'Vectores', 'Funciones', 'Clases'], file: 'main.cpp', lang: 'cpp', run: 'Salida esperada + ejecución en línea',
+    cpp:    { ex: 20, xs: 20, q: 16, topics: ['Referencias y clases', 'STL y lambdas', 'Plantillas y excepciones', 'Punteros inteligentes'], file: 'main.cpp', lang: 'cpp', run: 'Salida esperada + ejecución en línea',
       code: '#include <iostream>\n\nint main() {\n    std::cout << "Hola, C++" << std::endl;\n    return 0;\n}', out: 'Hola, C++' },
-    csharp: { ex: 10, xs: 10, q: 8, topics: ['Console y variables', 'Condicionales y bucles', 'Métodos', 'Clases'], file: 'Program.cs', lang: 'cs', run: 'Salida esperada + ejecución en línea',
+    csharp: { ex: 20, xs: 20, q: 16, topics: ['Colecciones y LINQ', 'Herencia e interfaces', 'Delegados y eventos', 'Records y pattern matching'], file: 'Program.cs', lang: 'cs', run: 'Salida esperada + ejecución en línea',
       code: 'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hola, C#");\n    }\n}', out: 'Hola, C#' }
   };
 })();

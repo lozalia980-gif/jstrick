@@ -178,8 +178,14 @@
       if (/[;{},(\[:.+\-*\/&|?=<>\\]$/.test(t) || /^(\.|->|\+|-|&&|\|\||\?|:)/.test(t)) continue;
       if (/^(else|do|try|finally)$/.test(t)) continue;
       if (/\)$/.test(t) && /^\{/.test(nextT)) continue;
+      if (/\bfunction\b.*\)\s*(:\s*\??[\w\\|]+)?$/.test(t) && /^\{/.test(nextT)) continue;
+      if (/^[)\]]/.test(nextT) || /^(->|\?->)/.test(nextT)) continue;
+      if (/\)\s*(const|noexcept|override|final)(\s+(const|noexcept|override|final))*$/.test(t) && /^\{/.test(nextT)) continue;
       if (/^(if|for|while|switch|foreach|catch|else if|elseif|using)\b/.test(t) && /\)$/.test(t) && !/;$/.test(t) && nextT && !/^\{/.test(nextT)) { /* if sin llaves: la siguiente es la sentencia */ continue; }
       if (/^(class|struct|namespace|interface)\b|^(public|private|protected|internal|static)\s+(class|struct|interface)\b/.test(t)) continue;
+      if (/^((public|private|protected|internal|static|abstract|sealed|partial|readonly)\s+)*(class|struct|interface|record|namespace|enum)\b/.test(t) && !/;$/.test(t)) continue;
+      if (/\bswitch$/.test(t) && /^\{/.test(nextT)) continue;
+      if (/=>/.test(t) && /^\}/.test(nextT)) continue;
       if (/^(public|private|protected|internal)\b.*\)$/.test(t) && /^\{/.test(nextT)) continue;
       if (/^\w[\w\s\*&:<>,\[\]]*\s+\*?\w+\s*\([^)]*\)$/.test(t) && /^\{/.test(nextT) ) continue;
       if (/(\)|\w|"|'|\]|\+\+|--)$/.test(t)) {
@@ -222,7 +228,7 @@
       var t = ln.trim();
       if (/\b(if|while)\s*\([^()=!<>]*[^=!<>]=(?!=)[^()=]*\)/.test(t) && !/\bfor\b/.test(t)) out.push(I('error', file, no, 'Usaste = dentro de la condición', 'Un solo ' + q('=') + ' guarda un valor; para comparar se usa ' + q('==') + '. Con ' + q('=') + ' la condición casi siempre da verdadero.', 'Cambia ' + q('=') + ' por ' + q('==') + '.'));
       if (/\b(int|long|short|float|double|char|bool)\s+\w+\s*=\s*"/.test(t)) out.push(I('error', file, no, 'No puedes guardar un texto ahí', 'Estás guardando un texto entre comillas dobles en una variable numérica o de un solo carácter.', cpp ? 'Para textos usa ' + q('string nombre = "Ana";') + '.' : 'Para textos usa ' + q('char nombre[] = "Ana";') + '. Para un solo carácter usa comillas simples: ' + q("char c = 'a';") + '.'));
-      if (/'[^'\\]{2,}'/.test(ln.replace(/"[^"]*"/g, '""')) && !/\\/.test(ln)) out.push(I('error', file, no, 'Comillas simples con más de una letra', 'Las comillas simples ' + q("'a'") + ' son para <b>un solo carácter</b>. Los textos van con comillas dobles.', 'Usa ' + q('"hola"') + '.'));
+      if ((((code.split('\n')[no - 1] || '').replace(/"(?:[^"\\]|\\.)*"/g, '""').match(/'(?:[^'\\]|\\.)*'/g)) || []).some(function (c) { return /^'[^'\\]{2,}'$/.test(c); })) out.push(I('error', file, no, 'Comillas simples con más de una letra', 'Las comillas simples ' + q("'a'") + ' son para <b>un solo carácter</b>. Los textos van con comillas dobles.', 'Usa ' + q('"hola"') + '.'));
       if (!cpp) { var sm = /\bscanf\s*\(\s*"[^"]*%[dfi][^"]*"\s*,\s*([A-Za-z_]\w*)\s*\)/.exec(code.split('\n')[no - 1] || ''); if (sm) out.push(I('error', file, no, 'scanf necesita &', q('scanf') + ' debe recibir la <b>dirección</b> de la variable: ' + q('&' + sm[1]) + '. Sin el ' + q('&') + ' el programa se cierra de golpe.', 'Escribe ' + q('scanf("%d", &' + sm[1] + ');') + '.')); }
       ln.replace(/(^|[^\w.>:])([A-Za-z_]\w*)\s*\(/g, function (a, pre, name) {
         if (defs[name] || C_FUNCS.indexOf(name) >= 0 || CTRL.test(name) || /^(sizeof|return|main|defined|catch|operator|new|delete|static_cast|dynamic_cast|if|for|while|switch)$/.test(name)) return a;
@@ -262,7 +268,7 @@
   }
 
   /* ======================= PHP ======================= */
-  var PHP_FUNCS = 'strlen strtoupper strtolower ucfirst ucwords str_replace str_repeat strpos substr trim count array_push array_pop array_merge array_keys array_values array_sum in_array sort rsort asort ksort implode explode isset empty unset date time rand mt_rand round floor ceil abs sqrt pow max min number_format var_dump print_r json_encode json_decode file_get_contents htmlspecialchars is_numeric is_array is_string intval floatval strval sprintf printf define array_map array_filter usort range'.split(' ');
+  var PHP_FUNCS = 'strlen strtoupper strtolower ucfirst ucwords str_replace str_repeat strpos substr trim count array_push array_pop array_merge array_keys array_values array_sum in_array sort rsort asort ksort implode explode isset empty unset date time rand mt_rand round floor ceil abs sqrt pow max min number_format var_dump print_r json_encode json_decode file_get_contents htmlspecialchars is_numeric is_array is_string intval floatval strval sprintf printf define array_map array_filter usort range arsort asort ksort krsort rsort usort uasort uksort array_slice array_splice array_merge array_unique array_reverse array_search array_flip array_combine array_fill array_column array_chunk array_diff array_intersect array_key_exists array_key_first array_key_last array_pop array_push array_shift array_unshift array_product range compact extract str_contains str_starts_with str_ends_with str_pad str_repeat str_word_count ucwords lcfirst wordwrap nl2br htmlspecialchars html_entity_decode strcmp strcasecmp strncmp strstr stripos strrpos substr_count substr_replace similar_text levenshtein sprintf vsprintf number_format intdiv fmod abs ceil floor round max min sqrt pow pi json_encode json_decode json_last_error_msg date time mktime strtotime checkdate date_default_timezone_set filter_var file_put_contents file_get_contents file fopen fgets fgetcsv fputcsv fclose fwrite feof file_exists is_file is_dir mkdir unlink rename copy basename dirname pathinfo realpath var_dump print_r var_export gettype get_class is_int is_string is_array is_numeric is_null is_bool intval floatval strval boolval settype method_exists property_exists class_exists function_exists spl_autoload_register password_hash password_verify md5 sha1 hash random_int mt_rand rand uniqid usleep sleep microtime memory_get_usage array_is_list iterator_to_array call_user_func call_user_func_array func_get_args'.split(' ');
   function lintPhp(code, file, o) {
     var out = [], m = mask(code, 'php');
     if (!o.fragment) out = out.concat(balance(code, 'php', file)).concat(missingSemis(code, 'php', file, o));
