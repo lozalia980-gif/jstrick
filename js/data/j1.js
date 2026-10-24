@@ -1,4 +1,4 @@
-/* js-trick :: Java desde cero (salida esperada verificada con el JDK; la ejecución en línea es opcional) */
+/* Xidecode :: Java desde cero (salida esperada verificada con el JDK; la ejecución en línea es opcional) */
 (function () {
   var HEAD = 'public class Main {\n    public static void main(String[] args) {';
   var TAIL = '    }\n}';

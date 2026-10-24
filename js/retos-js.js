@@ -1,4 +1,4 @@
-/* js-trick :: retos libres de JavaScript (se ejecutan en un Worker; la salida esperada sale de la solución) */
+/* Xidecode :: retos libres de JavaScript (se ejecutan en un Worker; la salida esperada sale de la solución) */
 (function () {
   var L = function () { return Array.prototype.join.call(arguments, '\n'); };
   JT.retosDef('js2', {

@@ -1,4 +1,4 @@
-/* js-trick :: C intermedio (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
+/* Xidecode :: C intermedio (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
 (function () {
   var INC = '#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>';
   var HEAD = INC + '\n\nint main(void)\n{';

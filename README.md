@@ -1,4 +1,4 @@
-# js-trick
+# Xidecode
 
 Plataforma interactiva para aprender a programar practicando: **HTML, CSS, JavaScript (guías 8 a 12: JSON, AJAX, jQuery y Angular), Python, SQL, PHP, C, C++, C#, Java, Go y Rust**. Cada ejemplo se explica pieza por pieza y termina con un ejercicio guiado. Está hecha con HTML, CSS y JavaScript puros, sin cuentas ni instalación.
 
@@ -7,7 +7,7 @@ Plataforma interactiva para aprender a programar practicando: **HTML, CSS, JavaS
 
 ## Cómo abrirla
 
-- **Recomendado en Windows:** doble clic en `abrir-js-trick.bat`. Inicia un servidor local con Python (si está instalado) y abre el navegador; para detenerlo cierra la ventana negra.
+- **Recomendado en Windows:** doble clic en `abrir-xidecode.bat`. Inicia un servidor local con Python (si está instalado) y abre el navegador; para detenerlo cierra la ventana negra.
 - **Opción simple:** doble clic en `index.html` (Chrome, Edge o Firefox) y pulsa **Entrar al panel**.
 - **Si algo no carga** (por ejemplo, por restricciones del navegador con archivos locales), abre una terminal en esta carpeta y ejecuta:
 
@@ -76,7 +76,7 @@ Si escribes algo incorrecto (de sintaxis o de lógica) aparece un cuadro que exp
 
 ## Cosas útiles del simulador
 
-- **Servidor de práctica** (reemplaza a mockAPI.io de la guía 9): `https://mock.jstrick.dev` con `/books`, `/cities`, `/users` y `/todos` (GET, POST, PUT, DELETE), más `/saludo.txt`, `/noticias.html`, `/datos.json`, `/lento` (tarda 2,5 s) y `/error500`. En tu práctica real solo cambias la URL por la de tu cuenta.
+- **Servidor de práctica** (reemplaza a mockAPI.io de la guía 9): `https://mock.xidecode.dev` con `/books`, `/cities`, `/users` y `/todos` (GET, POST, PUT, DELETE), más `/saludo.txt`, `/noticias.html`, `/datos.json`, `/lento` (tarda 2,5 s) y `/error500`. En tu práctica real solo cambias la URL por la de tu cuenta.
 - **Almacenamiento:** hay una pestaña "Almacenamiento" bajo la computadora (como en las herramientas de desarrollador), un botón **Cerrar pestaña** (borra sessionStorage y deja localStorage) y la función `simularOtraPestana("clave", "valor")` para ver el evento `storage`.
 - **jQuery:** se incluye una versión propia mínima (`js/lib-jquery.js`) con lo que enseñan las guías: selectores (`:even`, `:contains`...), eventos, efectos, `animate`, DOM, AJAX y plugins (`$.fn`).
 - **Angular:** es un **simulador didáctico** (`js/lib-angular.js`): componentes, `@Input`/`@Output`, servicios con inyección de dependencias, `*ngFor`, `*ngIf`, `[(ngModel)]`, `(eventos)`, `[propiedades]`, validación de formularios y pipes. No reemplaza a Angular CLI: para tu práctica real sigue usando `ng new` y `ng serve`.

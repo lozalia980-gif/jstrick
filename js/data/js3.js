@@ -1,4 +1,4 @@
-/* js-trick :: JavaScript avanzado (se ejecuta de verdad en la pantalla del resultado) */
+/* Xidecode :: JavaScript avanzado (se ejecuta de verdad en la pantalla del resultado) */
 (function () {
   var PRE = '<pre id="salida"></pre>';
   var HELP = 'const salida = document.getElementById("salida");\nfunction mostrar(texto) {\n  salida.textContent += texto + "\\n";\n}';

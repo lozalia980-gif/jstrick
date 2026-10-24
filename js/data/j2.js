@@ -1,4 +1,4 @@
-/* js-trick :: Java intermedio (salida esperada verificada con el JDK; la ejecución en línea es opcional) */
+/* Xidecode :: Java intermedio (salida esperada verificada con el JDK; la ejecución en línea es opcional) */
 (function () {
   var MAIN = 'public class Main {\n    public static void main(String[] args) {';
   var TAIL = '    }\n}';

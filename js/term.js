@@ -1,4 +1,4 @@
-/* js-trick :: "terminal" para Python, SQL, PHP, C, C++ y C#
+/* Xidecode :: "terminal" para Python, SQL, PHP, C, C++ y C#
    - Python y SQL se ejecutan de verdad en el navegador (Pyodide y sql.js, se descargan una vez).
    - Si el código es igual al del ejemplo se muestra su salida esperada al instante.
    - C, C++, C# y PHP pueden ejecutarse en línea (opcional, con tu permiso) en un servicio público gratuito. */
@@ -78,7 +78,7 @@
     var id = JUDGE_IDS[lang];
     if (!id) return Promise.reject(new Error('Ese lenguaje no se puede ejecutar en línea.'));
     if (!JT.state.judgeOk) {
-      if (!confirm('Para ejecutar ' + NAMES[lang] + ' de verdad, js-trick enviará tu código a un servicio público y gratuito de ejecución (ce.judge0.com). Solo se envía el código de este editor. Puede tardar hasta 30 segundos.\n\n¿Permitir?')) return Promise.resolve({ ok: false, cancelled: true, text: 'Ejecución en línea cancelada.' });
+      if (!confirm('Para ejecutar ' + NAMES[lang] + ' de verdad, Xidecode enviará tu código a un servicio público y gratuito de ejecución (ce.judge0.com). Solo se envía el código de este editor. Puede tardar hasta 30 segundos.\n\n¿Permitir?')) return Promise.resolve({ ok: false, cancelled: true, text: 'Ejecución en línea cancelada.' });
       JT.state.judgeOk = 1; JT.saveState();
     }
     var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null, to = setTimeout(function () { ctrl && ctrl.abort(); }, 60000);

@@ -1,4 +1,4 @@
-/* js-trick :: Flutter intermedio (se practica en la plataforma y se prueba en VS Code; la salida describe lo que se ve en la pantalla) */
+/* Xidecode :: Flutter intermedio (se practica en la plataforma y se prueba en VS Code; la salida describe lo que se ve en la pantalla) */
 (function () {
   var APP = 'Verás en la pantalla:\n';
   var IMP = "import 'package:flutter/material.dart';";

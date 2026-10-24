@@ -1,4 +1,4 @@
-/* js-trick :: C# avanzado (salidas verificadas con .NET; la ejecución en línea usa una versión antigua de C# y no sirve para este curso) */
+/* Xidecode :: C# avanzado (salidas verificadas con .NET; la ejecución en línea usa una versión antigua de C# y no sirve para este curso) */
 (function () {
   var U = 'using System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing System.Threading;\nusing System.Threading.Tasks;\nusing System.Collections.Concurrent;\n';
   var HEAD = U + '\nclass Program\n{\n    static void Main()\n    {';

@@ -1,4 +1,4 @@
-/* js-trick :: Go avanzado: concurrencia, genéricos e iteradores (salida esperada verificada con el compilador de Go 1.23) */
+/* Xidecode :: Go avanzado: concurrencia, genéricos e iteradores (salida esperada verificada con el compilador de Go 1.23) */
 (function () {
   var NL = String.fromCharCode(10);
   function imp(imps) { return imps.length === 1 ? 'import "' + imps[0] + '"' : 'import (' + NL + imps.map(function (x) { return '    "' + x + '"'; }).join(NL) + NL + ')'; }

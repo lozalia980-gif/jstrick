@@ -1,4 +1,4 @@
-/* js-trick :: presentaciones inmersivas del resto de cursos (mismo formato que portal-data.js) */
+/* Xidecode :: presentaciones inmersivas del resto de cursos (mismo formato que portal-data.js) */
 (function () {
   var JT = window.JT = window.JT || {};
   var L = function () { return Array.prototype.join.call(arguments, '\n'); };

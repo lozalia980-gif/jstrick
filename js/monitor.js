@@ -1,4 +1,4 @@
-/* js-trick :: la "computadora" donde se ve el resultado (tapa que se abre) + consola + almacenamiento */
+/* Xidecode :: la "computadora" donde se ve el resultado (tapa que se abre) + consola + almacenamiento */
 (function () {
   var JT = window.JT;
   var $ = function (s, r) { return (r || document).querySelector(s); };

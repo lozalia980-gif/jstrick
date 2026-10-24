@@ -1,4 +1,4 @@
-/* js-trick :: Rust avanzado: lifetimes, punteros inteligentes, concurrencia, iteradores, errores y macros (salida esperada verificada con el compilador de Rust) */
+/* Xidecode :: Rust avanzado: lifetimes, punteros inteligentes, concurrencia, iteradores, errores y macros (salida esperada verificada con el compilador de Rust) */
 (function () {
   var BASE = 'fn main() {\n    // tu código aquí\n}';
   function BU(use) { return use + '\n\nfn main() {\n    // tu código aquí\n}'; }

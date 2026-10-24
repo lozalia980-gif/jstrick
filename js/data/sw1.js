@@ -1,4 +1,4 @@
-/* js-trick :: Swift desde cero (salida esperada escrita y revisada a mano; se practica en la plataforma y se prueba en tu computadora) */
+/* Xidecode :: Swift desde cero (salida esperada escrita y revisada a mano; se practica en la plataforma y se prueba en tu computadora) */
 (function () {
   var B = '// tu código aquí';
   JT.tk({

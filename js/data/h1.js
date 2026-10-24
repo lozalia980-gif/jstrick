@@ -1,4 +1,4 @@
-/* js-trick :: HTML desde cero */
+/* Xidecode :: HTML desde cero */
 (function () {
   var IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80'%3E%3Crect width='120' height='80' rx='10' fill='%2361afef'/%3E%3Ccircle cx='60' cy='40' r='22' fill='%23ffffff'/%3E%3C/svg%3E";
   function H(code, why) { return ['html', code, why]; }

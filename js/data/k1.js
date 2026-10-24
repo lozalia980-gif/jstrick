@@ -1,4 +1,4 @@
-/* js-trick :: C desde cero (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
+/* Xidecode :: C desde cero (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
 (function () {
   var HEAD = '#include <stdio.h>\n\nint main(void)\n{';
   var TAIL = '    return 0;\n}';

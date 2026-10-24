@@ -1,4 +1,4 @@
-/* js-trick :: C# desde cero (salida esperada verificada con .NET; la ejecución en línea es opcional) */
+/* Xidecode :: C# desde cero (salida esperada verificada con .NET; la ejecución en línea es opcional) */
 (function () {
   var HEAD = 'using System;\n\nclass Program\n{\n    static void Main()\n    {';
   var TAIL = '    }\n}';

@@ -1,4 +1,4 @@
-/* js-trick :: Python desde cero */
+/* Xidecode :: Python desde cero */
 (function () {
   JT.tk({
     id: 'py1', track: 'python', num: 'Py', badge: 'Py', guide: 'Python', title: 'Python desde cero', short: 'Python básico',

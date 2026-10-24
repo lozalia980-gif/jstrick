@@ -1,4 +1,4 @@
-/* js-trick :: Java avanzado (salida esperada verificada con el JDK 17; la ejecución en línea usa una versión antigua y puede fallar) */
+/* Xidecode :: Java avanzado (salida esperada verificada con el JDK 17; la ejecución en línea usa una versión antigua y puede fallar) */
 (function () {
   var BASE = 'import java.util.*;\nimport java.util.stream.*;\nimport java.util.concurrent.*;\nimport java.util.concurrent.atomic.*;\nimport java.nio.file.*;\nimport java.math.*;\nimport java.time.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        // tu código aquí\n    }\n}';
   var BASE_C = 'import java.util.*;\n\n// tu código aquí (clases)\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        // tu código aquí (main)\n    }\n}';

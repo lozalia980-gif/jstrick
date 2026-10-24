@@ -1,4 +1,4 @@
-/* js-trick :: Python avanzado (se ejecuta de verdad en el navegador con Pyodide; salidas verificadas con Python) */
+/* Xidecode :: Python avanzado (se ejecuta de verdad en el navegador con Pyodide; salidas verificadas con Python) */
 (function () {
   var B = '# tu código aquí';
   JT.tk({

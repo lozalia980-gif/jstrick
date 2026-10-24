@@ -1,4 +1,4 @@
-/* js-trick :: Go intermedio (salida esperada verificada con el compilador de Go) */
+/* Xidecode :: Go intermedio (salida esperada verificada con el compilador de Go) */
 (function () {
   var NL = String.fromCharCode(10);
   function imp(imps) { return imps.length === 1 ? 'import "' + imps[0] + '"' : 'import (' + NL + imps.map(function (x) { return '    "' + x + '"'; }).join(NL) + NL + ')'; }

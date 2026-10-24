@@ -1,4 +1,4 @@
-/* js-trick :: retos libres de SQL (se ejecutan sobre la base de ejemplo del tema; la salida esperada sale de la solución) */
+/* Xidecode :: retos libres de SQL (se ejecutan sobre la base de ejemplo del tema; la salida esperada sale de la solución) */
 (function () {
   var COLS = ' <b>Usa exactamente esos nombres de columna y ese orden</b> para que el resultado coincida.';
   JT.retosDef('sq1', {

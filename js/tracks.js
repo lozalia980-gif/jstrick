@@ -1,4 +1,4 @@
-/* js-trick :: catálogo de lenguajes (pistas de aprendizaje) */
+/* Xidecode :: catálogo de lenguajes (pistas de aprendizaje) */
 (function () {
   var JT = window.JT = window.JT || {};
   /* kind: web = se ejecuta en la pantalla (HTML/CSS/JS); term = programa con salida de consola/tablas */

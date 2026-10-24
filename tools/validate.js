@@ -1,4 +1,4 @@
-/* Validacion estatica del contenido de js-trick (se ejecuta con: node tools/validate.js) */
+/* Validacion estatica del contenido de Xidecode (se ejecuta con: node tools/validate.js) */
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const root = path.join(__dirname, '..');
 global.window = global; global.document = { getElementById() { return null; } };

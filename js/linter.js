@@ -1,4 +1,4 @@
-/* js-trick :: revisor de código en tiempo real.
+/* Xidecode :: revisor de código en tiempo real.
    Detecta errores de sintaxis y de logica comunes y los explica en espanol (por que esta mal y que escribir en su lugar). */
 (function () {
   var JT = window.JT;
@@ -506,7 +506,7 @@
     if (/'send' on 'XMLHttpRequest'.*OPENED/.test(msg)) return { title: 'send() en mal momento', msg: 'Llamaste ' + q('send()') + ' sin haber llamado antes a ' + q('open()') + ' o ya habias enviado esa misma petición.', fix: 'Cada petición se prepara con ' + q('open()') + ' y se envia una sola vez con ' + q('send()') + '. Para otra petición usa otra llamada a open (o crea un nuevo objeto).' };
     if (/2 arguments required.*setItem/.test(msg)) return { title: 'setItem necesita clave y valor', msg: q(msg), fix: 'Ejemplo: ' + q("localStorage.setItem('clave', 'valor')") + '.' };
     if (/not a valid selector|unrecognized expression/.test(msg)) return { title: 'Selector no válido', msg: 'El selector que escribiste no es válido: ' + q(msg), fix: 'Ejemplos válidos: ' + q('#miId') + ', ' + q('.miClase') + ', ' + q('ul li') + ', ' + q('input[type=text]') + '.' };
-    if (/Failed to fetch|NetworkError/.test(msg)) return { title: 'No se pudo conectar al servidor', msg: 'La petición fallo antes de llegar. En este simulador solo funciona el servidor de práctica ' + q('https://mock.jstrick.dev') + '.', fix: 'Usa por ejemplo ' + q('https://mock.jstrick.dev/books') + ', ' + q('/cities') + ', ' + q('/users') + ' o ' + q('/todos') + '. En tu proyecto real iria la URL de tu cuenta de mockAPI.' };
+    if (/Failed to fetch|NetworkError/.test(msg)) return { title: 'No se pudo conectar al servidor', msg: 'La petición fallo antes de llegar. En este simulador solo funciona el servidor de práctica ' + q('https://mock.xidecode.dev') + '.', fix: 'Usa por ejemplo ' + q('https://mock.xidecode.dev/books') + ', ' + q('/cities') + ', ' + q('/users') + ' o ' + q('/todos') + '. En tu proyecto real iria la URL de tu cuenta de mockAPI.' };
     if (/not valid JSON/.test(msg)) return jsonRuntime(msg);
     return { title: (name && name !== 'Error' ? name : 'Error al ejecutar'), msg: 'El navegador reporto: ' + q(msg), fix: 'Mira la línea marcada en rojo y revisa los nombres, los paréntesis y el orden de las instrucciones. Usa el boton "?" de esa línea para ver que hace cada parte.' };
   };

@@ -1,4 +1,4 @@
-/* js-trick :: HTML intermedio */
+/* Xidecode :: HTML intermedio */
 (function () {
   function H(c, w) { return ['html', c, w]; }
   var B = { html: '<!-- tu código aquí -->' };

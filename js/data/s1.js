@@ -1,4 +1,4 @@
-/* js-trick :: SQL desde cero (se ejecuta de verdad en el navegador con sql.js sobre una base de ejemplo) */
+/* Xidecode :: SQL desde cero (se ejecuta de verdad en el navegador con sql.js sobre una base de ejemplo) */
 (function () {
   var T = '<p class="sm">Tablas disponibles: <code>alumnos(id, nombre, edad, carrera, nota)</code>, <code>cursos(id, nombre, creditos)</code> e <code>inscripciones(alumno_id, curso_id)</code>.</p>';
   JT.tk({

@@ -1,4 +1,4 @@
-/* js-trick :: glosario 3 (Python, SQL, PHP, C, C++, C#) para los botones "?" */
+/* Xidecode :: glosario 3 (Python, SQL, PHP, C, C++, C#) para los botones "?" */
 (function () {
   var JT = window.JT;
   function G(L, k, t, d, o) { o = o || {}; o.d = d; o.t = t; o.lang = o.lang || L; JT.glossary[L + ':' + k] = o; }

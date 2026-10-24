@@ -1,4 +1,4 @@
-/* js-trick :: Guía 8 · JSON, localStorage y sessionStorage */
+/* Xidecode :: Guía 8 · JSON, localStorage y sessionStorage */
 (function () {
   var H = JT.H, C = JT.C, J = JT.J, eq = JT.eq, all = JT.all;
 
@@ -151,7 +151,7 @@
         tryit: ['Suma 3 en cada uno, pulsa <b>Cerrar pestaña</b> y luego <b>Recargar</b>.', 'Agrega un tercer botón "Reiniciar" que ponga ambos contadores en 0.'] },
       /* 12 */
       { id: 'g8e12', title: 'El evento storage', short: 'Reacciona cuando otra pestaña cambia los datos',
-        intro: '<p>Cuando <b>otra pestaña</b> del mismo sitio cambia el almacenamiento, tu página recibe el evento <code>storage</code> con la clave, el valor antiguo y el nuevo. Como aquí solo hay una pantalla, usamos la función especial <code>simularOtraPestana()</code> (solo existe en js-trick) que imita a esa otra pestaña.</p>',
+        intro: '<p>Cuando <b>otra pestaña</b> del mismo sitio cambia el almacenamiento, tu página recibe el evento <code>storage</code> con la clave, el valor antiguo y el nuevo. Como aquí solo hay una pantalla, usamos la función especial <code>simularOtraPestana()</code> (solo existe en Xidecode) que imita a esa otra pestaña.</p>',
         parts: [
           H('<h3>Tema: <span id="tema">claro</span></h3>\n<button id="otra">Simular cambio desde otra pestaña</button>\n<ul id="registro"></ul>', 'Mostramos el tema actual, un botón que simula el cambio y un registro de eventos.'),
           J('var registro = document.getElementById("registro");\nvar tema = document.getElementById("tema");', 'Guardamos los dos elementos que vamos a modificar.'),

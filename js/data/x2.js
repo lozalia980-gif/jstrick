@@ -1,4 +1,4 @@
-/* js-trick :: C++ intermedio (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
+/* Xidecode :: C++ intermedio (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
 (function () {
   var INC = '#include <iostream>\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include <algorithm>\n#include <numeric>\n#include <memory>\n#include <sstream>\n#include <iomanip>\n#include <stdexcept>\nusing namespace std;';
   var INC_S = '#include <iostream>\n#include <string>\nusing namespace std;';

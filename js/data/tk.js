@@ -1,4 +1,4 @@
-/* js-trick :: constructor compacto de temas para los lenguajes nuevos (HTML, CSS, Python, SQL, PHP, C, C++, C#)
+/* Xidecode :: constructor compacto de temas para los lenguajes nuevos (HTML, CSS, Python, SQL, PHP, C, C++, C#)
    JT.tk({ id, track, num, badge, title, short, color, summary, seed?, theory:[[icono, titulo, html, codigo?, analogia?]],
            ex:[{ t, s, i, p:[[codigo, explicacion] | [archivo, codigo, explicacion]], out, tryit:[], notes:[] }],
            xs:[{ t, s, g, base, out?, st:[{ t, i, w, sol, alts?, hint?, tpl?, f? }] }],

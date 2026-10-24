@@ -1,4 +1,4 @@
-/* js-trick :: Rust desde cero (salida esperada verificada con el compilador de Rust; la ejecución en línea es opcional) */
+/* Xidecode :: Rust desde cero (salida esperada verificada con el compilador de Rust; la ejecución en línea es opcional) */
 (function () {
   var HEAD = 'fn main() {';
   var TAIL = '}';

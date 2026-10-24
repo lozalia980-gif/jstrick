@@ -1,4 +1,4 @@
-/* js-trick :: landing (efectos ligeros: se pausan fuera de pantalla y respetan "reducir movimiento") */
+/* Xidecode :: landing (efectos ligeros: se pausan fuera de pantalla y respetan "reducir movimiento") */
 (function () {
   var JT = window.JT, doc = document, $ = function (s, r) { return (r || doc).querySelector(s); }, $$ = function (s, r) { return [].slice.call((r || doc).querySelectorAll(s)); };
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

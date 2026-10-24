@@ -1,10 +1,10 @@
-/* js-trick :: datos ligeros para la landing (no carga el contenido de los cursos) */
+/* Xidecode :: datos ligeros para la landing (no carga el contenido de los cursos) */
 (function () {
   var JT = window.JT = window.JT || {};
   /* ex = ejemplos, xs = ejercicios, q = preguntas del reto. Actualizar al agregar contenido. */
   JT.catalog = {
     html:   { ex: 30, xs: 30, q: 24, topics: ['Estructura semántica', 'Formularios y validación', 'Tablas y accesibilidad', 'Elementos interactivos', 'Componentes web y APIs'], file: 'index.html', lang: 'html', run: 'Se ve en la pantalla',
-      code: '<h1>Hola, mundo</h1>\n<p>Mi primera <b>página</b>.</p>\n<a href="https://js-trick.dev">Visitar</a>', out: 'Hola, mundo' },
+      code: '<h1>Hola, mundo</h1>\n<p>Mi primera <b>página</b>.</p>\n<a href="https://xidecode.dev">Visitar</a>', out: 'Hola, mundo' },
     css:    { ex: 30, xs: 30, q: 24, topics: ['Variables y selectores', 'Flexbox y Grid', 'Diseño responsive', 'Animaciones', 'Container queries y :has()'], file: 'style.css', lang: 'css', run: 'Se ve en la pantalla',
       code: '.boton {\n  background: #61afef;\n  border-radius: 12px;\n  padding: 10px 18px;\n}', out: 'botón azul redondeado' },
     js:     { ex: 91, xs: 50, q: 64, topics: ['Repaso de bases', 'JSON y AJAX', 'jQuery y Angular', 'JavaScript moderno', 'Proxy, generadores y asincronía'], file: 'app.js', lang: 'js', run: 'Se ejecuta de verdad',

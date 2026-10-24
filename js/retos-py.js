@@ -1,4 +1,4 @@
-/* js-trick :: retos libres de Python (la salida esperada sale de ejecutar la solución) */
+/* Xidecode :: retos libres de Python (la salida esperada sale de ejecutar la solución) */
 (function () {
   var L = function () { return Array.prototype.join.call(arguments, '\n'); };
   JT.retosDef('py1', {

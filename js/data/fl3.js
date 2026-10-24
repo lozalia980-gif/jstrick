@@ -1,4 +1,4 @@
-/* js-trick :: Flutter avanzado (se practica en la plataforma y se prueba en VS Code; la salida describe lo que se ve en la pantalla o en la consola) */
+/* Xidecode :: Flutter avanzado (se practica en la plataforma y se prueba en VS Code; la salida describe lo que se ve en la pantalla o en la consola) */
 (function () {
   var APP = 'Verás en la pantalla:\n';
   var IMP = "import 'package:flutter/material.dart';";

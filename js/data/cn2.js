@@ -1,4 +1,4 @@
-/* js-trick :: C# intermedio (salidas verificadas con .NET; la ejecución en línea usa una versión antigua de C# y puede fallar con sintaxis moderna) */
+/* Xidecode :: C# intermedio (salidas verificadas con .NET; la ejecución en línea usa una versión antigua de C# y puede fallar con sintaxis moderna) */
 (function () {
   var USING = 'using System;\nusing System.Collections.Generic;\nusing System.Linq;\n';
   var HEAD = USING + '\nclass Program\n{\n    static void Main()\n    {';

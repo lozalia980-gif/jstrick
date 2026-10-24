@@ -1,4 +1,4 @@
-/* js-trick :: retos libres (sin pasos guiados): el alumno escribe el programa completo y se corrige ejecutándolo de verdad.
+/* Xidecode :: retos libres (sin pasos guiados): el alumno escribe el programa completo y se corrige ejecutándolo de verdad.
    JT.retosDef('py1', { lang: 'py', items: [{ t, s, g, start, sol, hint, tests: [{ code, stdin, label }] }] })
    - py: Python (Pyodide); sql: sql.js sobre la base de ejemplo del tema; js: JavaScript en un Worker (con console.log).
    - La salida esperada se obtiene ejecutando la solución del autor, así que solo hay que escribir `sol`.
@@ -83,7 +83,7 @@
     var saved = JT.state.drafts[id] && JT.state.drafts[id].code;
     var lang = d.lang === 'js' ? 'js' : d.lang;
     var prev = d.items[i - 1], next = d.items[i + 1];
-    document.title = 'js-trick | Reto: ' + c.t;
+    document.title = 'Xidecode | Reto: ' + c.t;
     view.innerHTML = '<div class="crumbs"><a href="#/">Inicio</a>' + ic('right') + '<a href="#/t/' + t.id + '/retos">' + esc(t.guide) + '</a>' + ic('right') + '<b>Reto ' + (i + 1) + ' de ' + d.items.length + '</b></div>' +
       '<h1 style="margin:0 0 4px">' + esc(c.t) + '</h1>' +
       '<div class="card"><h3>' + ic('target') + 'Tu misión</h3>' + c.g + '</div>' +

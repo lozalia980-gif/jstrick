@@ -1,4 +1,4 @@
-/* js-trick :: portal inmersivo de cada curso (landing): la tarjeta se expande, todo se vuelve negro y aparece un espacio 3D sin fondo
+/* Xidecode :: portal inmersivo de cada curso (landing): la tarjeta se expande, todo se vuelve negro y aparece un espacio 3D sin fondo
    con scroll: presentación, qué aprenderás, código, qué puedes crear, galería y una pregunta final.
    JT.portal.open(idCurso, elementoTarjeta). Respeta "reducir movimiento" y se detiene al cerrarse. */
 (function () {
@@ -7,7 +7,7 @@
   var esc = JT.esc || function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var ICON = { code: 'i-code', layers: 'i-layers', bolt: 'i-bolt', term: 'i-term', db: 'i-db', globe: 'i-globe', cube: 'i-cube' };
   function icon(id) { return '<svg class="i" aria-hidden="true"><use href="#' + (ICON[id] || id) + '"/></svg>'; }
-  var cur = null, KEY = 'jstrick:estado:v1';
+  var cur = null, KEY = (JT.STATE_KEY || 'xidecode:estado:v1');
 
   function rgb(h) { h = String(h || '#61afef').replace('#', ''); if (h.length === 3) h = h.replace(/(.)/g, '$1$1'); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; }
   function track(id) { for (var i = 0; i < JT.tracks.length; i++) if (JT.tracks[i].id === id) return JT.tracks[i]; return null; }

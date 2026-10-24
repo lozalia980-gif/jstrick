@@ -1,4 +1,4 @@
-/* js-trick :: panel de usuario, catálogo de lenguajes, barra lateral y estadísticas */
+/* Xidecode :: panel de usuario, catálogo de lenguajes, barra lateral y estadísticas */
 (function () {
   var JT = window.JT, esc = JT.esc, ic = JT.icon;
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -153,11 +153,11 @@
 
   /* ============================== PANEL ============================== */
   JT.pages.panel = function (view) {
-    document.title = 'js-trick | Mi panel';
+    document.title = 'Xidecode | Mi panel';
     var P = JT.state.profile || { name: '', color: '#61afef' }, lv = JT.level(JT.state.xp), T = totals(), nx = next(), sk = JT.streak();
     var today = (JT.state.activity || {})[JT.today()] || 0, goal = 3;
     var dc = daily(), earned = JT.badges.filter(function (b) { return JT.state.badges[b.id]; }).length;
-    var h = '<div class="dash-hero"><div class="avatar" style="background:' + P.color + '">' + esc((P.name || 'T').charAt(0).toUpperCase()) + '</div><div class="dh-main"><h1>' + (P.name ? 'Hola, ' + esc(P.name) : '¡Bienvenido a js-trick!') + '</h1><p>' + (T.ex + T.xs === 0 ? 'Elige un lenguaje y empieza con tu primer ejemplo. Cada ejemplo va seguido de un ejercicio para practicarlo.' : 'Llevas <b>' + (T.ex + T.xs) + '</b> actividades completadas. ¡Sigue así!') + '</p>' +
+    var h = '<div class="dash-hero"><div class="avatar" style="background:' + P.color + '">' + esc((P.name || 'T').charAt(0).toUpperCase()) + '</div><div class="dh-main"><h1>' + (P.name ? 'Hola, ' + esc(P.name) : '¡Bienvenido a Xidecode!') + '</h1><p>' + (T.ex + T.xs === 0 ? 'Elige un lenguaje y empieza con tu primer ejemplo. Cada ejemplo va seguido de un ejercicio para practicarlo.' : 'Llevas <b>' + (T.ex + T.xs) + '</b> actividades completadas. ¡Sigue así!') + '</p>' +
       (P.name ? '' : '<div class="namebox"><input id="pname" type="text" maxlength="24" placeholder="¿Cómo te llamas?"><button class="btn primary sm" id="psave">Guardar</button></div>') +
       '<div class="dh-xp"><span class="badge">Nivel ' + lv.n + ' · ' + esc(lv.name) + '</span><span class="xpbar big"><i style="width:' + lv.pct + '%"></i></span><span class="badge">' + JT.state.xp + ' XP</span></div></div>' +
       '<div class="dh-stats"><div class="stat">' + ic('bolt') + '<b>' + sk + '</b><span>día' + (sk === 1 ? '' : 's') + ' de racha</span></div><div class="stat">' + ic('award') + '<b>' + earned + '/' + JT.badges.length + '</b><span>logros</span></div><div class="stat">' + ic('check') + '<b>' + (T.ex + T.xs) + '</b><span>actividades</span></div></div></div>';
@@ -181,7 +181,7 @@
 
     h += '<div class="two"><div class="card"><h3>' + ic('calendar') + 'Tu actividad (últimas 18 semanas)</h3>' + heatmap() + '<div class="muted sm" style="margin-top:6px">Menos <i class="hm l0"></i><i class="hm l1"></i><i class="hm l2"></i><i class="hm l3"></i><i class="hm l4"></i> Más</div></div>' +
       '<div class="card"><h3>' + ic('award') + 'Logros</h3><div class="badges">' + JT.badges.map(function (b) { var got = JT.state.badges[b.id]; return '<div class="bdg' + (got ? ' on' : '') + '" title="' + esc(b.desc) + '">' + ic(got ? b.icon : 'lock') + '<b>' + esc(b.name) + '</b><span>' + esc(b.desc) + '</span></div>'; }).join('') + '</div></div></div>';
-    h += '<div class="foot">js-trick · tu progreso vive en este navegador · <a href="#" id="resetProg">Reiniciar mi progreso</a> · <a href="index.html">Volver al inicio</a></div>';
+    h += '<div class="foot">Xidecode · tu progreso vive en este navegador · <a href="#" id="resetProg">Reiniciar mi progreso</a> · <a href="index.html">Volver al inicio</a></div>';
     view.innerHTML = h;
 
     var sv = $('#psave');
@@ -203,7 +203,7 @@
 
   /* ============================== CATÁLOGO ============================== */
   JT.pages.cursos = function (view) {
-    document.title = 'js-trick | Cursos';
+    document.title = 'Xidecode | Cursos';
     var h = '<div class="crumbs"><a href="#/panel">Mi panel</a>' + ic('right') + '<b>Cursos</b></div><div class="thead"><div><h1>Elige tu curso</h1><p>Cada curso tiene conceptos, lecciones (ejemplo con su desglose) con un ejercicio guiado después de cada una y un reto rápido.</p></div></div><div class="grid g3">' +
       JT.tracks.map(function (tr) {
         var ts = topicsOf(tr.id), s = trackStats(tr.id), has = ts.length;
@@ -216,7 +216,7 @@
   /* ============================== PÁGINA DE UN LENGUAJE ============================== */
   JT.pages.curso = function (view, id) {
     var tr = JT.track(id), ts = topicsOf(id), s = trackStats(id), nx = nextInTrack(id);
-    document.title = 'js-trick | ' + tr.name;
+    document.title = 'Xidecode | ' + tr.name;
     var h = '<div class="crumbs"><a href="#/panel">Mi panel</a>' + ic('right') + '<a href="#/cursos">Cursos</a>' + ic('right') + '<b>' + esc(tr.name) + '</b></div>' +
       '<div class="track-hero" style="--c:' + tr.color + '"><span class="cc-ic big" style="background:' + tr.color + '">' + ic(tr.icon) + '</span><div><h1>' + esc(tr.name) + '</h1><p>' + esc(tr.tagline) + '</p><p class="muted">' + esc(tr.why) + '</p></div>' + ring(s.pct, tr.color, 84) + '</div>' +
       (nx ? '<div style="margin:14px 0"><a class="btn primary" href="' + nx.hash + '">' + ic('play') + (s.done ? 'Continuar: ' : 'Empezar: ') + esc(nx.title) + '</a></div>' : '') +

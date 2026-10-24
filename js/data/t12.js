@@ -1,4 +1,4 @@
-/* js-trick :: Guía 12 · Framework JavaScript: Angular (simulador didáctico) */
+/* Xidecode :: Guía 12 · Framework JavaScript: Angular (simulador didáctico) */
 (function () {
   var H = JT.H, C = JT.C, T = JT.T, M = JT.M, eq = JT.eq;
 

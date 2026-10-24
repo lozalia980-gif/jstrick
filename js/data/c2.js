@@ -1,4 +1,4 @@
-/* js-trick :: CSS intermedio */
+/* Xidecode :: CSS intermedio */
 (function () {
   function H(code, why) { return ['html', code, why]; }
   function C(code, why) { return ['css', code, why]; }

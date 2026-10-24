@@ -1,4 +1,4 @@
-/* js-trick :: HTML avanzado (APIs nativas del navegador: componentes, diálogos, canvas, arrastrar y soltar, validación, accesibilidad y datos estructurados) */
+/* Xidecode :: HTML avanzado (APIs nativas del navegador: componentes, diálogos, canvas, arrastrar y soltar, validación, accesibilidad y datos estructurados) */
 (function () {
   function H(c, w) { return ['html', c, w]; }
   function J(c, w) { return ['js', c, w]; }

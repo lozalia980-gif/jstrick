@@ -1,4 +1,4 @@
-/* js-trick :: simulador didactico de Angular.
+/* Xidecode :: simulador didactico de Angular.
    - JT.ng.transform(ts): convierte el TypeScript del alumno a JavaScript ejecutable (conserva los números de línea).
    - JT.libs.ng(win): motor que corre DENTRO de la pantalla: renderiza plantillas, enlaces de datos, *ngFor, *ngIf,
      [(ngModel)], eventos, pipes, servicios, componentes hijos con @Input/@Output y formularios con validación. */

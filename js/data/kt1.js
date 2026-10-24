@@ -1,4 +1,4 @@
-/* js-trick :: Kotlin desde cero (salida esperada escrita y revisada a mano; se practica en la plataforma y se prueba en tu computadora) */
+/* Xidecode :: Kotlin desde cero (salida esperada escrita y revisada a mano; se practica en la plataforma y se prueba en tu computadora) */
 (function () {
   var B = 'fun main() {\n    // tu código aquí\n}';
   var M = { indent: 2 };

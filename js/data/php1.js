@@ -1,4 +1,4 @@
-/* js-trick :: PHP desde cero (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
+/* Xidecode :: PHP desde cero (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
 (function () {
   var OPEN = '<?php';
   var BASE = '<?php\n\n// tu código aquí';

@@ -1,4 +1,4 @@
-/* js-trick :: Swift avanzado (Swift de consola con salida esperada escrita y revisada a mano; SwiftUI se practica aquí y se prueba en Xcode) */
+/* Xidecode :: Swift avanzado (Swift de consola con salida esperada escrita y revisada a mano; SwiftUI se practica aquí y se prueba en Xcode) */
 (function () {
   var TEL = 'Verás en el iPhone:\n';
   var IMP = 'import SwiftUI';

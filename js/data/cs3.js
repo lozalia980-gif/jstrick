@@ -1,4 +1,4 @@
-/* js-trick :: CSS avanzado (capas, :has, container queries, subgrid, funciones modernas, @property, efectos, scroll, temas y anidamiento) */
+/* Xidecode :: CSS avanzado (capas, :has, container queries, subgrid, funciones modernas, @property, efectos, scroll, temas y anidamiento) */
 (function () {
   function H(code, why) { return ['html', code, why]; }
   function C(code, why) { return ['css', code, why]; }

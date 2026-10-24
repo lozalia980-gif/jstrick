@@ -1,4 +1,4 @@
-/* js-trick :: contenido de las presentaciones inmersivas de la landing (un bloque por curso; los que no tengan se arman con el catálogo)
+/* Xidecode :: contenido de las presentaciones inmersivas de la landing (un bloque por curso; los que no tengan se arman con el catálogo)
    uses: [titulo, descripcion, icono]   snippets: [archivo, lang, codigo]
    slides: term {title, code, out} | chart {title, bars:[[etiqueta, valor]], note} | flow {title, nodes:[], note} | browser {title, url, html} | phone {title, items:[]} */
 (function () {

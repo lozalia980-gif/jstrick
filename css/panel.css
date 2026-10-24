@@ -1,4 +1,4 @@
-/* js-trick :: estilos del panel, catálogo y navegación por lenguajes */
+/* Xidecode :: estilos del panel, catálogo y navegación por lenguajes */
 .topnav{display:flex;gap:4px;margin-left:10px}
 .topnav a{color:var(--muted);padding:6px 12px;border-radius:8px;font-size:14px;font-weight:600}
 .topnav a:hover{background:var(--panel);color:var(--text);text-decoration:none}

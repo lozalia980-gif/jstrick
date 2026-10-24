@@ -1,4 +1,4 @@
-/* js-trick :: iOS con SwiftUI (Swift intermedio). Se practica en la plataforma y se prueba en Xcode; la salida describe lo que se ve en el iPhone. */
+/* Xidecode :: iOS con SwiftUI (Swift intermedio). Se practica en la plataforma y se prueba en Xcode; la salida describe lo que se ve en el iPhone. */
 (function () {
   var TEL = 'Verás en el iPhone:\n';
   var IMP = 'import SwiftUI';

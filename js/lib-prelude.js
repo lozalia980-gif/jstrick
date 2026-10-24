@@ -1,4 +1,4 @@
-/* js-trick :: prelude que se ejecuta DENTRO de la pantalla (iframe) antes del código del alumno.
+/* Xidecode :: prelude que se ejecuta DENTRO de la pantalla (iframe) antes del código del alumno.
    Esta función se serializa con toString(), por eso debe ser autosuficiente (no usar variables externas). */
 (function () {
   var JT = window.JT;
@@ -139,10 +139,10 @@
     };
 
     /* ---------- servidor de práctica (reemplaza a mockAPI.io) ---------- */
-    var HOST = 'https://mock.jstrick.dev';
+    var HOST = 'https://mock.xidecode.dev';
     function svg(w, h, body) { return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' + body + '</svg>'); }
     function cover(t, c1, c2) {
-      return svg(120, 170, '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c1 + '"/><stop offset="1" stop-color="' + c2 + '"/></linearGradient></defs><rect width="120" height="170" rx="6" fill="url(#g)"/><rect x="10" y="12" width="6" height="146" fill="rgba(0,0,0,.18)"/><text x="64" y="86" font-family="Segoe UI,Arial" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">' + t + '</text><text x="64" y="150" font-family="Segoe UI,Arial" font-size="9" fill="rgba(255,255,255,.8)" text-anchor="middle">js-trick</text>');
+      return svg(120, 170, '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c1 + '"/><stop offset="1" stop-color="' + c2 + '"/></linearGradient></defs><rect width="120" height="170" rx="6" fill="url(#g)"/><rect x="10" y="12" width="6" height="146" fill="rgba(0,0,0,.18)"/><text x="64" y="86" font-family="Segoe UI,Arial" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">' + t + '</text><text x="64" y="150" font-family="Segoe UI,Arial" font-size="9" fill="rgba(255,255,255,.8)" text-anchor="middle">Xidecode</text>');
     }
     function scene(c1, c2, shape) { return svg(320, 180, '<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c1 + '"/><stop offset="1" stop-color="' + c2 + '"/></linearGradient></defs><rect width="320" height="180" fill="url(#g)"/>' + shape); }
     var seed = function () {
@@ -178,10 +178,10 @@
 
     var FILES = {
       '/noticias.html': '<h3>Últimas noticias</h3><ul><li>Nueva versión de JavaScript publicada</li><li>Curso de jQuery disponible</li><li>Angular alcanza nuevas funciones</li></ul>',
-      '/saludo.txt': 'Hola desde el servidor de práctica de js-trick',
+      '/saludo.txt': 'Hola desde el servidor de práctica de Xidecode',
       '/datos.json': '{"curso":"Desarrollo de Aplicaciones Web","guia":9,"tema":"AJAX"}',
       '/inicio.html': '<h2>Inicio</h2><p>Bienvenido al sitio de práctica. Este contenido se cargó con AJAX sin recargar la página.</p>',
-      '/contacto.html': '<h2>Contacto</h2><p>Escríbenos a <b>hola@jstrick.dev</b>.</p>',
+      '/contacto.html': '<h2>Contacto</h2><p>Escríbenos a <b>hola@xidecode.dev</b>.</p>',
       '/acerca.html': '<h2>Acerca de</h2><p>Un sitio pequeño para practicar peticiones asíncronas.</p>'
     };
     function parseQuery(q) {
@@ -206,7 +206,7 @@
       if (path === '/error500') return err(500, 'Internal Server Error', 'Algo falló en el servidor');
       if (FILES[path] !== undefined && method === 'GET') {
         var isH = /\.html$/.test(path), isJ = /\.json$/.test(path);
-        return { status: 200, statusText: 'OK', body: FILES[path], headers: { 'content-type': isH ? 'text/html; charset=utf-8' : isJ ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8', 'x-servidor': 'js-trick' }, delay: 300 };
+        return { status: 200, statusText: 'OK', body: FILES[path], headers: { 'content-type': isH ? 'text/html; charset=utf-8' : isJ ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8', 'x-servidor': 'xidecode' }, delay: 300 };
       }
       var m = /^\/([a-z]+)(?:\/([^\/]+))?$/.exec(path);
       if (!m || !DB[m[1]]) return err(404, 'Not Found', 'No existe el recurso ' + path + '. Recursos disponibles: /books, /cities, /users, /todos');

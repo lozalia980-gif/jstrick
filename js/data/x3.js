@@ -1,4 +1,4 @@
-/* js-trick :: C++ avanzado (salida esperada escrita y revisada a mano; requiere C++17: la ejecución en línea es opcional) */
+/* Xidecode :: C++ avanzado (salida esperada escrita y revisada a mano; requiere C++17: la ejecución en línea es opcional) */
 (function () {
   var INC_S = '#include <iostream>\n#include <string>\nusing namespace std;';
   var INC = '#include <iostream>\n#include <string>\n#include <vector>\n#include <map>\n#include <algorithm>\n#include <numeric>\n#include <functional>\n#include <memory>\n#include <optional>\n#include <variant>\n#include <future>\n#include <type_traits>\nusing namespace std;';

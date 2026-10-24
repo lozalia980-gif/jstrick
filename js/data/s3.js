@@ -1,4 +1,4 @@
-/* js-trick :: SQL avanzado (se ejecuta de verdad en el navegador con sql.js; salidas verificadas con SQLite) */
+/* Xidecode :: SQL avanzado (se ejecuta de verdad en el navegador con sql.js; salidas verificadas con SQLite) */
 (function () {
   var T = '<p class="sm">Tablas disponibles: <code>departamentos(id, nombre)</code>, <code>empleados(id, nombre, depto_id, jefe_id, salario, ingreso)</code> y <code>ventas(id, empleado_id, monto, fecha)</code>.</p>';
   var B = '-- tu código aquí';

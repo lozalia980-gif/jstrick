@@ -1,4 +1,4 @@
-/* js-trick :: Guía 11 · jQuery: componentes de interfaz y plugins */
+/* Xidecode :: Guía 11 · jQuery: componentes de interfaz y plugins */
 (function () {
   var H = JT.H, C = JT.C, J = JT.J, eq = JT.eq;
 

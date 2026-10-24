@@ -1,4 +1,4 @@
-/* js-trick :: revisor de errores para Python, SQL, PHP, C, C++ y C# (explica qué está mal y cómo corregirlo) */
+/* Xidecode :: revisor de errores para Python, SQL, PHP, C, C++ y C# (explica qué está mal y cómo corregirlo) */
 (function () {
   var JT = window.JT, esc = JT.esc;
   function I(sev, file, line, title, msg, fix) { return { sev: sev, file: file, line: line || 0, title: title, msg: msg, fix: fix || '', code: '' }; }

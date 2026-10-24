@@ -1,4 +1,4 @@
-/* js-trick :: explicación genérica de una línea para Python, SQL, PHP, C, C++ y C# (botón "?" del editor) */
+/* Xidecode :: explicación genérica de una línea para Python, SQL, PHP, C, C++ y C# (botón "?" del editor) */
 (function () {
   var JT = window.JT, esc = JT.esc;
   function c(s) { return '<code>' + esc(s) + '</code>'; }

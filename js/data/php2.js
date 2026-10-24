@@ -1,4 +1,4 @@
-/* js-trick :: PHP intermedio (salida esperada escrita y revisada a mano; requiere PHP 8 o superior: la ejecución en línea usa una versión antigua) */
+/* Xidecode :: PHP intermedio (salida esperada escrita y revisada a mano; requiere PHP 8 o superior: la ejecución en línea usa una versión antigua) */
 (function () {
   var OPEN = '<?php';
   var OPENW = 'Todo el código PHP va después de <code>&lt;?php</code>. Estos ejemplos usan PHP 8 o superior.';

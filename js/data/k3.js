@@ -1,4 +1,4 @@
-/* js-trick :: C avanzado (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
+/* Xidecode :: C avanzado (salida esperada escrita y revisada a mano; la ejecución en línea es opcional) */
 (function () {
   var INC = '#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>';
   var INC2 = INC + '\n#include <ctype.h>';

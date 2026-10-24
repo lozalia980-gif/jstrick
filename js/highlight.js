@@ -1,4 +1,4 @@
-/* js-trick :: resaltado de sintaxis + deteccion de terminos del glosario (los botones "?") */
+/* Xidecode :: resaltado de sintaxis + deteccion de terminos del glosario (los botones "?") */
 (function () {
   var JT = window.JT;
 

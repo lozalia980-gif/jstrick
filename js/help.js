@@ -1,4 +1,4 @@
-/* js-trick :: cuadro de ayuda "?" (explica términos, líneas y responde dudas escritas) */
+/* Xidecode :: cuadro de ayuda "?" (explica términos, líneas y responde dudas escritas) */
 (function () {
   var JT = window.JT, esc = JT.esc;
   var H = JT.help = { parts: [], history: [] };
@@ -159,7 +159,7 @@
     push(function () {
       var h = '<p>Escribe abajo cualquier duda y te explico. También puedes tocar los botones <b>?</b> que aparecen junto a cada línea de código, cada pieza del desglose y en la lista "Consulta" bajo el editor.</p><h5>Temas frecuentes</h5><div class="chips">' +
         ['Guardar un objeto o arreglo', 'JSON.parse', 'JSON.stringify', 'localStorage.setItem', 'XMLHttpRequest', '.readyState', '$', '.click', '.fadeIn', '*ngFor', '[(ngModel)]', '== y ==='].filter(function (k) { return JT.glossary[k]; }).map(function (k) { return '<button class="chip" data-term="' + esc(k) + '">' + esc(JT.glossary[k].t || k) + '<i>?</i></button>'; }).join('') + '</div>';
-      H.show(JT.icon('help') + '<span>Pregúntale a js-trick</span>', h, { focus: true });
+      H.show(JT.icon('help') + '<span>Pregúntale a Xidecode</span>', h, { focus: true });
     });
   };
 })();

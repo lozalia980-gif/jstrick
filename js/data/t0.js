@@ -1,4 +1,4 @@
-/* js-trick :: Base · Repaso exprés de JavaScript (para quien no recuerda lo básico) */
+/* Xidecode :: Base · Repaso exprés de JavaScript (para quien no recuerda lo básico) */
 (function () {
   var H = JT.H, C = JT.C, J = JT.J, eq = JT.eq;
 
@@ -58,7 +58,7 @@
           J('function cuentaRegresiva(desde) {\n  var texto = "";\n  var x = desde;\n  while (x > 0) {\n    texto += x + "... ";\n    x--;\n  }\n  return texto + "¡Despegue!";\n}', 'Con <code>while</code> repetimos <b>mientras</b> <code>x &gt; 0</code>. <code>x--</code> resta 1 en cada vuelta; si olvidaras esa línea, el bucle nunca terminaría (bucle infinito).'),
           J('document.getElementById("tabla").onclick = function () {\n  var n = Number(document.getElementById("n").value);\n  var salida = tablaDel(n) + "\\n" + cuentaRegresiva(5);\n  document.getElementById("salida").textContent = salida;\n};', 'Juntamos ambos resultados y los mostramos al pulsar el botón.')
         ],
-        notes: [{ type: 'warn', html: 'Un bucle sin salida congela la página. Js-trick se niega a ejecutar <code>while (true)</code> sin <code>break</code> para protegerte.' }],
+        notes: [{ type: 'warn', html: 'Un bucle sin salida congela la página. Xidecode se niega a ejecutar <code>while (true)</code> sin <code>break</code> para protegerte.' }],
         tryit: ['Cambia <code>i &lt;= 10</code> por <code>i &lt;= 12</code>.', 'Haz que la cuenta regresiva baje de 2 en 2: <code>x -= 2;</code>.'] },
       /* 5 */
       { id: 'g0e5', title: 'Funciones: parámetros y return', short: 'Reutilizar código', lib: null,

@@ -1,4 +1,4 @@
-/* js-trick :: arma el documento que se muestra en la "pantalla" (iframe) y recibe sus mensajes */
+/* Xidecode :: arma el documento que se muestra en la "pantalla" (iframe) y recibe sus mensajes */
 (function () {
   var JT = window.JT;
 

@@ -1,4 +1,4 @@
-/* js-trick :: SQL intermedio (se ejecuta de verdad en el navegador con sql.js; salidas verificadas con SQLite) */
+/* Xidecode :: SQL intermedio (se ejecuta de verdad en el navegador con sql.js; salidas verificadas con SQLite) */
 (function () {
   var T = '<p class="sm">Tablas disponibles: <code>clientes(id, nombre, ciudad)</code>, <code>productos(id, nombre, categoria, precio)</code> y <code>pedidos(id, cliente_id, producto_id, cantidad, fecha)</code>.</p>';
   var B = '-- tu código aquí';

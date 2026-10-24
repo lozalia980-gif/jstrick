@@ -1,4 +1,4 @@
-/* js-trick :: editor de código con resaltado, números de línea y boton "?" por línea */
+/* Xidecode :: editor de código con resaltado, números de línea y boton "?" por línea */
 (function () {
   var JT = window.JT;
 

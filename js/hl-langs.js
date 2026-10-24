@@ -1,4 +1,4 @@
-/* js-trick :: resaltado para Python, SQL, PHP, C, C++, C#, Java, Go y Rust (+ enlace con el glosario para los botones "?") */
+/* Xidecode :: resaltado para Python, SQL, PHP, C, C++, C#, Java, Go y Rust (+ enlace con el glosario para los botones "?") */
 (function () {
   var JT = window.JT;
   JT.langScan = JT.langScan || {};

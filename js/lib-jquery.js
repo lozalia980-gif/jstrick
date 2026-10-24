@@ -1,4 +1,4 @@
-/* js-trick :: mini-jQuery incluido en la pantalla (sin internet).
+/* Xidecode :: mini-jQuery incluido en la pantalla (sin internet).
    Implementa la parte de jQuery que ensenan las guias 10 y 11 (selectores, eventos, efectos, DOM, AJAX y plugins).
    Se serializa con toString(): debe ser autosuficiente. */
 (function () {
@@ -55,7 +55,7 @@
 
     /* ---------- constructor ---------- */
     function JQ(sel, ctx) { return new JQ.fn.init(sel, ctx); }
-    JQ.fn = JQ.prototype = { jquery: '3.7.1-js-trick', length: 0, constructor: JQ };
+    JQ.fn = JQ.prototype = { jquery: '3.7.1-xidecode', length: 0, constructor: JQ };
     var init = JQ.fn.init = function (sel, ctx) {
       this.length = 0;
       if (!sel) return this;

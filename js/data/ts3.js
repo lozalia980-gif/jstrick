@@ -1,4 +1,4 @@
-/* js-trick :: TypeScript avanzado (salidas verificadas con Node y tipos comprobados con tsc; se practica en la plataforma y se prueba en VS Code) */
+/* Xidecode :: TypeScript avanzado (salidas verificadas con Node y tipos comprobados con tsc; se practica en la plataforma y se prueba en VS Code) */
 (function () {
   var B = '// tu código aquí';
   JT.tk({

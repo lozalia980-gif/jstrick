@@ -1,4 +1,4 @@
-/* js-trick :: aplicación (vistas, rutas, ejemplos interactivos, ejercicios guiados y retos) */
+/* Xidecode :: aplicación (vistas, rutas, ejemplos interactivos, ejercicios guiados y retos) */
 (function () {
   var JT = window.JT, esc = JT.esc, ic = JT.icon;
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -48,7 +48,7 @@
 
   /* ============================== página de un tema ============================== */
   function pageTopic(t, tab) {
-    document.title = 'js-trick | ' + t.title;
+    document.title = 'Xidecode | ' + t.title;
     var st = topicStats(t);
     var h = '<div class="crumbs"><a href="#/">Inicio</a>' + ic('right') + '<b>' + esc(t.guide) + '</b></div>' +
       '<div class="thead"><span class="num" style="background:' + t.color + '">' + (t.num === 0 ? '0' : t.num) + '</span><div><h1>' + esc(t.title) + '</h1><p>' + esc(t.guide) + ' &middot; ' + st.done + ' de ' + st.total + ' actividades completadas</p></div></div>' +
@@ -132,7 +132,7 @@
   /* ============================== EJEMPLO ============================== */
   function pageExample(t, idx) {
     var ex = t.examples[idx], files0 = JT.filesFromParts(ex.parts);
-    document.title = 'js-trick | ' + ex.title;
+    document.title = 'Xidecode | ' + ex.title;
     JT.help.parts = ex.parts; JT.help.history = [];
     var draft = JT.state.drafts['e:' + ex.id];
     var order = filesOrder(t, files0), prev = t.examples[idx - 1], next = t.examples[idx + 1];
@@ -287,7 +287,7 @@
 
   function pageExercise(t, idx) {
     var xs = t.exercises[idx], kind = t.kind || 'web', lib = xs.lib || t.lib;
-    document.title = 'js-trick | ' + xs.title;
+    document.title = 'Xidecode | ' + xs.title;
     JT.help.parts = []; JT.help.history = [];
     var st = loadEx(xs), N = xs.steps.length, prev = t.exercises[idx - 1], next = t.exercises[idx + 1];
     var base = xs.base || {}, keys = Object.keys(base);

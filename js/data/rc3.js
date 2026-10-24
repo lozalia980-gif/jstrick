@@ -1,4 +1,4 @@
-/* js-trick :: React avanzado (se practica en la plataforma y se prueba en VS Code con Vite; la salida esperada describe lo que se ve en la página) */
+/* Xidecode :: React avanzado (se practica en la plataforma y se prueba en VS Code con Vite; la salida esperada describe lo que se ve en la página) */
 (function () {
   var WEB = 'Verás en la página:\n';
   var BASE_ALL = '// tu código aquí (imports)\n\n// tu código aquí (componentes)\n\nexport default function App() {\n  // tu código aquí (lógica)\n  return (\n    <div>\n      {/* tu código aquí (JSX) */}\n    </div>\n  );\n}';

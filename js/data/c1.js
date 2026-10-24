@@ -1,4 +1,4 @@
-/* js-trick :: CSS desde cero */
+/* Xidecode :: CSS desde cero */
 (function () {
   function H(code, why) { return ['html', code, why]; }
   function C(code, why) { return ['css', code, why]; }

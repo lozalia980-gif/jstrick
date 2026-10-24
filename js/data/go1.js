@@ -1,4 +1,4 @@
-/* js-trick :: Go desde cero (salida esperada verificada con el compilador de Go; la ejecución en línea es opcional) */
+/* Xidecode :: Go desde cero (salida esperada verificada con el compilador de Go; la ejecución en línea es opcional) */
 (function () {
   function head(imps) {
     var l = imps.length === 1 ? 'import "' + imps[0] + '"' : 'import (\n' + imps.map(function (x) { return '    "' + x + '"'; }).join('\n') + '\n)';

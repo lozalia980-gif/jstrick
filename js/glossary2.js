@@ -1,4 +1,4 @@
-/* js-trick :: glosario 2 (jQuery, Angular, HTML) */
+/* Xidecode :: glosario 2 (jQuery, Angular, HTML) */
 (function () {
   var JT = window.JT;
   function G(k, d, o) { o = o || {}; o.d = d; JT.glossary[k] = o; }

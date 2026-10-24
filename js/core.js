@@ -1,4 +1,4 @@
-/* js-trick :: nucleo (utilidades, estado, progreso, ayudantes para escribir contenido) */
+/* Xidecode :: nucleo (utilidades, estado, progreso, ayudantes para escribir contenido) */
 (function () {
   var JT = (window.JT = window.JT || {});
   JT.topics = JT.topics || [];
@@ -60,7 +60,13 @@
   };
 
   /* ---------- estado persistente ---------- */
-  var KEY = 'jstrick:estado:v1';
+  var KEY = 'xidecode:estado:v1', OLD_KEY = 'jstrick:estado:v1';
+  JT.STATE_KEY = KEY;
+  /* el progreso guardado con el nombre anterior de la plataforma se copia a la clave nueva (una sola vez) */
+  JT.migrateState = function () {
+    try { if (!localStorage.getItem(KEY) && localStorage.getItem(OLD_KEY)) localStorage.setItem(KEY, localStorage.getItem(OLD_KEY)); } catch (e) { /* sin almacenamiento */ }
+  };
+  JT.migrateState();
   JT.state = { done: {}, xp: 0, drafts: {}, quiz: {}, helped: {}, profile: { name: '', color: '#61afef' }, activity: {}, badges: {}, daily: {} };
   JT.loadState = function () {
     try {

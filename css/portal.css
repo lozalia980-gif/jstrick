@@ -1,4 +1,4 @@
-/* js-trick :: portal inmersivo de la landing */
+/* Xidecode :: portal inmersivo de la landing */
 .pt-grow{position:fixed;z-index:1000;border-radius:18px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 38%,#12141a),#12141a);border:1px solid var(--c);pointer-events:none;box-shadow:0 0 60px color-mix(in srgb,var(--c) 40%,transparent);transition:left .62s cubic-bezier(.7,0,.2,1),top .62s cubic-bezier(.7,0,.2,1),width .62s cubic-bezier(.7,0,.2,1),height .62s cubic-bezier(.7,0,.2,1),border-radius .62s ease,background .35s ease,border-color .35s,opacity .3s}
 .pt-grow.go{left:0!important;top:0!important;width:100vw!important;height:100vh!important;border-radius:0;box-shadow:none}
 .pt-grow.black{background:#05060a;border-color:transparent}

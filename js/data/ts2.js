@@ -1,4 +1,4 @@
-/* js-trick :: TypeScript intermedio (salidas verificadas con Node; se practica en la plataforma y se prueba en VS Code) */
+/* Xidecode :: TypeScript intermedio (salidas verificadas con Node; se practica en la plataforma y se prueba en VS Code) */
 (function () {
   var B = '// tu código aquí';
   JT.tk({
