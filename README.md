@@ -116,3 +116,7 @@ revisa que todos los ejemplos no tengan errores y que la solución de cada paso 
 ## Marca
 
 Los archivos de la marca están en `assets/brand/`: `xidecode-mark.svg` (símbolo con degradado), `xidecode-icon.svg` (símbolo sobre fondo oscuro, es el favicon y el logo del menú), `xidecode-mark-mono.svg` (una sola tinta, usa `currentColor`) y `xidecode-logo.svg` (símbolo con el nombre; el texto usa la tipografía del sistema). `referencia-gemini.webp` es la imagen que inspiró el diseño. El símbolo son dos corchetes angulares que forman una X partida, `><`, en degradado rosa y cian.
+
+## Animación de entrada
+
+La landing abre con una animación corta (unos 4 segundos): pantalla negra, cuatro haces de luz que viajan al centro, el logo que se forma, gira hacia la izquierda mientras aparece el nombre y vuela hasta su sitio en el menú mientras la pantalla se abre desde el centro. Se muestra una vez por sesión del navegador, se puede saltar (clic, Esc o el botón) y no se ejecuta si el sistema tiene activado *reducir movimiento*. Está en `js/intro.js` y `css/intro.css`; con `index.html?introslow=6` se ve 6 veces más lenta, útil para ajustarla.

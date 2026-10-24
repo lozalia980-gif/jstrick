@@ -1,0 +1,21 @@
+/* Xidecode :: animación de entrada de la landing (pantalla negra, cuatro haces de luz, logo, nombre y vuelo al menú) */
+@property --r { syntax: '<length>'; initial-value: 0px; inherits: false; }
+#intro { display: none; }
+html.intro-on, html.intro-on body { overflow: hidden; scrollbar-gutter: stable; }
+html.intro-on #intro { display: block; position: fixed; inset: 0; z-index: 3000; }
+html.intro-on:not(.intro-landed) .brand { opacity: 0; }
+.in-bg { position: absolute; inset: 0; background: #05060a; --r: 0px;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 2px));
+  mask-image: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 2px)); }
+#intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.in-stage { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.in-lock { --L: 150px; display: flex; align-items: center; opacity: 0; transform-origin: 0 0; will-change: transform; }
+.in-logo { width: var(--L); height: var(--L); display: block; flex: none; border-radius: calc(var(--L) * .26);
+  filter: drop-shadow(0 0 calc(var(--L) * .18) rgba(255, 126, 182, .55)) drop-shadow(0 0 calc(var(--L) * .3) rgba(79, 216, 255, .35)); }
+.in-text { display: block; width: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
+  font: 800 calc(var(--L) * .5882) var(--mono); letter-spacing: -.02em; color: var(--text, #dfe2ea); line-height: 1.2; }
+.in-text span { display: block; padding-right: .04em; }
+.in-skip { position: absolute; right: 18px; bottom: 18px; z-index: 2; padding: 8px 14px; border-radius: 99px; font: 600 13px var(--sans);
+  color: #aab1c5; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .16); opacity: 0; animation: inskip .4s ease .6s forwards; }
+.in-skip:hover { color: #fff; border-color: rgba(255, 255, 255, .4); }
+@keyframes inskip { to { opacity: 1; } }

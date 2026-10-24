@@ -236,12 +236,15 @@
     doc.addEventListener('keydown', cur.onKey);
     /* secuencia de entrada */
     if (reduce) { grow.remove(); root.classList.add('show'); cur.stop = scene($('.pt-canvas', root), t.color, prog); upd(); $('.pt-close', root).focus(); return; }
+    var me = cur;
     requestAnimationFrame(function () { requestAnimationFrame(function () {
+      if (cur !== me) return;
       grow.classList.add('go');
       setTimeout(function () { grow.classList.add('black'); }, 520);
       setTimeout(function () {
+        if (cur !== me) return;
         root.classList.add('show'); cur.stop = scene($('.pt-canvas', root), t.color, prog); upd();
-        setTimeout(function () { grow.remove(); $('.pt-close', root).focus({ preventScroll: true }); }, 700);
+        setTimeout(function () { grow.remove(); if (cur === me) $('.pt-close', root).focus({ preventScroll: true }); }, 700);
       }, 780);
     }); });
   }

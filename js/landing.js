@@ -44,7 +44,9 @@
   var seen = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); seen.unobserve(e.target); if (e.target.hasAttribute('data-count')) countUp(e.target); } });
   }, { threshold: .15 }) : null;
-  $$('.reveal,[data-split],[data-count]').forEach(function (el) { if (seen) seen.observe(el); else el.classList.add('in'); });
+  /* con la animación de entrada, los textos del inicio aparecen cuando termina */
+  function startReveal() { $$('.reveal,[data-split],[data-count]').forEach(function (el) { if (seen) seen.observe(el); else el.classList.add('in'); }); }
+  if (doc.documentElement.classList.contains('intro-on')) doc.addEventListener('xidecode:intro-done', startReveal, { once: true }); else startReveal();
 
   /* ---------- números ---------- */
   var totals = { ex: 0, xs: 0, q: 0 };
