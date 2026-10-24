@@ -183,9 +183,11 @@
       if (/\)\s*(const|noexcept|override|final)(\s+(const|noexcept|override|final))*$/.test(t) && /^\{/.test(nextT)) continue;
       if (/^(if|for|while|switch|foreach|catch|else if|elseif|using)\b/.test(t) && /\)$/.test(t) && !/;$/.test(t) && nextT && !/^\{/.test(nextT)) { /* if sin llaves: la siguiente es la sentencia */ continue; }
       if (/^(class|struct|namespace|interface)\b|^(public|private|protected|internal|static)\s+(class|struct|interface)\b/.test(t)) continue;
-      if (/^((public|private|protected|internal|static|abstract|sealed|partial|readonly)\s+)*(class|struct|interface|record|namespace|enum)\b/.test(t) && !/;$/.test(t)) continue;
+      if (/^((public|private|protected|internal|static|abstract|sealed|partial|readonly|final)\s+)*(class|struct|interface|record|namespace|enum|trait)\b/.test(t) && !/;$/.test(t)) continue;
       if (/\bswitch$/.test(t) && /^\{/.test(nextT)) continue;
       if (/=>/.test(t) && /^\}/.test(nextT)) continue;
+      if (/\bnew\b[^;(]*(\[\])?$/.test(t) && /^\{/.test(nextT)) continue;
+      if (/^new\b/.test(t) && /^[}\]]/.test(nextT)) continue;
       if (/^(public|private|protected|internal)\b.*\)$/.test(t) && /^\{/.test(nextT)) continue;
       if (/^\w[\w\s\*&:<>,\[\]]*\s+\*?\w+\s*\([^)]*\)$/.test(t) && /^\{/.test(nextT) ) continue;
       if (/(\)|\w|"|'|\]|\+\+|--)$/.test(t)) {
@@ -195,7 +197,7 @@
     return out;
   }
 
-  var C_FUNCS = 'printf scanf puts putchar getchar gets fgets fputs fopen fclose fprintf sprintf strlen strcpy strncpy strcmp strcat strchr strstr malloc calloc realloc free sqrt pow abs fabs floor ceil rand srand time atoi atof exit toupper tolower isdigit isalpha memset memcpy sort reverse find min max swap to_string stoi stod getline begin end size length substr push_back pop_back count accumulate'.split(' ');
+  var C_FUNCS = 'qsort bsearch strrchr snprintf sscanf vprintf vsnprintf vfprintf strtol strtod strtoul remove rewind ftell fseek fwrite fread memmove memcmp isupper islower isspace isalnum va_start va_arg va_end perror strerror labs strncat strncmp strtok assert printf scanf puts putchar getchar gets fgets fputs fopen fclose fprintf sprintf strlen strcpy strncpy strcmp strcat strchr strstr malloc calloc realloc free sqrt pow abs fabs floor ceil rand srand time atoi atof exit toupper tolower isdigit isalpha memset memcpy sort reverse find min max swap to_string stoi stod getline begin end size length substr push_back pop_back count accumulate'.split(' ');
   function lintC(code, file, o, L) {
     var out = [], m = mask(code, L), cpp = L === 'cpp';
     if (!o.fragment) out = out.concat(balance(code, L, file));
@@ -276,7 +278,7 @@
     var defs = {}; m.replace(/\bfunction\s+(\w+)/g, function (a, n) { defs[n] = 1; return a; });
     eachLine(m, function (ln, no) {
       var t = ln.trim();
-      if (/^[A-Za-z_]\w*\s*=(?!=)/.test(t) && !/^(define|const|public|private|protected|static|var|use|namespace|class)\b/.test(t)) out.push(I('error', file, no, 'La variable necesita $', 'En PHP todas las variables empiezan con ' + q('$') + ': ' + q('$' + t.split('=')[0].trim()) + '.', 'Escribe ' + q('$' + t.replace(/;$/, '') + ';') + '.'));
+      if (/^[A-Za-z_]\w*\s*=(?![=>])/.test(t) && !/^(define|const|public|private|protected|static|var|use|namespace|class)\b/.test(t)) out.push(I('error', file, no, 'La variable necesita $', 'En PHP todas las variables empiezan con ' + q('$') + ': ' + q('$' + t.split('=')[0].trim()) + '.', 'Escribe ' + q('$' + t.replace(/;$/, '') + ';') + '.'));
       if (/\b(echo|print)\b[^;]*"[^"]*"\s*\+\s*(\$|")/.test(t) || /(\$\w+|")\s*\+\s*"/.test(t.replace(/\d+\s*\+\s*\d+/g, ''))) out.push(I('error', file, no, 'En PHP se concatena con punto', 'El operador ' + q('+') + ' suma números. Para unir textos PHP usa el <b>punto</b> ' + q('.') + '.', 'Escribe ' + q('"Hola " . $nombre') + '.'));
       if (/\b(if|while|elseif)\s*\([^()=!<>]*[^=!<>]=(?!=)[^()=]*\)/.test(t)) out.push(I('error', file, no, 'Usaste = dentro de la condición', 'Un solo ' + q('=') + ' asigna; para comparar se usa ' + q('==') + ' o ' + q('===') + '.', 'Cambia ' + q('=') + ' por ' + q('==') + '.'));
       if (/\belif\b|\belse\s+if\b/.test(t) && /\belif\b/.test(t)) out.push(I('error', file, no, 'En PHP es elseif', q('elif') + ' es de Python. En PHP se escribe ' + q('elseif') + ' (o ' + q('else if') + ').', 'Cambia ' + q('elif') + ' por ' + q('elseif') + '.'));

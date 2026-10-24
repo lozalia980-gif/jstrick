@@ -21,20 +21,20 @@ y entra a `http://localhost:5173`.
 
 | Curso | Niveles | Cómo se ejecuta |
 |---|---|---|
-| HTML y CSS | Básico + intermedio | Se ven de verdad en la pantalla del resultado |
+| HTML y CSS | Básico + intermedio + avanzado | Se ven de verdad en la pantalla del resultado |
 | JavaScript | Guías 8-12 + intermedio | Se ejecuta de verdad en la pantalla del resultado |
 | Python | Básico + intermedio | Se ejecuta de verdad con Pyodide (descarga el intérprete la primera vez) |
 | SQL | Básico + intermedio | Se ejecuta de verdad con sql.js sobre una base de ejemplo |
 | TypeScript y Node.js | Básico + intermedio | Salida esperada; *Ejecutar en línea* opcional; se prueban en VS Code |
 | React | Básico + intermedio | Salida descrita; se practica aquí y se prueba con Vite en VS Code |
-| PHP, C, C++ y C# | Básico + intermedio | Salida esperada; el revisor explica errores de sintaxis; *Ejecutar en línea* opcional (el intermedio de PHP y C# usa sintaxis moderna que el servicio en línea puede no soportar) |
+| PHP, C, C++ y C# | Básico + intermedio + avanzado | Salida esperada; el revisor explica errores de sintaxis; *Ejecutar en línea* opcional (el intermedio y el avanzado de PHP, C++ y C# usan sintaxis moderna que el servicio en línea puede no soportar: PHP 8.1, C++17, hilos y C# reciente) |
 | Flutter | Básico + intermedio | Salida descrita; se prueba con `flutter run -d chrome` en VS Code |
 | Kotlin | Básico + Android con Jetpack Compose | Básico: salida esperada y *Ejecutar en línea* opcional; Compose: se prueba en Android Studio |
 | Swift | Básico + iOS con SwiftUI | Básico: salida esperada y *Ejecutar en línea* opcional; SwiftUI: se prueba en Xcode (requiere Mac) |
 
 *Ejecutar en línea* pide permiso y usa el servicio público ce.judge0.com. Los cursos de TypeScript, React, Node.js, Flutter, Kotlin y Swift empiezan con una guía para instalar todo en tu computadora.
 
-El contenido está en `js/data/` (`tk.js` es el constructor compacto de temas). Salidas verificadas contra ejecución real: Python, SQL, C# (básico e intermedio), TypeScript y Node.js. Escritas y revisadas a mano (sin compilador en el entorno de desarrollo): C, C++, PHP, React, Flutter, Kotlin y Swift.
+El contenido está en `js/data/` (`tk.js` es el constructor compacto de temas). Salidas verificadas contra ejecución real: Python, SQL, C# (básico, intermedio y avanzado), TypeScript y Node.js. Los cursos avanzados de HTML y CSS se ejecutan en el sandbox del propio proyecto (`tools/runall.html`). Escritas y revisadas a mano (sin compilador en el entorno de desarrollo): C, C++, PHP, React, Flutter, Kotlin y Swift.
 
 ## Herramientas para quien edita el contenido
 
