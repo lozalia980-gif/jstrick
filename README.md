@@ -28,8 +28,9 @@ y entra a `http://localhost:5173`.
 | TypeScript y Node.js | Básico + intermedio | Salida esperada; *Ejecutar en línea* opcional; se prueban en VS Code |
 | React | Básico + intermedio | Salida descrita; se practica aquí y se prueba con Vite en VS Code |
 | PHP, C, C++ y C# | Básico | Salida esperada; el revisor explica errores de sintaxis; *Ejecutar en línea* opcional |
-| Flutter | Básico | Salida descrita; se prueba con `flutter run -d chrome` en VS Code |
-| Kotlin y Swift | Básico | Salida esperada; *Ejecutar en línea* opcional |
+| Flutter | Básico + intermedio | Salida descrita; se prueba con `flutter run -d chrome` en VS Code |
+| Kotlin | Básico + Android con Jetpack Compose | Básico: salida esperada y *Ejecutar en línea* opcional; Compose: se prueba en Android Studio |
+| Swift | Básico + iOS con SwiftUI | Básico: salida esperada y *Ejecutar en línea* opcional; SwiftUI: se prueba en Xcode (requiere Mac) |
 
 *Ejecutar en línea* pide permiso y usa el servicio público ce.judge0.com. Los cursos de TypeScript, React, Node.js, Flutter, Kotlin y Swift empiezan con una guía para instalar todo en tu computadora.
 
