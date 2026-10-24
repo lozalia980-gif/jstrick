@@ -43,12 +43,18 @@
     if ((t.quiz || []).length && !JT.state.done['quiz:' + t.id]) return { hash: '#/t/' + t.id + '/quiz', title: 'Reto rápido de ' + t.short, t: t };
     return null;
   }
+  /* cursos que el usuario eligió en la landing (si no eligió ninguno, se muestran todos) */
+  function mineIds() { var r = (JT.state.ruta || []).filter(function (id) { return JT.track(id); }); return r.length ? r : null; }
+  function mine(extra) { var r = mineIds(); return JT.tracks.filter(function (tr) { return !r || r.indexOf(tr.id) >= 0 || tr.id === extra; }); }
+  JT.myTracks = mine;
   function nextInTrack(id) { var ts = topicsOf(id); for (var i = 0; i < ts.length; i++) { var n = nextInTopic(ts[i]); if (n) return n; } return null; }
   function next() {
     var order = [];
     if (JT.state.lastTrack) order.push(JT.state.lastTrack);
     ['html', 'js', 'python'].forEach(function (id) { order.push(id); });
-    JT.tracks.forEach(function (tr) { order.push(tr.id); });
+    var mn = mine().map(function (tr) { return tr.id; });
+    order = order.filter(function (id) { return mn.indexOf(id) >= 0; });
+    mn.forEach(function (id) { order.push(id); });
     for (var i = 0; i < order.length; i++) { if (!topicsOf(order[i]).length) continue; var n = nextInTrack(order[i]); if (n) return n; }
     var f = JT.topics[0]; return { hash: '#/t/' + f.id + '/conceptos', title: 'Repasar ' + f.short, t: f };
   }
@@ -81,7 +87,7 @@
   var openGroups = {};
   JT.pages.side = function (cur) {
     var h = '<a class="navlink' + (cur.kind === 'panel' ? ' cur' : '') + '" href="#/panel">' + ic('home') + 'Mi panel</a><a class="navlink' + (cur.kind === 'cursos' ? ' cur' : '') + '" href="#/cursos">' + ic('grid') + 'Todos los lenguajes</a>';
-    JT.tracks.forEach(function (tr) {
+    mine(cur.track).forEach(function (tr) {
       var ts = topicsOf(tr.id); if (!ts.length) return;
       var s = trackStats(tr.id), active = cur.track === tr.id, open = openGroups[tr.id] != null ? openGroups[tr.id] : active;
       h += '<div class="trackgrp' + (open ? ' open' : '') + '"><button class="trackhead" data-track="' + tr.id + '"><span class="tdot" style="background:' + tr.color + '"></span><b>' + esc(tr.name) + '</b><span class="tpct">' + s.pct + '%</span>' + ic('down') + '</button>';
@@ -166,15 +172,9 @@
     }
     h += '</div>';
 
-    var ruta = (JT.state.ruta || []).filter(function (id) { return JT.track(id); });
-    if (ruta.length) {
-      h += '<div class="sectiontitle">' + ic('flag') + '<h2 style="margin:0">Tu ruta</h2><a class="btn sm" style="margin-left:auto" href="#/panel" id="quitaRuta">Quitar ruta</a></div><div class="grid g3">' + ruta.map(function (id, k) {
-        var tr = JT.track(id), s = trackStats(id), has = topicsOf(id).length;
-        return '<a class="card trackcard" href="' + (has ? '#/curso/' + id : '#/cursos') + '" style="--c:' + tr.color + '">' + ring(s.pct, tr.color, 64) + '<div><h3>' + (k + 1) + '. ' + esc(tr.name) + '</h3><div class="muted sm">' + esc(tr.tagline) + '</div></div></a>';
-      }).join('') + '</div>';
-    }
-    h += '<div class="sectiontitle">' + ic('layers') + '<h2 style="margin:0">Mis cursos</h2><a class="btn sm" style="margin-left:auto" href="#/cursos">Ver todos</a></div><div class="grid g3">' +
-      JT.tracks.map(function (tr) {
+    var chosen = mineIds();
+    h += '<div class="sectiontitle">' + ic('layers') + '<h2 style="margin:0">' + (chosen ? 'Tu ruta' : 'Mis cursos') + '</h2><span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">' + (chosen ? '<a class="btn sm" href="index.html#lenguajes">Elegir otros cursos</a><a class="btn sm" href="#/panel" id="quitaRuta">Mostrar todos</a>' : '') + '<a class="btn sm" href="#/cursos">Ver el catálogo</a></span></div><div class="grid g3">' +
+      mine().map(function (tr) {
         var s = trackStats(tr.id), has = topicsOf(tr.id).length, n = has ? nextInTrack(tr.id) : null;
         return '<a class="card trackcard" href="' + (has ? '#/curso/' + tr.id : '#/cursos') + '" style="--c:' + tr.color + '">' + ring(s.pct, tr.color, 64) + '<div><h3>' + esc(tr.name) + '</h3><div class="muted sm">' + s.ex + '/' + s.exTotal + ' ejemplos · ' + s.xs + '/' + s.xsTotal + ' ejercicios</div><div class="muted sm">' + (n ? 'Sigue: ' + esc(n.title.slice(0, 38)) : s.total ? '¡Completado!' : 'Próximamente') + '</div></div></a>';
       }).join('') + '</div>';

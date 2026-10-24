@@ -174,10 +174,12 @@
   }
 
   /* ---------- ruta elegida ---------- */
-  function saveRoute(ids) {
+  /* ids: reemplaza la ruta; add: suma un curso a la ruta si ya existía una (si no, no se filtra nada) */
+  function saveRoute(ids, add) {
     try {
       var o = {}; try { o = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { o = {}; }
       if (ids && ids.length) { o.ruta = ids; o.lastTrack = ids[0]; }
+      if (add) { if (o.ruta && o.ruta.length && o.ruta.indexOf(add) < 0) o.ruta.push(add); o.lastTrack = add; }
       localStorage.setItem(KEY, JSON.stringify(o));
     } catch (e) { /* sin almacenamiento */ }
   }
@@ -227,7 +229,7 @@
       var hint = e.target.closest('.pt-scrollhint'); if (hint) { e.preventDefault(); var nx = $('#pt-learn', root) || $$('.pt-sec', root)[1]; nx && nx.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
       if (e.target.closest('[data-act="multi"]')) { var m = $('.pt-multi', root); m.hidden = !m.hidden; count(); if (!m.hidden) m.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); return; }
       var chip = e.target.closest('.pt-chip'); if (chip) { var on = chip.classList.toggle('on'); chip.setAttribute('aria-pressed', on); count(); return; }
-      var go = e.target.closest('[data-act="go"]'); if (go) { saveRoute([t.id]); return; }
+      var go = e.target.closest('[data-act="go"]'); if (go) { saveRoute(null, t.id); return; }
       var rt = e.target.closest('[data-act="route"]'); if (rt) { var ids = $$('.pt-chip.on', root).map(function (c) { return c.dataset.id; }); if (!ids.length) { e.preventDefault(); return; } saveRoute(ids); }
     });
     cur.onKey = function (e) { if (e.key === 'Escape') close(); };
