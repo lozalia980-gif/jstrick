@@ -44,6 +44,10 @@ Además de los ejercicios guiados, los temas de Python (3 niveles), SQL (3 nivel
 
 Además, resolver el ejercicio guiado de un ejemplo sin ver soluciones marca ese ejemplo como entendido.
 
+## Presentación inmersiva de cada curso (landing)
+
+Al pulsar una tarjeta de lenguaje en `index.html`, la tarjeta se expande, la pantalla se vuelve negra y aparece un espacio 3D sin fondo (canvas con túnel, estrellas y cubos de alambre que avanzan con el scroll) con: presentación, qué se aprende, código, qué se puede crear, una galería coverflow y una pregunta final (ir al curso, volver o elegir varios cursos para armar una *ruta* que se muestra en el panel). Respeta *reducir movimiento*. El motor está en `js/portal.js` y `css/portal.css`; el contenido de cada curso, en `js/portal-data.js` (Python, Rust y React tienen contenido propio; los demás se arman con el catálogo hasta que se les escriba el suyo).
+
 ## Herramientas para quien edita el contenido
 
 ```bash

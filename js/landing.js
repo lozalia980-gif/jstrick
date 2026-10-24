@@ -66,13 +66,19 @@
   /* ---------- tarjetas de lenguajes ---------- */
   $('#lang-grid').innerHTML = JT.tracks.map(function (t, i) {
     var c = CAT[t.id], ready = c.ex > 0;
-    return '<article class="lcard reveal" data-tilt="7" style="--c:' + t.color + ';--d:' + (i % 3) + '">' +
+    return '<article class="lcard reveal" data-id="' + t.id + '" data-tilt="7" style="--c:' + t.color + ';--d:' + (i % 3) + '">' +
       '<div class="lc-head"><span class="lc-ic">' + icon(ICON[t.icon] || 'i-code') + '</span><div><h3>' + esc(t.name) + '</h3><small>' + esc(c.file) + '</small></div></div>' +
       '<p>' + esc(t.tagline) + '</p>' +
       '<pre class="lc-code" aria-hidden="true">' + JT.highlight(c.code, c.lang) + '</pre>' +
       '<div class="lc-topics">' + c.topics.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' +
       '<div class="lc-foot"><span>' + (ready ? c.ex + ' ejemplos · ' + c.xs + ' ejercicios' : esc(c.run)) + '</span><a href="app.html#/curso/' + t.id + '">Ver curso ' + icon('i-arrow') + '</a></div></article>';
   }).join('');
+  /* al pulsar una tarjeta: transición inmersiva (con Ctrl/Cmd o clic central se abre el curso normal) */
+  $('#lang-grid').addEventListener('click', function (e) {
+    var card = e.target.closest('.lcard'); if (!card || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
+    if (!JT.portal) return;
+    e.preventDefault(); JT.portal.open(card.dataset.id, card);
+  });
   if (!JT.soon.length) { var sr = $('.soon-row'); if (sr) sr.style.display = 'none'; }
   $('#soon-row').innerHTML = JT.soon.map(function (s) { return '<span style="--c:' + s.color + '"><i></i>' + esc(s.name) + '</span>'; }).join('');
   $$('.lcard').forEach(function (c) { if (seen) seen.observe(c); else c.classList.add('in'); });

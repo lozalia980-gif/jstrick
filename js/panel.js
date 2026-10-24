@@ -166,6 +166,13 @@
     }
     h += '</div>';
 
+    var ruta = (JT.state.ruta || []).filter(function (id) { return JT.track(id); });
+    if (ruta.length) {
+      h += '<div class="sectiontitle">' + ic('flag') + '<h2 style="margin:0">Tu ruta</h2><a class="btn sm" style="margin-left:auto" href="#/panel" id="quitaRuta">Quitar ruta</a></div><div class="grid g3">' + ruta.map(function (id, k) {
+        var tr = JT.track(id), s = trackStats(id), has = topicsOf(id).length;
+        return '<a class="card trackcard" href="' + (has ? '#/curso/' + id : '#/cursos') + '" style="--c:' + tr.color + '">' + ring(s.pct, tr.color, 64) + '<div><h3>' + (k + 1) + '. ' + esc(tr.name) + '</h3><div class="muted sm">' + esc(tr.tagline) + '</div></div></a>';
+      }).join('') + '</div>';
+    }
     h += '<div class="sectiontitle">' + ic('layers') + '<h2 style="margin:0">Mis cursos</h2><a class="btn sm" style="margin-left:auto" href="#/cursos">Ver todos</a></div><div class="grid g3">' +
       JT.tracks.map(function (tr) {
         var s = trackStats(tr.id), has = topicsOf(tr.id).length, n = has ? nextInTrack(tr.id) : null;
@@ -190,6 +197,7 @@
         JT.checkBadges();
       };
     });
+    var qr = $('#quitaRuta'); if (qr) qr.onclick = function (e) { e.preventDefault(); delete JT.state.ruta; JT.saveState(); JT.pages.panel(view); };
     $('#resetProg').onclick = function (e) { e.preventDefault(); if (confirm('¿Seguro que quieres borrar todo tu progreso y tus códigos guardados?')) { JT.resetState(); JT.toast('Progreso reiniciado'); JT.pages.panel(view); if (JT.onProgress) JT.onProgress(); } };
   };
 
