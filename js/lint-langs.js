@@ -10,6 +10,7 @@
     var toks = JT.langScan[L](code), out = '';
     toks.forEach(function (t) {
       if (t.t === 'c') out += t.s.replace(/[^\n]/g, ' ');
+      else if (t.t === 's' && /^[fFrRbBuU]{0,2}("""|''')/.test(t.s)) out += t.s.replace(/[^\n]/g, ' ');
       else if (t.t === 's') { var inner = t.s.replace(/[^\n]/g, ' '); out += t.s.length > 1 ? t.s[0] + inner.slice(1, -1) + t.s[t.s.length - 1] : inner; }
       else out += t.s;
     });
@@ -52,16 +53,16 @@
   function lintPy(code, file, o) {
     var out = [], m = mask(code, 'py'), lines = code.split('\n'), mlines = m.split('\n');
     if (!o.fragment) out = out.concat(balance(code, 'py', file));
-    var defined = {};
+    var defined = {}, mdef = m + (o.context ? '\n' + o.context : '');
     PY_BUILTINS.forEach(function (b) { defined[b] = 1; });
-    m.replace(/\bdef\s+(\w+)\s*\(([^)]*)\)/g, function (a, n, ps) { defined[n] = 1; ps.split(',').forEach(function (p) { var w = /\w+/.exec(p); if (w) defined[w[0]] = 1; }); return a; });
-    m.replace(/\bclass\s+(\w+)/g, function (a, n) { defined[n] = 1; return a; });
-    m.replace(/\bimport\s+([\w., ]+)/g, function (a, n) { n.split(',').forEach(function (x) { var w = x.trim().split(/\s+as\s+/); defined[(w[1] || w[0]).split('.')[0]] = 1; }); return a; });
-    m.replace(/\bfrom\s+[\w.]+\s+import\s+([\w, *]+)/g, function (a, n) { n.split(',').forEach(function (x) { var w = x.trim().split(/\s+as\s+/); defined[(w[1] || w[0]).trim()] = 1; }); return a; });
-    m.replace(/^\s*([\w, ]+?)\s*=(?!=)/gm, function (a, n) { n.split(',').forEach(function (x) { defined[x.trim()] = 1; }); return a; });
-    m.replace(/\bfor\s+([\w, ]+)\s+in\b/g, function (a, n) { n.split(',').forEach(function (x) { defined[x.trim()] = 1; }); return a; });
-    m.replace(/\bas\s+(\w+)/g, function (a, n) { defined[n] = 1; return a; });
-    m.replace(/\blambda\s+([\w, ]*):/g, function (a, n) { n.split(',').forEach(function (x) { defined[x.trim()] = 1; }); return a; });
+    mdef.replace(/\bdef\s+(\w+)\s*\(([^)]*)\)/g, function (a, n, ps) { defined[n] = 1; ps.split(',').forEach(function (p) { var w = /\w+/.exec(p); if (w) defined[w[0]] = 1; }); return a; });
+    mdef.replace(/\bclass\s+(\w+)/g, function (a, n) { defined[n] = 1; return a; });
+    mdef.replace(/\bimport\s+([\w., ]+)/g, function (a, n) { n.split(',').forEach(function (x) { var w = x.trim().split(/\s+as\s+/); defined[(w[1] || w[0]).split('.')[0]] = 1; }); return a; });
+    mdef.replace(/\bfrom\s+[\w.]+\s+import\s+([\w, *]+)/g, function (a, n) { n.split(',').forEach(function (x) { var w = x.trim().split(/\s+as\s+/); defined[(w[1] || w[0]).trim()] = 1; }); return a; });
+    mdef.replace(/^\s*([\w, ]+?)\s*=(?!=)/gm, function (a, n) { n.split(',').forEach(function (x) { defined[x.trim()] = 1; }); return a; });
+    mdef.replace(/\bfor\s+([\w, ]+)\s+in\b/g, function (a, n) { n.split(',').forEach(function (x) { defined[x.trim()] = 1; }); return a; });
+    mdef.replace(/\bas\s+(\w+)/g, function (a, n) { defined[n] = 1; return a; });
+    mdef.replace(/\blambda\s+([\w, ]*):/g, function (a, n) { n.split(',').forEach(function (x) { defined[x.trim()] = 1; }); return a; });
     var depth = 0, prevIndent = -1, prevOpener = false, prevDepth0 = true, inputVars = {};
     eachLine(m, function (ln, no) {
       var raw = lines[no - 1], t = ln.trim();
@@ -80,7 +81,7 @@
       if (/^print\s+[^(=\s]|^print\s+["'\w]/.test(t) && !/^print\s*\(/.test(t)) out.push(I('error', file, no, 'print necesita paréntesis', 'En Python 3, ' + q('print') + ' es una función: lo que quieres mostrar va entre paréntesis.', 'Escribe ' + q('print("hola")') + ' en lugar de ' + q('print "hola"') + '.'));
       if (/^(if|elif|while)\b[^=!<>:]*[^=!<>:]=(?!=)[^=]/.test(t) && !/:=/.test(t)) out.push(I('error', file, no, 'Usaste = dentro de ' + /^(\w+)/.exec(t)[1], 'Un solo ' + q('=') + ' guarda un valor; para comparar se usa ' + q('==') + '.', 'Cambia ' + q('=') + ' por ' + q('==') + ' en la condición.'));
       /* dos puntos */
-      if (!o.fragment && startDepth === 0 && /^(if|elif|else|for|while|def|class|try|except|finally|with)\b/.test(t) && depth === 0 && !/[:\\,]$/.test(t) && !/\bif\b.*\belse\b/.test(t) && !/^(if|while|for)\b.*:\s*\S/.test(t)) out.push(I('error', file, no, 'Falta ":" al final de la línea', 'Las líneas que abren un bloque (' + q(/^(\w+)/.exec(t)[1]) + ') deben terminar con dos puntos.', 'Agrega ' + q(':') + ' al final: ' + q(t + ':') + '.'));
+      if (!o.fragment && startDepth === 0 && /^(?:async\s+)?(if|elif|else|for|while|def|class|try|except|finally|with)\b/.test(t) && depth === 0 && !/[:\\,]$/.test(t) && !/\bif\b.*\belse\b/.test(t) && !/^(if|while|for)\b.*:\s*\S/.test(t) && !/^(?:async\s+)?(def|class)\b.*:\s*\S/.test(t)) out.push(I('error', file, no, 'Falta ":" al final de la línea', 'Las líneas que abren un bloque (' + q(/^(\w+)/.exec(t)[1]) + ') deben terminar con dos puntos.', 'Agrega ' + q(':') + ' al final: ' + q(t + ':') + '.'));
       if (/^def\s+\w+\s*:/.test(t)) out.push(I('error', file, no, 'Faltan los paréntesis de la función', 'Una función se declara con paréntesis aunque no tenga parámetros: ' + q('def saludar():') + '.', 'Escribe ' + q('def nombre():') + '.'));
       /* sangría */
       if (!o.fragment && startDepth === 0) {
@@ -99,7 +100,7 @@
         if (near && name.length >= 3) out.push(I('error', file, no, name + '() no existe', 'No hay ninguna función llamada ' + q(name) + ' (ni de Python ni definida por ti).', 'Quizá quisiste escribir ' + q(near + '()') + '. Revisa la ortografía y las mayúsculas.'));
         return a;
       });
-      prevOpener = depth === 0 && /:\s*$/.test(t) && /^(if|elif|else|for|while|def|class|try|except|finally|with)\b/.test(t) || (depth === 0 && /:\s*$/.test(t) && startDepth === 0 && /^(if|elif|else|for|while|def|class|try|except|finally|with|match|case)\b/.test(t));
+      prevOpener = depth === 0 && /:\s*$/.test(t) && /^(?:async\s+)?(if|elif|else|for|while|def|class|try|except|finally|with)\b/.test(t) || (depth === 0 && /:\s*$/.test(t) && startDepth === 0 && /^(?:async\s+)?(if|elif|else|for|while|def|class|try|except|finally|with|match|case)\b/.test(t));
       prevIndent = indent; prevDepth0 = depth === 0;
     });
     if (!o.fragment && prevOpener) out.push(I('error', file, lines.length, 'Falta el contenido del bloque', 'El último bloque abierto con ":" no tiene ninguna línea dentro.', 'Escribe al menos una instrucción con sangría (o ' + q('pass') + ' si no hace nada).'));
@@ -108,9 +109,10 @@
 
   /* ======================= SQL ======================= */
   var SQL_STARTS = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP', 'ALTER', 'WITH', 'PRAGMA', 'BEGIN', 'COMMIT', 'ROLLBACK', 'EXPLAIN'];
-  var SQL_WORDS = 'SELECT FROM WHERE INSERT INTO VALUES UPDATE SET DELETE CREATE TABLE DROP ALTER GROUP BY ORDER HAVING LIMIT OFFSET DISTINCT AS AND OR IN BETWEEN LIKE IS NULL NOT JOIN INNER LEFT RIGHT ON COUNT SUM AVG MIN MAX ASC DESC UNION ALL PRIMARY KEY FOREIGN REFERENCES DEFAULT UNIQUE CASE WHEN THEN ELSE END'.split(' ');
+  var SQL_WORDS = 'SELECT FROM WHERE INSERT INTO VALUES UPDATE SET DELETE CREATE TABLE DROP ALTER GROUP BY ORDER HAVING LIMIT OFFSET DISTINCT AS AND OR IN BETWEEN LIKE IS NULL NOT JOIN INNER LEFT RIGHT ON COUNT SUM AVG MIN MAX ASC DESC UNION ALL PRIMARY KEY FOREIGN REFERENCES DEFAULT UNIQUE CASE WHEN THEN ELSE END VALUE CAST AFTER BEFORE OVER FILTER ROWS ROW PARTITION UNBOUNDED PRECEDING FOLLOWING CURRENT WINDOW RECURSIVE EXCLUDED CONFLICT RETURNING TRIGGER VIEW INDEX BEGIN COMMIT ROLLBACK EXISTS INTERSECT EXCEPT CROSS NTILE RANK DENSE LAG LEAD FIRST LAST CHECK COALESCE IGNORE NOTHING REPLACE OUTER USING NATURAL FULL TEMP TEMPORARY'.split(' ');
   function lintSql(code, file, o) {
     var out = [], m = mask(code, 'sql');
+    m = m.replace(/CREATE\s+(?:TEMP\s+|TEMPORARY\s+)?TRIGGER[\s\S]*?\bEND\s*;?/gi, function (x) { return x.replace(/[^\n]/g, ' '); });
     if (!o.fragment) out = out.concat(balance(code, 'sql', file));
     /* partir en sentencias */
     var idx = 0, stmts = [];
@@ -138,7 +140,7 @@
       if (/^UPDATE\b/.test(up) && !/\bWHERE\b/.test(up)) out.push(I('warn', file, no, 'UPDATE sin WHERE', 'Sin ' + q('WHERE') + ' se modifican <b>todas</b> las filas de la tabla.', 'Agrega ' + q('WHERE condición') + ' para cambiar solo las filas que quieres.'));
       if (/^DELETE\b/.test(up) && !/^DELETE\s+FROM\b/.test(up)) out.push(I('error', file, no, 'DELETE necesita FROM', 'Para borrar filas: ' + q('DELETE FROM tabla WHERE ...') + '.', 'Escribe ' + q('DELETE FROM') + ' y el nombre de la tabla.'));
       if (/^DELETE\b/.test(up) && !/\bWHERE\b/.test(up)) out.push(I('warn', file, no, 'DELETE sin WHERE', 'Sin ' + q('WHERE') + ' se borran <b>todas</b> las filas de la tabla.', 'Agrega ' + q('WHERE condición') + '.'));
-      if (/^INSERT\b/.test(up) && !/^INSERT\s+INTO\b/.test(up)) out.push(I('error', file, no, 'INSERT necesita INTO', 'La forma es ' + q('INSERT INTO tabla (columnas) VALUES (valores)') + '.', 'Escribe ' + q('INSERT INTO') + ' y la tabla.'));
+      if (/^INSERT\b/.test(up) && !/^INSERT\s+(OR\s+\w+\s+)?INTO\b/.test(up)) out.push(I('error', file, no, 'INSERT necesita INTO', 'La forma es ' + q('INSERT INTO tabla (columnas) VALUES (valores)') + '.', 'Escribe ' + q('INSERT INTO') + ' y la tabla.'));
       if (/^INSERT\b/.test(up) && !/\bVALUES\b|\bSELECT\b/.test(up)) out.push(I('error', file, no, 'Falta VALUES', 'Un ' + q('INSERT') + ' necesita ' + q('VALUES (...)') + ' con los datos a guardar.', 'Agrega ' + q("VALUES ('dato1', 5)") + '.'));
       if (/\bORDER\s+(?!BY\b)\w/.test(up)) out.push(I('error', file, no, 'Es ORDER BY', 'Para ordenar se escribe ' + q('ORDER BY columna') + ' (las dos palabras).', 'Agrega ' + q('BY') + ' después de ORDER.'));
       if (/\bGROUP\s+(?!BY\b)\w/.test(up)) out.push(I('error', file, no, 'Es GROUP BY', 'Para agrupar se escribe ' + q('GROUP BY columna') + '.', 'Agrega ' + q('BY') + ' después de GROUP.'));
@@ -177,6 +179,9 @@
       if (/^(#|<\?php|\?>|\/\/|\/\*|\*|\[)/.test(t) || /^[{}]/.test(t)) continue;
       if (/[;{},(\[:.+\-*\/&|?=<>\\]$/.test(t) || /^(\.|->|\+|-|&&|\|\||\?|:)/.test(t)) continue;
       if (/^(else|do|try|finally)$/.test(t)) continue;
+      if (/^@/.test(t)) continue;
+      if (/^\.[A-Za-z_]/.test(nextT)) continue;
+      if (/\)\s*throws\s+[\w.,\s]+$/.test(t) && /^\{/.test(nextT)) continue;
       if (/\)$/.test(t) && /^\{/.test(nextT)) continue;
       if (/\bfunction\b.*\)\s*(:\s*\??[\w\\|]+)?$/.test(t) && /^\{/.test(nextT)) continue;
       if (/^[)\]]/.test(nextT) || /^(->|\?->)/.test(nextT)) continue;
@@ -191,7 +196,7 @@
       if (/^(public|private|protected|internal)\b.*\)$/.test(t) && /^\{/.test(nextT)) continue;
       if (/^\w[\w\s\*&:<>,\[\]]*\s+\*?\w+\s*\([^)]*\)$/.test(t) && /^\{/.test(nextT) ) continue;
       if (/(\)|\w|"|'|\]|\+\+|--)$/.test(t)) {
-        out.push(I('error', file, i + 1, 'Falta ";" al final de la línea ' + (i + 1), 'En ' + ({ php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#' })[L] + ' cada instrucción termina con punto y coma: ' + q(lines[i].trim()) + ' no lo tiene.', 'Agrega ' + q(';') + ' al final: ' + q(lines[i].trim() + ';') + '.'));
+        out.push(I('error', file, i + 1, 'Falta ";" al final de la línea ' + (i + 1), 'En ' + ({ php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', java: 'Java' })[L] + ' cada instrucción termina con punto y coma: ' + q(lines[i].trim()) + ' no lo tiene.', 'Agrega ' + q(';') + ' al final: ' + q(lines[i].trim() + ';') + '.'));
       }
     }
     return out;
@@ -269,13 +274,40 @@
     return out;
   }
 
+  /* ======================= Java ======================= */
+  var JAVA_OUT = ['println', 'print', 'printf', 'format', 'flush', 'write'];
+  function lintJava(code, file, o) {
+    var out = [], m = mask(code, 'java');
+    if (!o.fragment) out = out.concat(balance(code, 'java', file)).concat(missingSemis(code, 'java', file, o));
+    if (!o.fragment && /\bclass\b/.test(m) && !/\bmain\s*\(/.test(m) && !/\binterface\b|\brecord\b|\benum\b/.test(m)) out.push(I('warn', file, 0, 'No encuentro el método main', 'Un programa Java empieza en ' + q('public static void main(String[] args)') + '. Sin él, la máquina virtual no sabe por dónde empezar.', 'Agrega el método ' + q('public static void main(String[] args) { ... }') + ' dentro de la clase.'));
+    if (!o.fragment && /\b(List|ArrayList|Map|HashMap|Set|HashSet|Scanner|Optional|Arrays|Collectors)\b/.test(m) && !/^\s*import\s/m.test(m) && !/java\.util\./.test(m)) out.push(I('error', file, 1, 'Falta un import', 'Usas una clase de ' + q('java.util') + ' (como List, ArrayList o Scanner) sin importarla.', 'Agrega al inicio, por ejemplo, ' + q('import java.util.*;') + '.'));
+    eachLine(m, function (ln, no) {
+      var t = ln.trim();
+      ln.replace(/\bSystem\s*\.\s*out\s*\.\s*(\w+)/g, function (a, mem) {
+        if (JAVA_OUT.indexOf(mem) >= 0) return a;
+        var lc = JAVA_OUT.filter(function (x) { return x.toLowerCase() === mem.toLowerCase(); })[0], near = lc || nearest(mem, JAVA_OUT, 2);
+        out.push(I('error', file, no, 'System.out.' + mem + ' no existe', 'Java distingue mayúsculas y minúsculas: ' + q('System.out.' + mem) + ' no existe.', near ? 'Quizá quisiste escribir ' + q('System.out.' + near) + '.' : 'Los métodos habituales son ' + JAVA_OUT.slice(0, 3).map(q).join(', ') + '.'));
+        return a;
+      });
+      if (/\bsystem\s*\.\s*out\b|\bSystem\s*\.\s*Out\b/.test(t)) out.push(I('error', file, no, 'Se escribe System.out', 'En Java se escribe ' + q('System.out.println(...)') + ' con la S de System en mayúscula y out en minúscula.', 'Usa ' + q('System.out.println("hola");') + '.'));
+      if (/\bstring\s+\w+\s*[=;)]/.test(t) || /\(\s*string\s+\w+/.test(t)) out.push(I('error', file, no, 'String lleva mayúscula', 'En Java el tipo de los textos es ' + q('String') + ' (clase, con mayúscula), no ' + q('string') + '.', 'Cambia ' + q('string') + ' por ' + q('String') + '.'));
+      if (/\b(if|while)\s*\([^()=!<>]*[^=!<>]=(?!=)[^()=]*\)/.test(t)) out.push(I('error', file, no, 'Usaste = dentro de la condición', 'Un solo ' + q('=') + ' asigna; para comparar se usa ' + q('==') + ' (o ' + q('.equals') + ' en textos).', 'Cambia ' + q('=') + ' por ' + q('==') + '.'));
+      if (/\b(int|long|double|float|boolean|char)\s+\w+\s*=\s*"/.test(t)) out.push(I('error', file, no, 'Tipo incorrecto', 'No puedes guardar un texto en una variable numérica, boolean o char. Los textos van en ' + q('String') + '.', 'Cambia el tipo a ' + q('String') + '.'));
+      if (/\bString\s+\w+\s*=\s*-?\d/.test(t)) out.push(I('error', file, no, 'Tipo incorrecto', 'Un ' + q('String') + ' guarda texto: el número va entre comillas ("5") o la variable debe ser ' + q('int') + '.', 'Usa ' + q('int') + ' para números.'));
+      if (/==\s*"|"\s*==/.test(t) || /!=\s*"/.test(t)) out.push(I('warn', file, no, 'Comparar textos con ==', 'Con ' + q('==') + ' Java compara si son <b>el mismo objeto</b>, no si dicen lo mismo, y puede dar ' + q('false') + ' aunque el texto sea igual.', 'Usa ' + q('a.equals(b)') + '.'));
+      if (/\bfor\s*\(\s*(?:\w+(?:<[^>]*>)?\s+)?\w+\s+in\b/.test(t)) out.push(I('error', file, no, 'El for mejorado usa ":"', 'En Java se escribe ' + q('for (String s : lista)') + ', con dos puntos (no ' + q('in') + ').', 'Cambia ' + q('in') + ' por ' + q(':') + '.'));
+      if (/\bConsole\.(WriteLine|Write)\b|\bconsole\.log\b|^print\s*\(/.test(t)) out.push(I('error', file, no, 'Eso no es Java', 'En Java se muestra texto con ' + q('System.out.println(...)') + '.', 'Usa ' + q('System.out.println("hola");') + '.'));
+    });
+    return out;
+  }
+
   /* ======================= PHP ======================= */
   var PHP_FUNCS = 'strlen strtoupper strtolower ucfirst ucwords str_replace str_repeat strpos substr trim count array_push array_pop array_merge array_keys array_values array_sum in_array sort rsort asort ksort implode explode isset empty unset date time rand mt_rand round floor ceil abs sqrt pow max min number_format var_dump print_r json_encode json_decode file_get_contents htmlspecialchars is_numeric is_array is_string intval floatval strval sprintf printf define array_map array_filter usort range arsort asort ksort krsort rsort usort uasort uksort array_slice array_splice array_merge array_unique array_reverse array_search array_flip array_combine array_fill array_column array_chunk array_diff array_intersect array_key_exists array_key_first array_key_last array_pop array_push array_shift array_unshift array_product range compact extract str_contains str_starts_with str_ends_with str_pad str_repeat str_word_count ucwords lcfirst wordwrap nl2br htmlspecialchars html_entity_decode strcmp strcasecmp strncmp strstr stripos strrpos substr_count substr_replace similar_text levenshtein sprintf vsprintf number_format intdiv fmod abs ceil floor round max min sqrt pow pi json_encode json_decode json_last_error_msg date time mktime strtotime checkdate date_default_timezone_set filter_var file_put_contents file_get_contents file fopen fgets fgetcsv fputcsv fclose fwrite feof file_exists is_file is_dir mkdir unlink rename copy basename dirname pathinfo realpath var_dump print_r var_export gettype get_class is_int is_string is_array is_numeric is_null is_bool intval floatval strval boolval settype method_exists property_exists class_exists function_exists spl_autoload_register password_hash password_verify md5 sha1 hash random_int mt_rand rand uniqid usleep sleep microtime memory_get_usage array_is_list iterator_to_array call_user_func call_user_func_array func_get_args'.split(' ');
   function lintPhp(code, file, o) {
     var out = [], m = mask(code, 'php');
     if (!o.fragment) out = out.concat(balance(code, 'php', file)).concat(missingSemis(code, 'php', file, o));
     if (!o.fragment && !/<\?php|<\?=/.test(code)) out.push(I('warn', file, 1, 'Falta <?php al inicio', 'El código PHP debe ir dentro de ' + q('<?php ... ?>') + '; sin la etiqueta de apertura el servidor lo muestra como texto.', 'Escribe ' + q('<?php') + ' en la primera línea.'));
-    var defs = {}; m.replace(/\bfunction\s+(\w+)/g, function (a, n) { defs[n] = 1; return a; });
+    var defs = {}; (m + (o.context ? '\n' + o.context : '')).replace(/\bfunction\s+(\w+)/g, function (a, n) { defs[n] = 1; return a; });
     eachLine(m, function (ln, no) {
       var t = ln.trim();
       if (/^[A-Za-z_]\w*\s*=(?![=>])/.test(t) && !/^(define|const|public|private|protected|static|var|use|namespace|class)\b/.test(t)) out.push(I('error', file, no, 'La variable necesita $', 'En PHP todas las variables empiezan con ' + q('$') + ': ' + q('$' + t.split('=')[0].trim()) + '.', 'Escribe ' + q('$' + t.replace(/;$/, '') + ';') + '.'));
@@ -306,6 +338,7 @@
       else if (lang === 'c') out = lintC(code, file, opts, 'c');
       else if (lang === 'cpp') out = lintC(code, file, opts, 'cpp');
       else if (lang === 'cs') out = lintCs(code, file, opts);
+      else if (lang === 'java') out = lintJava(code, file, opts);
       else if (lang === 'dart' || lang === 'kt' || lang === 'swift') out = opts.fragment ? [] : balance(code, lang, file);
       else if (lang === 'tsc' || lang === 'jsx' || lang === 'node') out = opts.fragment ? [] : JT.checkBrackets(code, lang, 'js');
     } catch (e) { /* un fallo del revisor nunca debe romper la página */ }

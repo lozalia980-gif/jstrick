@@ -1,0 +1,52 @@
+/* js-trick :: glosario 4 (Java) para los botones "?" */
+(function () {
+  var JT = window.JT;
+  function G(L, k, t, d, o) { o = o || {}; o.d = d; o.t = t; o.lang = o.lang || L; JT.glossary[L + ':' + k] = o; }
+  var J = function (k, t, d, o) { G('java', k, t, d, o); };
+
+  J('import', 'import', 'Trae una clase de otro paquete para usarla por su nombre corto: <code>import java.util.ArrayList;</code>. Las clases de <code>java.lang</code> (<code>String</code>, <code>Math</code>, <code>System</code>) no necesitan import.', { sig: 'import java.util.List;', kw: 'importar paquete biblioteca' });
+  J('class', 'class', 'Define una <b>clase</b>: un molde con datos (campos) y acciones (métodos). En Java todo el código vive dentro de clases. Una clase <code>public</code> debe estar en un archivo con su mismo nombre.', { sig: 'public class Main {\n    public static void main(String[] args) { }\n}', kw: 'clase objeto poo', core: true });
+  J('public', 'public / private / protected', '<b>Visibilidad</b>: <code>public</code> se ve desde cualquier lugar, <code>private</code> solo dentro de la clase, <code>protected</code> en la clase y sus hijas. Sin palabra, solo dentro del mismo paquete.', { kw: 'acceso publico privado visibilidad' });
+  J('static', 'static', 'Un miembro <code>static</code> pertenece a la <b>clase</b>, no a cada objeto: se usa sin <code>new</code>. Por eso <code>main</code> es static.', { kw: 'estatico clase' });
+  J('void', 'void', 'El método no devuelve ningún valor.', { kw: 'nada vacio metodo' });
+  J('main', 'main', 'El <b>punto de entrada</b> de un programa Java: la máquina virtual busca exactamente este método.', { sig: 'public static void main(String[] args) {\n    System.out.println("Hola");\n}', kw: 'principal inicio entrada', core: true });
+  J('System', 'System', 'Clase de la biblioteca estándar con utilidades del sistema: <code>System.out</code> (pantalla), <code>System.in</code> (teclado), <code>System.currentTimeMillis()</code>.', { kw: 'sistema salida pantalla' });
+  J('.println', 'System.out.println()', 'Escribe un valor en la consola y <b>salta de línea</b>. <code>System.out.print</code> escribe sin saltar.', { sig: 'System.out.println("Hola " + nombre);', err: 'Escribirlo con minúscula (<code>system.out.println</code>) o <code>System.out.printn</code>: Java distingue mayúsculas.', kw: 'mostrar imprimir salida consola', core: true });
+  J('.print', 'System.out.print()', 'Escribe en la consola <b>sin</b> saltar de línea.', { kw: 'mostrar imprimir salida' });
+  J('.printf', 'System.out.printf()', 'Escribe con formato, como <code>printf</code> de C: <code>%d</code> entero, <code>%s</code> texto, <code>%.2f</code> decimal con 2 cifras, <code>%n</code> salto de línea.', { sig: 'System.out.printf("%s tiene %d%n", "Ana", 20);', kw: 'formato mostrar' });
+  J('String', 'String', 'Tipo de los textos. Es una <b>clase</b> (empieza en mayúscula) y los textos son <b>inmutables</b>: sus métodos devuelven un texto nuevo.', { sig: 'String nombre = "Ana";\nnombre.toUpperCase();', err: 'Escribir <code>string</code> en minúscula: en Java es <code>String</code>.', kw: 'texto cadena tipo', core: true });
+  J('int', 'int', 'Tipo primitivo entero (de unos -2 000 millones a 2 000 millones). Para enteros mayores usa <code>long</code>.', { sig: 'int edad = 20;', kw: 'entero numero tipo variable', core: true });
+  J('double', 'double', 'Tipo primitivo para decimales. Para dinero exacto se usa <code>BigDecimal</code>.', { kw: 'decimal numero tipo' });
+  J('boolean', 'boolean', 'Tipo que solo vale <code>true</code> o <code>false</code>.', { kw: 'booleano verdadero falso' });
+  J('char', 'char', 'Un solo carácter, entre comillas simples: <code>\'A\'</code>.', { kw: 'caracter letra' });
+  J('var', 'var', 'Deja que el compilador deduzca el tipo de una variable local a partir de su valor (Java 10+). El tipo sigue siendo fijo.', { sig: 'var lista = new ArrayList<String>();', kw: 'inferencia tipo' });
+  J('if', 'if / else', 'Ejecuta un bloque solo si la condición (<code>boolean</code>) es verdadera.', { kw: 'condicion si' });
+  J('for', 'for', 'Bucle con inicio, condición y paso. Existe también el <b>for mejorado</b>: <code>for (String s : lista)</code>.', { sig: 'for (int i = 0; i < 3; i++) {\n    System.out.println(i);\n}', kw: 'bucle ciclo repetir', core: true });
+  J('while', 'while', 'Repite el bloque mientras la condición sea verdadera.', { kw: 'bucle mientras' });
+  J('switch', 'switch', 'Elige entre varios casos. Con la sintaxis de flecha (<code>case 1 -&gt; ...</code>) no hace falta <code>break</code> y puede devolver un valor.', { kw: 'casos seleccionar' });
+  J('new', 'new', 'Crea un objeto nuevo llamando al constructor de la clase.', { sig: 'Persona p = new Persona("Ana");', kw: 'crear objeto instancia' });
+  J('return', 'return', 'Termina el método y devuelve un valor a quien lo llamó.', { kw: 'devolver resultado' });
+  J('this', 'this', 'Se refiere al <b>objeto actual</b>. Se usa para distinguir un campo de un parámetro con el mismo nombre.', { sig: 'this.nombre = nombre;', kw: 'objeto actual' });
+  J('extends', 'extends', 'Hace que una clase <b>herede</b> de otra: obtiene sus campos y métodos. Java solo permite heredar de una clase.', { kw: 'herencia hijo padre' });
+  J('implements', 'implements', 'Dice que la clase cumple el contrato de una o varias <b>interfaces</b> (debe tener todos sus métodos).', { kw: 'interfaz contrato' });
+  J('interface', 'interface', 'Un contrato: lista de métodos que otras clases deben implementar. Una clase puede implementar varias.', { kw: 'contrato' });
+  J('abstract', 'abstract', 'Una clase <code>abstract</code> no se puede instanciar y puede dejar métodos sin cuerpo para que las hijas los escriban.', { kw: 'abstracta' });
+  J('final', 'final', 'En una variable: no se puede reasignar. En un método: no se puede sobrescribir. En una clase: no se puede heredar.', { kw: 'constante inmutable' });
+  J('try', 'try / catch / finally', 'Intenta ejecutar código que puede fallar. Si lanza una excepción salta al <code>catch</code>; el <code>finally</code> se ejecuta siempre.', { sig: 'try {\n    int x = Integer.parseInt("abc");\n} catch (NumberFormatException e) {\n    System.out.println("no es un número");\n}', kw: 'error excepcion capturar' });
+  J('throw', 'throw / throws', '<code>throw</code> lanza una excepción; <code>throws</code> en la firma avisa que el método puede lanzar una excepción comprobada.', { kw: 'lanzar excepcion error' });
+  J('record', 'record', 'Declara en una línea una clase de datos inmutable: Java genera constructor, getters (<code>x()</code>), <code>equals</code>, <code>hashCode</code> y <code>toString</code>.', { sig: 'record Punto(int x, int y) { }', kw: 'datos inmutable' });
+  J('enum', 'enum', 'Un tipo con un conjunto fijo de valores con nombre. Puede tener campos y métodos.', { kw: 'enumeracion constantes' });
+  J('ArrayList', 'ArrayList', 'Lista que <b>crece sola</b>. Se declara con el tipo de sus elementos entre <code>&lt; &gt;</code>: <code>ArrayList&lt;String&gt;</code>. Métodos: <code>add</code>, <code>get</code>, <code>size</code>, <code>remove</code>.', { sig: 'List<String> n = new ArrayList<>();\nn.add("Ana");', kw: 'lista coleccion', core: true });
+  J('List', 'List', 'Interfaz de las listas ordenadas. Conviene declarar la variable como <code>List</code> y crear un <code>ArrayList</code>. <code>List.of(...)</code> crea una lista inmutable.', { kw: 'lista coleccion' });
+  J('HashMap', 'HashMap', 'Diccionario de pares clave → valor con búsqueda muy rápida (sin orden). Métodos: <code>put</code>, <code>get</code>, <code>containsKey</code>, <code>getOrDefault</code>.', { sig: 'Map<String, Integer> edades = new HashMap<>();\nedades.put("Ana", 20);', kw: 'diccionario mapa clave valor' });
+  J('Map', 'Map', 'Interfaz de los diccionarios clave → valor.', { kw: 'diccionario mapa' });
+  J('Scanner', 'Scanner', 'Lee datos del teclado: <code>new Scanner(System.in)</code> y luego <code>nextLine()</code>, <code>nextInt()</code>...', { kw: 'leer teclado entrada' });
+  J('Math', 'Math', 'Funciones matemáticas: <code>Math.max</code>, <code>Math.sqrt</code>, <code>Math.pow</code>, <code>Math.abs</code>, <code>Math.round</code>, <code>Math.random()</code>.', { kw: 'matematicas raiz potencia' });
+  J('.equals', '.equals()', 'Compara el <b>contenido</b> de dos objetos (textos, por ejemplo). Con <code>==</code> en objetos se compara si son <i>el mismo objeto</i>, no si valen lo mismo.', { sig: 'if (a.equals(b)) { ... }', err: 'Comparar textos con <code>==</code>: puede dar <code>false</code> aunque digan lo mismo.', kw: 'comparar igual texto' });
+  J('.length', 'length', 'En un texto es el método <code>s.length()</code>; en un arreglo es el campo <code>a.length</code> (sin paréntesis).', { kw: 'largo tamano longitud' });
+  J('.size', '.size()', 'Cantidad de elementos de una colección (<code>List</code>, <code>Map</code>, <code>Set</code>).', { kw: 'cantidad tamano' });
+  J('.add', '.add()', 'Agrega un elemento a una lista o un conjunto.', { kw: 'agregar anadir' });
+  J('.get', '.get()', 'Obtiene un elemento: por posición en una lista (<code>lista.get(0)</code>) o por clave en un diccionario.', { kw: 'obtener leer' });
+  J('.stream', '.stream()', 'Convierte una colección en un <b>stream</b>: una cadena de operaciones (<code>filter</code>, <code>map</code>, <code>sorted</code>, <code>collect</code>...) sin bucles explícitos.', { sig: 'lista.stream().filter(x -> x > 2).toList();', kw: 'flujo filtrar transformar' });
+  J('Optional', 'Optional', 'Una caja que puede tener un valor o estar vacía: evita devolver <code>null</code>. Métodos: <code>isPresent</code>, <code>orElse</code>, <code>map</code>.', { kw: 'opcional nulo' });
+})();

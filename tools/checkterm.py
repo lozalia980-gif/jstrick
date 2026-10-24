@@ -1,6 +1,6 @@
 """Comprueba que la salida esperada (out) de los ejemplos y ejercicios coincide con la ejecucion real.
 Uso: node tools/validate.js && python tools/checkterm.py
-Python y SQL (sqlite) se ejecutan de verdad; C#, C, C++ y PHP se ejecutan solo si hay compilador instalado."""
+Python y SQL (sqlite) se ejecutan de verdad; C#, Java, C, C++ y PHP se ejecutan solo si hay compilador instalado."""
 import io, json, os, shutil, subprocess, sys, sqlite3, tempfile
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -38,7 +38,7 @@ def run_py(code):
 
 
 def run_sql(code, seed):
-    db = sqlite3.connect(':memory:')
+    db = sqlite3.connect(':memory:', isolation_level=None)
     parts = []
     if seed:
         db.executescript(seed)
@@ -61,6 +61,22 @@ def split_sql(code):
     return out
 
 
+def find_tsc():
+    cands = [os.environ.get('TSC_JS'), os.path.join(os.environ.get('APPDATA', ''), 'npm', 'node_modules', 'typescript', 'lib', 'tsc.js'),
+             os.path.join(os.environ.get('APPDATA', ''), 'npm', 'node_modules', 'eas-cli', 'node_modules', 'typescript', 'lib', 'tsc.js')]
+    for c in cands:
+        if c and os.path.exists(c): return c
+    return None
+
+
+def type_check(code, d):
+    tsc = find_tsc()
+    if not tsc: return ''
+    src = os.path.join(d, 'check.ts'); io.open(src, 'w', encoding='utf8').write('export {};\n' + code)
+    r = subprocess.run(['node', tsc, '--noEmit', '--strict', '--target', 'es2022', '--module', 'esnext', '--moduleResolution', 'bundler', '--lib', 'es2022,dom', '--skipLibCheck', src], capture_output=True, text=True, encoding='utf8', cwd=d)
+    return (r.stdout + r.stderr).strip()
+
+
 def run_native(lang, code):
     d = tempfile.mkdtemp()
     try:
@@ -71,6 +87,9 @@ def run_native(lang, code):
             if c.returncode: return 'COMPILE ERROR\n' + c.stderr
             return subprocess.run([exe], capture_output=True, text=True, timeout=10).stdout.replace('\r', '')
         if lang in ('tsc', 'node') and shutil.which('node'):
+            if lang == 'tsc' and '--types' in sys.argv:
+                te = type_check(code, d)
+                if te: return 'TYPE ERROR\n' + te[:1500]
             src = os.path.join(d, 'index.ts' if lang == 'tsc' else 'index.js'); io.open(src, 'w', encoding='utf8').write(code)
             r = subprocess.run(['node', src], capture_output=True, text=True, encoding='utf8', timeout=20, cwd=d)
             return (r.stdout + r.stderr).replace('\r', '')
@@ -82,6 +101,12 @@ def run_native(lang, code):
             b = subprocess.run(['dotnet', 'build', 'app.csproj', '-o', 'out', '-nologo', '-v', 'q'], cwd=proj, capture_output=True, text=True, encoding='utf8')
             if b.returncode: return 'COMPILE ERROR\n' + (b.stdout + b.stderr)[-1500:]
             return subprocess.run([os.path.join(proj, 'out', 'app.exe')], capture_output=True, text=True, encoding='utf8', timeout=20, env=dict(os.environ, DOTNET_SYSTEM_GLOBALIZATION_INVARIANT='1')).stdout.replace('\r', '')
+        if lang == 'java' and shutil.which('javac'):
+            src = os.path.join(d, 'Main.java'); io.open(src, 'w', encoding='utf8').write(code)
+            c = subprocess.run(['javac', '-encoding', 'utf8', '-Xlint:none', src], capture_output=True, text=True, encoding='utf8')
+            if c.returncode: return 'COMPILE ERROR\n' + c.stderr[-1500:]
+            r = subprocess.run(['java', '-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-Duser.language=en', '-Duser.country=US', '-cp', d, 'Main'], capture_output=True, text=True, encoding='utf8', timeout=30, cwd=d)
+            return (r.stdout + r.stderr).replace(chr(13), '')
         if lang == 'php' and shutil.which('php'):
             src = os.path.join(d, 'index.php'); io.open(src, 'w', encoding='utf8').write(code)
             return subprocess.run(['php', src], capture_output=True, text=True, timeout=10).stdout.replace('\r', '')

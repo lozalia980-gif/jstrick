@@ -8,9 +8,9 @@
   var PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/';
   var SQLJS = 'https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/';
   var JUDGE = 'https://ce.judge0.com/submissions?base64_encoded=false&wait=true';
-  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98, tsc: 74, node: 63, kt: 78, swift: 83 };
-  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run', tsc: 'npx tsx index.ts', jsx: 'npm run dev', node: 'node index.js', dart: 'flutter run -d chrome', kt: 'kotlinc Main.kt -include-runtime -d main.jar && java -jar main.jar', swift: 'swift main.swift' };
-  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', tsc: 'TypeScript', jsx: 'React', node: 'Node.js', dart: 'Flutter', kt: 'Kotlin', swift: 'Swift' };
+  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98, tsc: 74, node: 63, kt: 78, swift: 83, java: 62 };
+  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run', java: 'javac Main.java && java Main', tsc: 'npx tsx index.ts', jsx: 'npm run dev', node: 'node index.js', dart: 'flutter run -d chrome', kt: 'kotlinc Main.kt -include-runtime -d main.jar && java -jar main.jar', swift: 'swift main.swift' };
+  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', java: 'Java', tsc: 'TypeScript', jsx: 'React', node: 'Node.js', dart: 'Flutter', kt: 'Kotlin', swift: 'Swift' };
 
   function loadScript(src) {
     return new Promise(function (res, rej) {
@@ -32,7 +32,8 @@
       var g = py.globals.get('dict')();
       g.set('__jt_inputs', py.toPy(stdin || []));
       return py.runPythonAsync("import builtins\ndef __jt_input(prompt=''):\n    v = __jt_inputs.pop(0) if __jt_inputs else '1'\n    print(str(prompt) + str(v))\n    return str(v)\nbuiltins.input = __jt_input\n", { globals: g }).then(function () {
-        return py.runPythonAsync(code, { globals: g });
+        /* Pyodide ya tiene un bucle de eventos en marcha: asyncio.run(f()) se ejecuta como "await f()" (mismo resultado, mismas líneas) */
+        return py.runPythonAsync(code.replace(/\basyncio\.run\((.*)\)[ \t]*$/gm, 'await $1'), { globals: g });
       }).then(function () { return { ok: true, text: out.join('\n') }; }, function (e) {
         var msg = String(e.message || e), last = msg.trim().split('\n').pop(), tm = /^(\w+(?:Error|Exception|Interrupt|Exit)?):\s*(.*)$/.exec(last), ln = /File "<exec>", line (\d+)/g, lm, line = 0;
         while ((lm = ln.exec(msg))) line = +lm[1];
@@ -90,7 +91,7 @@
         return { ok: false, text: d.stdout || '', error: { type: st === 6 ? 'CompileError' : st === 5 ? 'Timeout' : 'RuntimeError', message: String(raw).trim(), line: lineFromCompile(raw), raw: raw } };
       }, function (e) { clearTimeout(to); throw new Error('No se pudo contactar al servicio de ejecución (' + (e.name === 'AbortError' ? 'tardó demasiado' : 'sin conexión o servicio ocupado') + ').'); });
   };
-  function lineFromCompile(raw) { var m = /(?:main\.\w+|prog\.\w+|Main\.cs|script\.\w+|\.php)[:(](\d+)/.exec(String(raw)) || /line (\d+)/i.exec(String(raw)) || /\((\d+),\d+\)/.exec(String(raw)); return m ? +m[1] : 0; }
+  function lineFromCompile(raw) { var m = /(?:main\.\w+|prog\.\w+|Main\.cs|Main\.java|script\.\w+|\.php)[:(](\d+)/.exec(String(raw)) || /line (\d+)/i.exec(String(raw)) || /\((\d+),\d+\)/.exec(String(raw)); return m ? +m[1] : 0; }
 
   /* ---------------- ejecución según el caso ---------------- */
   T.canOnline = function (lang) { return !!JUDGE_IDS[lang]; };
@@ -164,6 +165,15 @@
       if ((m = /error CS0103: The name '(\w+)' does not exist/.exec(msg))) return { title: '"' + m[1] + '" no existe', msg: 'Usas ' + c(m[1]) + ' sin declararla (o con otras mayúsculas).', fix: 'Declárala con su tipo: ' + c('int ' + m[1] + ' = 0;') + '.' };
       if (/CS0246/.test(msg)) return { title: 'Tipo o espacio de nombres no encontrado', msg: esc(first), fix: 'Falta un ' + c('using') + ' (por ejemplo ' + c('using System;') + ').' };
       if (/CS0029|CS0266/.test(msg)) return { title: 'Tipos incompatibles', msg: esc(first), fix: 'Convierte el valor (' + c('int.Parse(...)') + ', ' + c('Convert.ToInt32(...)') + ') o cambia el tipo de la variable.' };
+    }
+    if (lang === 'java') {
+      if (/error: ';' expected/.test(msg)) return { title: 'Falta ";"', msg: 'El compilador esperaba un punto y coma.', fix: 'Agrega ' + c(';') + ' al final de la línea anterior a la que señala el error.' };
+      if ((m = /cannot find symbol[\s\S]*?symbol:\s+(?:variable|method|class)\s+(\w+)/.exec(msg))) return { title: '"' + m[1] + '" no existe', msg: 'Usas ' + c(m[1]) + ' sin declararla, con otras mayúsculas o sin importar su clase.', fix: 'Declárala con su tipo, revisa mayúsculas (Java distingue ' + c('String') + ' de ' + c('string') + ') o agrega el ' + c('import') + ' que falte.' };
+      if (/incompatible types/.test(msg)) return { title: 'Tipos incompatibles', msg: esc(first), fix: 'Convierte el valor (por ejemplo ' + c('Integer.parseInt(...)') + ' o un cast como ' + c('(int) x') + ') o cambia el tipo de la variable.' };
+      if (/missing return statement/.test(msg)) return { title: 'Falta un return', msg: 'El método promete devolver un valor pero algún camino termina sin hacerlo.', fix: 'Agrega ' + c('return ...;') + ' en todos los caminos (o cambia el tipo a ' + c('void') + ').' };
+      if (/should be declared in a file named/.test(msg)) return { title: 'La clase pública debe llamarse como el archivo', msg: esc(first), fix: 'Usa ' + c('public class Main') + ' en el archivo ' + c('Main.java') + '.' };
+      if (/ArrayIndexOutOfBounds|StringIndexOutOfBounds/.test(msg)) return { title: 'Índice fuera de rango', msg: esc(first), fix: 'Los índices van de 0 a ' + c('length - 1') + '.' };
+      if (/NullPointerException/.test(msg)) return { title: 'NullPointerException', msg: 'Usaste un objeto que vale ' + c('null') + '.', fix: 'Asegúrate de crearlo con ' + c('new') + ' o comprueba ' + c('if (x != null)') + ' antes de usarlo.' };
     }
     if (lang === 'php') {
       if (/Parse error|syntax error/.test(msg)) return { title: 'Error de sintaxis en PHP', msg: esc(first), fix: 'Casi siempre falta un ' + c(';') + ', unas comillas o un ' + c('$') + ' en una variable.' };

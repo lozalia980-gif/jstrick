@@ -4,7 +4,7 @@ const root = path.join(__dirname, '..');
 global.window = global; global.document = { getElementById() { return null; } };
 global.localStorage = { getItem() { return null; }, setItem() { } };
 const load = f => vm.runInThisContext(fs.readFileSync(path.join(root, f), 'utf8'), { filename: f });
-['js/core.js', 'js/tracks.js', 'js/highlight.js', 'js/glossary1.js', 'js/glossary2.js', 'js/glossary3.js', 'js/hl-langs.js', 'js/linter.js', 'js/lint-langs.js', 'js/lib-prelude.js', 'js/lib-jquery.js', 'js/lib-angular.js'].forEach(load);
+['js/core.js', 'js/tracks.js', 'js/highlight.js', 'js/glossary1.js', 'js/glossary2.js', 'js/glossary3.js', 'js/glossary4.js', 'js/hl-langs.js', 'js/linter.js', 'js/lint-langs.js', 'js/lib-prelude.js', 'js/lib-jquery.js', 'js/lib-angular.js'].forEach(load);
 const only = process.argv[2];
 load('js/data/tk.js');
 fs.readdirSync(path.join(root, 'js/data')).sort().forEach(f => { if (f !== 'tk.js' && (!only || f.includes(only))) load('js/data/' + f); });

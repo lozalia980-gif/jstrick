@@ -249,7 +249,7 @@
   function lintStep(step, raw, topic, prev) {
     if ((step.file || 'js') !== 'js') {
       if (topic.kind !== 'term' || step.file === 'sql') return ''; /* en SQL cada paso es solo una línea de la consulta: no se revisa suelta */
-      var lli = JT.lintLang(step.file, raw, { fragment: true }).filter(function (x) { return x.sev === 'error' && !/^(Falta cerrar|Comillas sin cerrar|Sobra|Cierre equivocado|Falta ";"|Falta ":"|Falta la|Falta sangr|Sangr)/.test(x.title); })[0];
+      var lli = JT.lintLang(step.file, raw, { fragment: true, context: prev }).filter(function (x) { return x.sev === 'error' && !/^(Falta cerrar|Comillas sin cerrar|Sobra|Cierre equivocado|Falta ";"|Falta ":"|Falta la|Falta sangr|Sangr)/.test(x.title); })[0];
       return lli ? '<b>' + esc(lli.title) + '.</b> ' + lli.msg + (lli.fix ? ' <br><b>Mejor así:</b> ' + lli.fix : '') : '';
     }
     var plugins = []; String(prev || '').replace(/\$\.fn\.([\w$]+)/g, function (m, n) { plugins.push(n); }); var li = JT.lint({ files: { js: raw }, kind: 'web', lib: topic.lib, plugins: plugins, noSyntax: true });

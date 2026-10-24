@@ -17,7 +17,8 @@
     { id: 'php', name: 'PHP', color: '#8892bf', icon: 'globe', kind: 'term', lang: 'php', ext: 'php', file: 'index.php', tagline: 'El lenguaje del servidor detrás de millones de sitios', why: 'WordPress y gran parte de la web funcionan con PHP.' },
     { id: 'c', name: 'C', color: '#7f8ea3', icon: 'cube', kind: 'term', lang: 'c', ext: 'c', file: 'main.c', tagline: 'Cómo funciona realmente una computadora', why: 'Te enseña memoria, tipos y control total. Base de sistemas y microcontroladores.' },
     { id: 'cpp', name: 'C++', color: '#d19a66', icon: 'cube', kind: 'term', lang: 'cpp', ext: 'cpp', file: 'main.cpp', tagline: 'Potencia y rendimiento: videojuegos y software de alto nivel', why: 'C con clases, plantillas y una biblioteca estándar enorme.' },
-    { id: 'csharp', name: 'C#', color: '#98c379', icon: 'layers', kind: 'term', lang: 'cs', ext: 'cs', file: 'Program.cs', tagline: 'Apps de escritorio, web y videojuegos con Unity', why: 'Un lenguaje moderno y ordenado del ecosistema .NET.' }
+    { id: 'csharp', name: 'C#', color: '#98c379', icon: 'layers', kind: 'term', lang: 'cs', ext: 'cs', file: 'Program.cs', tagline: 'Apps de escritorio, web y videojuegos con Unity', why: 'Un lenguaje moderno y ordenado del ecosistema .NET.' },
+    { id: 'java', name: 'Java', color: '#e5754f', icon: 'cube', kind: 'term', lang: 'java', ext: 'java', file: 'Main.java', tagline: 'El gigante de las empresas, Android y los sistemas grandes', why: 'Tipado fuerte, orientado a objetos y con un ecosistema enorme: lleva décadas entre los lenguajes más usados.' }
   ];
   JT.soon = [];
   JT.track = function (id) { for (var i = 0; i < JT.tracks.length; i++) if (JT.tracks[i].id === id) return JT.tracks[i]; return null; };
