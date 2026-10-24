@@ -1,4 +1,4 @@
-/* js-trick :: resaltado para Python, SQL, PHP, C, C++, C# y Java (+ enlace con el glosario para los botones "?") */
+/* js-trick :: resaltado para Python, SQL, PHP, C, C++, C#, Java, Go y Rust (+ enlace con el glosario para los botones "?") */
 (function () {
   var JT = window.JT;
   JT.langScan = JT.langScan || {};
@@ -14,6 +14,8 @@
     dart: { kw: set('abstract as assert async await break case catch class const continue covariant default deferred do dynamic else enum export extends extension external factory final finally for get hide if implements import in interface is late library mixin new on operator part required rethrow return set show static super switch sync this throw try typedef var void while with yield'), lit: set('true false null'), line: ['//'], block: true, strings: ['"', "'"], cls: true, types: set('int double String bool num Object dynamic') },
     kt: { kw: set('as break by catch class constructor continue do else enum fun for if import in init interface is object open override package private protected public return sealed super this throw try typealias val var when while data companion lateinit abstract final inner internal out vararg suspend where get set'), lit: set('true false null'), line: ['//'], block: true, strings: ['"', "'"], cls: true, types: set('Int String Boolean Double Float Long Char Unit Any Nothing') },
     swift: { kw: set('associatedtype break case catch class continue default defer deinit do else enum extension fallthrough fileprivate for func guard if import in init inout internal is let nil open operator private protocol public repeat rethrows return self Self static struct subscript super switch throw throws try typealias var where while as mutating override final lazy weak unowned'), lit: set('true false nil'), line: ['//'], block: true, strings: ['"'], cls: true, types: set('Int String Bool Double Float Character Any') },
+    go: { kw: set('break case chan const continue default defer else fallthrough for func go goto if import interface map package range return select struct switch type var'), lit: set('true false nil iota'), line: ['//'], block: true, go: true, strings: ['"', "'"], cls: false, types: set('string int int8 int16 int32 int64 uint uint8 uint16 uint32 uint64 float32 float64 bool byte rune error any') },
+    rust: { kw: set('as async await break const continue crate dyn else enum extern fn for if impl in let loop match mod move mut pub ref return self Self static struct super trait type unsafe use where while'), lit: set('true false'), line: ['//'], block: true, rust: true, strings: ['"', "'"], cls: true, types: set('i8 i16 i32 i64 i128 isize u8 u16 u32 u64 u128 usize f32 f64 bool char str String Vec Option Result Box Rc Arc HashMap HashSet') },
     java: { kw: set('abstract assert boolean break byte case catch char class const continue default do double else enum extends final finally float for goto if implements import instanceof int interface long native new package private protected public return short static strictfp super switch synchronized this throw throws transient try void volatile while var record sealed permits yield'), lit: set('true false null'), line: ['//'], block: true, triple: true, strings: ['"', "'"], cls: true, types: set('String Integer Double Boolean Character Long Object List Map Set ArrayList HashMap HashSet Optional Math System') },
     cs: { kw: set('abstract as base bool break byte case catch char checked class const continue decimal default delegate do double else enum event explicit extern finally fixed float for foreach goto if implicit in int interface internal is lock long namespace new object operator out override params private protected public readonly ref return sbyte sealed short sizeof stackalloc static string struct switch this throw try typeof uint ulong unchecked unsafe ushort using var virtual void volatile while get set value async await record init'), lit: set('true false null'), line: ['//'], block: true, strings: ['"', "'"], cls: true }
   };
@@ -43,6 +45,14 @@
         if (src.substr(i, 2) === '?>') { push('pp', '?>'); i += 2; continue; }
         if (ch === '$' && /[A-Za-z_]/.test(src[i + 1] || '')) { m = /\$[A-Za-z_]\w*/y; m.lastIndex = i; var vm = m.exec(src); push('var', vm[0]); i += vm[0].length; continue; }
       }
+      /* Go: cadenas crudas con acento grave; Rust: caracteres 'a' y lifetimes 'a */
+      if (cfg.go && ch === '`') { var eb = src.indexOf('`', i + 1); eb = eb < 0 ? n : eb + 1; push('s', src.slice(i, eb)); i = eb; continue; }
+      if (cfg.rust && ch === "'") {
+        var rc = /'(?:\\.|[^'\\\n])'/y; rc.lastIndex = i; m = rc.exec(src);
+        if (m) { push('s', m[0]); i += m[0].length; continue; }
+        var rl = /'[A-Za-z_]\w*/y; rl.lastIndex = i; m = rl.exec(src);
+        if (m) { push('k', m[0]); i += m[0].length; continue; }
+      }
       /* cadenas */
       var strRe = cfg.triple ? reStrPy : cfg.php ? reStrPhp : cfg.ci ? reStrSql : reStrC;
       if (ch === '"' || ch === "'" || (cfg.triple && /[fFrRbBuU]/.test(ch) && /["']/.test(src[i + 1] || '')) || (cfg.triple && /[fFrRbBuU]/.test(ch) && /[fFrRbBuU]/.test(src[i + 1] || '') && /["']/.test(src[i + 2] || '')) || (!cfg.triple && !cfg.php && !cfg.ci && /[@$]/.test(ch) && /["@$]/.test(src[i + 1] || ''))) {
@@ -57,7 +67,7 @@
         else if (!prevDot && cfg.lit[w]) type = 'l';
         else {
           var nx = i + w.length; while (src[nx] === ' ') nx++;
-          if (src[nx] === '(' && !cfg.ci) type = 'f';
+          if ((src[nx] === '(' || (cfg.rust && src[nx] === '!' && /[(\[{]/.test(src[nx + 1] || ''))) && !cfg.ci) type = 'f';
           else if (cfg.ci && src[nx] === '(' ) type = 'f';
           else if (prevDot) type = 'p';
           else if (cfg.types && cfg.types[w]) type = 'cls';

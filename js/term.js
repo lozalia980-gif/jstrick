@@ -8,9 +8,9 @@
   var PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/';
   var SQLJS = 'https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/';
   var JUDGE = 'https://ce.judge0.com/submissions?base64_encoded=false&wait=true';
-  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98, tsc: 74, node: 63, kt: 78, swift: 83, java: 62 };
-  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run', java: 'javac Main.java && java Main', tsc: 'npx tsx index.ts', jsx: 'npm run dev', node: 'node index.js', dart: 'flutter run -d chrome', kt: 'kotlinc Main.kt -include-runtime -d main.jar && java -jar main.jar', swift: 'swift main.swift' };
-  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', java: 'Java', tsc: 'TypeScript', jsx: 'React', node: 'Node.js', dart: 'Flutter', kt: 'Kotlin', swift: 'Swift' };
+  var JUDGE_IDS = { py: 100, c: 103, cpp: 105, cs: 51, php: 98, tsc: 74, node: 63, kt: 78, swift: 83, java: 62, go: 107, rust: 108 };
+  var CMD = { py: 'python main.py', sql: 'sqlite3 escuela.db < consulta.sql', php: 'php index.php', c: 'gcc main.c -o main && ./main', cpp: 'g++ main.cpp -o main && ./main', cs: 'dotnet run', java: 'javac Main.java && java Main', tsc: 'npx tsx index.ts', jsx: 'npm run dev', node: 'node index.js', dart: 'flutter run -d chrome', kt: 'kotlinc Main.kt -include-runtime -d main.jar && java -jar main.jar', swift: 'swift main.swift', go: 'go run main.go', rust: 'rustc main.rs && ./main' };
+  var NAMES = { py: 'Python', sql: 'SQL', php: 'PHP', c: 'C', cpp: 'C++', cs: 'C#', java: 'Java', tsc: 'TypeScript', jsx: 'React', node: 'Node.js', dart: 'Flutter', kt: 'Kotlin', swift: 'Swift', go: 'Go', rust: 'Rust' };
 
   function loadScript(src) {
     return new Promise(function (res, rej) {
@@ -91,7 +91,7 @@
         return { ok: false, text: d.stdout || '', error: { type: st === 6 ? 'CompileError' : st === 5 ? 'Timeout' : 'RuntimeError', message: String(raw).trim(), line: lineFromCompile(raw), raw: raw } };
       }, function (e) { clearTimeout(to); throw new Error('No se pudo contactar al servicio de ejecución (' + (e.name === 'AbortError' ? 'tardó demasiado' : 'sin conexión o servicio ocupado') + ').'); });
   };
-  function lineFromCompile(raw) { var m = /(?:main\.\w+|prog\.\w+|Main\.cs|Main\.java|script\.\w+|\.php)[:(](\d+)/.exec(String(raw)) || /line (\d+)/i.exec(String(raw)) || /\((\d+),\d+\)/.exec(String(raw)); return m ? +m[1] : 0; }
+  function lineFromCompile(raw) { var m = /(?:main\.\w+|prog\.\w+|Main\.cs|Main\.java|main\.go|main\.rs|script\.\w+|\.php)[:(](\d+)/.exec(String(raw)) || /line (\d+)/i.exec(String(raw)) || /\((\d+),\d+\)/.exec(String(raw)); return m ? +m[1] : 0; }
 
   /* ---------------- ejecución según el caso ---------------- */
   T.canOnline = function (lang) { return !!JUDGE_IDS[lang]; };
@@ -174,6 +174,26 @@
       if (/should be declared in a file named/.test(msg)) return { title: 'La clase pública debe llamarse como el archivo', msg: esc(first), fix: 'Usa ' + c('public class Main') + ' en el archivo ' + c('Main.java') + '.' };
       if (/ArrayIndexOutOfBounds|StringIndexOutOfBounds/.test(msg)) return { title: 'Índice fuera de rango', msg: esc(first), fix: 'Los índices van de 0 a ' + c('length - 1') + '.' };
       if (/NullPointerException/.test(msg)) return { title: 'NullPointerException', msg: 'Usaste un objeto que vale ' + c('null') + '.', fix: 'Asegúrate de crearlo con ' + c('new') + ' o comprueba ' + c('if (x != null)') + ' antes de usarlo.' };
+    }
+    if (lang === 'go') {
+      if ((m = /declared and not used:? ?(\w+)?/.exec(msg))) return { title: 'Variable declarada y sin usar', msg: 'Go no permite variables que no se usan' + (m[1] ? ': ' + c(m[1]) : '') + '.', fix: 'Úsala (por ejemplo imprímela) o bórrala; si solo quieres ignorar un valor, asígnalo a ' + c('_') + '.' };
+      if ((m = /"([\w\/]+)" imported and not used/.exec(msg))) return { title: 'Import sin usar', msg: 'Importaste ' + c(m[1]) + ' pero el programa no lo usa.', fix: 'Borra esa línea del ' + c('import') + ' o usa el paquete.' };
+      if ((m = /undefined: (\w+)/.exec(msg))) return { title: '"' + m[1] + '" no existe', msg: 'Usas ' + c(m[1]) + ' sin declararla, con otras mayúsculas o sin importar su paquete.', fix: 'Declárala con ' + c(m[1] + ' := valor') + ', revisa las mayúsculas o agrega el ' + c('import') + ' que falte.' };
+      if (/missing return/.test(msg)) return { title: 'Falta un return', msg: 'La función promete devolver un valor pero algún camino termina sin hacerlo.', fix: 'Agrega ' + c('return ...') + ' al final de la función.' };
+      if (/cannot use .* as .* value|mismatched types|invalid operation/.test(msg)) return { title: 'Tipos incompatibles', msg: esc(first), fix: 'Go no convierte tipos solo: usa una conversión explícita como ' + c('float64(x)') + ' o ' + c('strconv.Itoa(n)') + '.' };
+      if (/syntax error/.test(msg)) return { title: 'Error de sintaxis en Go', msg: esc(first), fix: 'Revisa llaves, paréntesis y que cada ' + c('{') + ' quede en la misma línea que su ' + c('if') + '/' + c('for') + '/' + c('func') + '.' };
+      if (/index out of range/.test(msg)) return { title: 'Índice fuera de rango', msg: esc(first), fix: 'Los índices van de 0 a ' + c('len(x)-1') + '.' };
+      if (/nil pointer dereference|assignment to entry in nil map/.test(msg)) return { title: 'Valor nil', msg: esc(first), fix: 'Inicializa el puntero o el mapa antes de usarlo (' + c('make(map[string]int)') + ').' };
+    }
+    if (lang === 'rust') {
+      if (/E0382/.test(msg)) return { title: 'Valor ya movido', msg: 'Usaste una variable cuyo valor ya se entregó a otra (ownership).', fix: 'Pasa una referencia (' + c('&x') + ') o clónalo con ' + c('x.clone()') + ' si necesitas dos copias.' };
+      if (/E0384/.test(msg)) return { title: 'Variable inmutable', msg: 'Las variables de Rust no cambian por defecto.', fix: 'Declárala con ' + c('let mut') + ' si va a cambiar.' };
+      if (/E0502|E0499|E0506/.test(msg)) return { title: 'Conflicto de préstamos', msg: 'Pides prestado el mismo dato de dos formas incompatibles (lectura y escritura a la vez).', fix: 'Termina de usar la primera referencia antes de crear la segunda.' };
+      if (/E0308/.test(msg)) return { title: 'Tipos incompatibles', msg: esc(first), fix: 'Rust no convierte tipos solo: usa ' + c('as') + ', ' + c('.into()') + ' o ' + c('.to_string()') + ' según el caso.' };
+      if ((m = /E0425.*?`(\w+)`/.exec(msg))) return { title: '"' + m[1] + '" no existe', msg: 'Usas ' + c(m[1]) + ' sin declararla o fuera de su alcance.', fix: 'Decláralo con ' + c('let ' + m[1] + ' = ...;') + ' antes de usarla.' };
+      if (/E0599/.test(msg)) return { title: 'Método inexistente', msg: esc(first), fix: 'Ese tipo no tiene ese método: revisa la ortografía o el trait que lo da (' + c('use ...') + ').' };
+      if (/E0106/.test(msg)) return { title: 'Falta indicar un lifetime', msg: 'El compilador no sabe a qué referencia pertenece el resultado.', fix: 'Agrega un lifetime: ' + c("fn f<'a>(x: &'a str) -> &'a str") + '.' };
+      if (/panicked at/.test(msg)) return { title: 'El programa entró en pánico', msg: esc(first), fix: 'Revisa índices, ' + c('unwrap()') + ' sobre ' + c('None') + '/' + c('Err') + ' y divisiones entre cero.' };
     }
     if (lang === 'php') {
       if (/Parse error|syntax error/.test(msg)) return { title: 'Error de sintaxis en PHP', msg: esc(first), fix: 'Casi siempre falta un ' + c(';') + ', unas comillas o un ' + c('$') + ' en una variable.' };

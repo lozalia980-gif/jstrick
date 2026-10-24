@@ -1,6 +1,6 @@
 # js-trick
 
-Plataforma interactiva para aprender a programar practicando: **HTML, CSS, JavaScript (guías 8 a 12: JSON, AJAX, jQuery y Angular), Python, SQL, PHP, C, C++, C# y Java**. Cada ejemplo se explica pieza por pieza y termina con un ejercicio guiado. Está hecha con HTML, CSS y JavaScript puros, sin cuentas ni instalación.
+Plataforma interactiva para aprender a programar practicando: **HTML, CSS, JavaScript (guías 8 a 12: JSON, AJAX, jQuery y Angular), Python, SQL, PHP, C, C++, C#, Java, Go y Rust**. Cada ejemplo se explica pieza por pieza y termina con un ejercicio guiado. Está hecha con HTML, CSS y JavaScript puros, sin cuentas ni instalación.
 
 - `index.html`: **landing page** con efectos 3D ligeros (se pausan fuera de pantalla y respetan *reducir movimiento*) y un botón al panel.
 - `app.html`: el **entorno** (panel de usuario con nivel, XP, racha, logros y reto diario; catálogo de lenguajes; ejemplos, ejercicios y retos).
@@ -28,13 +28,15 @@ y entra a `http://localhost:5173`.
 | TypeScript y Node.js | Básico + intermedio + avanzado | Salida esperada; *Ejecutar en línea* opcional; se prueban en VS Code |
 | React | Básico + intermedio + avanzado | Salida descrita; se practica aquí y se prueba con Vite en VS Code |
 | PHP, C, C++, C# y Java | Básico + intermedio + avanzado | Salida esperada; el revisor explica errores de sintaxis; *Ejecutar en línea* opcional (el intermedio y el avanzado de PHP, C++, C# y Java usan sintaxis moderna que el servicio en línea puede no soportar: PHP 8.1, C++17, hilos y C# reciente) |
+| Go | Básico + intermedio + avanzado (concurrencia, genéricos, iteradores) | Salida esperada; el revisor explica errores de sintaxis; *Ejecutar en línea* opcional (Go 1.23) |
+| Rust | Básico + intermedio + avanzado (lifetimes, hilos, macros) | Salida esperada; el revisor explica errores; *Ejecutar en línea* opcional; se prueba con `cargo run` en VS Code |
 | Flutter | Básico + intermedio + avanzado | Salida descrita (o de consola en las lecciones de Dart); se prueba con `flutter run -d chrome` en VS Code |
 | Kotlin | Básico + Android con Jetpack Compose + avanzado | Básico: salida esperada y *Ejecutar en línea* opcional; avanzado: Kotlin, corrutinas y Flow con salida esperada y Compose en Android Studio |
 | Swift | Básico + iOS con SwiftUI + avanzado | Básico: salida esperada y *Ejecutar en línea* opcional; avanzado: Swift y concurrencia con salida esperada y SwiftUI en Xcode (requiere Mac) |
 
-*Ejecutar en línea* pide permiso y usa el servicio público ce.judge0.com. Los cursos de Java, TypeScript, React, Node.js, Flutter, Kotlin y Swift empiezan con una guía para instalar todo en tu computadora.
+*Ejecutar en línea* pide permiso y usa el servicio público ce.judge0.com. Los cursos de Java, Go, Rust, TypeScript, React, Node.js, Flutter, Kotlin y Swift empiezan con una guía para instalar todo en tu computadora.
 
-El contenido está en `js/data/` (`tk.js` es el constructor compacto de temas). Salidas verificadas contra ejecución real: Python, SQL, C#, Java, TypeScript (con comprobación de tipos con tsc) y Node.js, en los tres niveles. Los cursos avanzados de HTML y CSS se ejecutan en el sandbox del propio proyecto (`tools/runall.html`). Escritas y revisadas a mano (sin compilador en el entorno de desarrollo): C, C++, PHP, React, Flutter, Kotlin y Swift.
+El contenido está en `js/data/` (`tk.js` es el constructor compacto de temas). Salidas verificadas contra ejecución real: Python, SQL, C#, Java, TypeScript (con comprobación de tipos con tsc), Node.js, Go y Rust, en los tres niveles. Los cursos avanzados de HTML y CSS se ejecutan en el sandbox del propio proyecto (`tools/runall.html`). Escritas y revisadas a mano (sin compilador en el entorno de desarrollo): C, C++, PHP, React, Flutter, Kotlin y Swift.
 
 ## Herramientas para quien edita el contenido
 
@@ -43,7 +45,7 @@ node tools/validate.js
 python tools/checkterm.py
 ```
 
-`validate.js` revisa estructura, soluciones y errores del revisor; `checkterm.py` ejecuta Python, SQL y C# (si hay .NET) y compara con la salida esperada (`--fill archivo.js` rellena los `'@@'` pendientes).
+`validate.js` revisa estructura, soluciones y errores del revisor; `checkterm.py` ejecuta Python, SQL, C#, Java, Go y Rust (si están instalados) y compara con la salida esperada (`--fill archivo.js` rellena los `'@@'` pendientes).
 
 ## Contenido de las guías 8 a 12
 

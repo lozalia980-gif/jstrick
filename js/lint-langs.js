@@ -301,6 +301,59 @@
     return out;
   }
 
+  /* ======================= Go ======================= */
+  var GO_FMT = ['Println', 'Printf', 'Print', 'Sprintf', 'Sprint', 'Sprintln', 'Errorf', 'Fprintf', 'Fprintln', 'Sscanf', 'Sscan'];
+  function lintGo(code, file, o) {
+    var out = [], m = mask(code, 'go');
+    if (!o.fragment) out = out.concat(balance(code, 'go', file));
+    if (!o.fragment && !/^\s*package\s+\w+/m.test(m)) out.push(I('error', file, 1, 'Falta la línea package', 'Todo archivo de Go empieza con ' + q('package main') + ' (el paquete del programa principal).', 'Escribe ' + q('package main') + ' en la primera línea.'));
+    if (!o.fragment && /^\s*package\s+main\b/m.test(m) && !/\bfunc\s+main\s*\(/.test(m)) out.push(I('warn', file, 0, 'No encuentro func main', 'Un programa Go empieza en ' + q('func main() { ... }') + '. Sin ella no hay por dónde arrancar.', 'Agrega ' + q('func main() {') + ' ... ' + q('}') + '.'));
+    if (!o.fragment && /\bfmt\./.test(m) && !/"fmt"/.test(code)) out.push(I('error', file, 1, 'Falta importar fmt', 'Usas ' + q('fmt.') + ' pero no lo importaste.', 'Agrega ' + q('import "fmt"') + ' debajo de ' + q('package main') + '.'));
+    eachLine(m, function (ln, no) {
+      var t = ln.trim();
+      ln.replace(/\bfmt\s*\.\s*(\w+)/g, function (a, mem) {
+        if (GO_FMT.indexOf(mem) >= 0 || /^(Sscan|Scan|Scanln|Scanf|Fprint|Fscan|Append|Appendf|Appendln|Stringer|State|Formatter)\w*$/.test(mem)) return a;
+        var lc = GO_FMT.filter(function (x) { return x.toLowerCase() === mem.toLowerCase(); })[0], near = lc || nearest(mem, GO_FMT, 2);
+        out.push(I('error', file, no, 'fmt.' + mem + ' no existe', 'Go distingue mayúsculas: lo que se exporta de un paquete empieza con mayúscula, y ' + q('fmt.' + mem) + ' no existe.', near ? 'Quizá quisiste escribir ' + q('fmt.' + near) + '.' : 'Las habituales son ' + q('fmt.Println') + ' y ' + q('fmt.Printf') + '.'));
+        return a;
+      });
+      if (/\bfmt\s*\.\s*println\b|\bFmt\s*\./.test(t)) return;
+      if (/^(if|for|switch)\b[^{]*[^=!<>:]=(?!=)[^{=]*\{\s*$/.test(t) && !/:=/.test(t) && !/^for\b.*;/.test(t) && !/^if\b.*;/.test(t)) out.push(I('error', file, no, 'Usaste = dentro de la condición', 'Un solo ' + q('=') + ' asigna; para comparar se usa ' + q('==') + '.', 'Cambia ' + q('=') + ' por ' + q('==') + '.'));
+      if (/^\s*(let|const|var)\s+\w+\s*=/.test(ln) && /^\s*let\b/.test(ln)) out.push(I('error', file, no, 'Go no tiene let', 'Para declarar dentro de una función se usa ' + q('x := valor') + ' o ' + q('var x = valor') + '.', 'Escribe ' + q('x := 5') + '.'));
+      if (/^\s*(def|function)\s+\w+/.test(ln)) out.push(I('error', file, no, 'En Go las funciones se declaran con func', 'Se escribe ' + q('func nombre() { ... }') + '.', 'Cambia ' + q(/^\s*(\w+)/.exec(ln)[1]) + ' por ' + q('func') + '.'));
+      if (/\b(\w+)\+\+\s*[;)]?\s*$/.test(t) === false && /(=|\()\s*\w+(\+\+|--)/.test(t)) out.push(I('error', file, no, 'x++ es una instrucción, no una expresión', 'En Go ' + q('i++') + ' se usa solo, en su propia línea: no devuelve un valor.', 'Escribe ' + q('i++') + ' aparte y usa ' + q('i') + ' después.'));
+      if (/\bwhile\s*[(\w]/.test(t) && /\{\s*$/.test(t)) out.push(I('error', file, no, 'Go no tiene while', 'En Go el único bucle es ' + q('for') + ': ' + q('for cond { ... }') + ' hace lo mismo que un while.', 'Cambia ' + q('while') + ' por ' + q('for') + '.'));
+      if (/\bprintln\s*\(/.test(t) === false && /\b(console\.log|System\.out|print\s*\()/.test(t)) out.push(I('error', file, no, 'Eso no es Go', 'En Go se muestra texto con ' + q('fmt.Println(...)') + '.', 'Usa ' + q('fmt.Println("hola")') + '.'));
+      if (/\bnull\b/.test(t)) out.push(I('error', file, no, 'En Go es nil', 'El valor vacío de punteros, mapas, slices y errores se escribe ' + q('nil') + ', no ' + q('null') + '.', 'Cambia ' + q('null') + ' por ' + q('nil') + '.'));
+      if (/\bfor\s*\(.*\)\s*\{/.test(t) && !/range/.test(t)) out.push(I('warn', file, no, 'El for de Go no lleva paréntesis', 'Se escribe ' + q('for i := 0; i < 5; i++ {') + ', sin paréntesis alrededor.', 'Quita los paréntesis.'));
+    });
+    return out;
+  }
+
+  /* ======================= Rust ======================= */
+  function lintRust(code, file, o) {
+    var out = [], m = mask(code, 'rust');
+    if (!o.fragment) out = out.concat(balance(code, 'rust', file));
+    if (!o.fragment && !/\bfn\s+main\s*\(/.test(m) && /\bprintln!|\blet\b/.test(m) && !/\bmod\b|\btrait\b|\bimpl\b/.test(m)) out.push(I('warn', file, 0, 'No encuentro fn main', 'Un programa Rust empieza en ' + q('fn main() { ... }') + '.', 'Agrega ' + q('fn main() {') + ' ... ' + q('}') + '.'));
+    eachLine(m, function (ln, no) {
+      var t = ln.trim();
+      if (/(^|[^.\w:])(println|print|eprintln|format|vec|panic|assert|assert_eq|writeln|matches|todo|unreachable)\s*\(/.test(t) && !/\bfn\s+(println|print|format|vec)\b/.test(t)) {
+        var mm = /(?:^|[^.\w:])(println|print|eprintln|format|vec|panic|assert|assert_eq|writeln|matches|todo|unreachable)\s*\(/.exec(t);
+        out.push(I('error', file, no, mm[1] + ' lleva ! (es una macro)', q(mm[1]) + ' es una <b>macro</b> de Rust y se escribe con signo de exclamación.', 'Escribe ' + q(mm[1] + '!(...)') + '.'));
+      }
+      if (/\bPrintln\s*\(|\bconsole\.log\b|\bSystem\.out\b|\bfmt\./.test(t)) out.push(I('error', file, no, 'Eso no es Rust', 'En Rust se muestra texto con la macro ' + q('println!("...")') + '.', 'Usa ' + q('println!("hola");') + '.'));
+      if (/^\s*(var|const)\s+\w+\s*=/.test(ln) && /^\s*var\b/.test(ln)) out.push(I('error', file, no, 'Rust no usa var', 'Las variables se declaran con ' + q('let') + ' (y ' + q('let mut') + ' si van a cambiar).', 'Escribe ' + q('let x = 5;') + '.'));
+      if (/^\s*(def|function|func)\s+\w+/.test(ln)) out.push(I('error', file, no, 'En Rust las funciones se declaran con fn', 'Se escribe ' + q('fn nombre() { ... }') + '.', 'Cambia ' + q(/^\s*(\w+)/.exec(ln)[1]) + ' por ' + q('fn') + '.'));
+      if (/\b\w+(\+\+|--)\s*;/.test(t)) out.push(I('error', file, no, 'Rust no tiene ++ ni --', 'No existe ' + q('i++') + '. Se escribe ' + q('i += 1;') + '.', 'Escribe ' + q('i += 1;') + '.'));
+      if (/^(if|while)\b[^{=!<>]*[^=!<>]=(?!=)[^{=]*\{\s*$/.test(t) && !/\blet\b/.test(t)) out.push(I('error', file, no, 'Usaste = dentro de la condición', 'Un solo ' + q('=') + ' asigna; para comparar se usa ' + q('==') + '.', 'Cambia ' + q('=') + ' por ' + q('==') + '.'));
+      if (/^(if|while)\s*\(.*\)\s*\{\s*$/.test(t) && !/\)\s*(&&|\|\|)/.test(t)) out.push(I('info', file, no, 'Los paréntesis de la condición sobran', 'En Rust ' + q('if x > 3 {') + ' no necesita paréntesis alrededor de la condición.', 'Puedes quitarlos.'));
+      if (/\bnull\b|\bNone\b/.test(t) === false && /\bnull\b/.test(t)) return;
+      if (/\bnull\b/.test(t)) out.push(I('error', file, no, 'Rust no tiene null', 'La ausencia de valor se modela con ' + q('Option') + ': ' + q('Some(x)') + ' o ' + q('None') + '.', 'Usa ' + q('None') + '.'));
+      if (/\bString\s+\w+\s*=/.test(t) || /\b(int|float|double|bool)\s+\w+\s*=/.test(t)) out.push(I('error', file, no, 'En Rust el tipo va después del nombre', 'Se escribe ' + q('let nombre: String = ...;') + ' (con ' + q('let') + ' y el tipo tras dos puntos).', 'Escribe ' + q('let x: i32 = 5;') + '.'));
+    });
+    return out;
+  }
+
   /* ======================= PHP ======================= */
   var PHP_FUNCS = 'strlen strtoupper strtolower ucfirst ucwords str_replace str_repeat strpos substr trim count array_push array_pop array_merge array_keys array_values array_sum in_array sort rsort asort ksort implode explode isset empty unset date time rand mt_rand round floor ceil abs sqrt pow max min number_format var_dump print_r json_encode json_decode file_get_contents htmlspecialchars is_numeric is_array is_string intval floatval strval sprintf printf define array_map array_filter usort range arsort asort ksort krsort rsort usort uasort uksort array_slice array_splice array_merge array_unique array_reverse array_search array_flip array_combine array_fill array_column array_chunk array_diff array_intersect array_key_exists array_key_first array_key_last array_pop array_push array_shift array_unshift array_product range compact extract str_contains str_starts_with str_ends_with str_pad str_repeat str_word_count ucwords lcfirst wordwrap nl2br htmlspecialchars html_entity_decode strcmp strcasecmp strncmp strstr stripos strrpos substr_count substr_replace similar_text levenshtein sprintf vsprintf number_format intdiv fmod abs ceil floor round max min sqrt pow pi json_encode json_decode json_last_error_msg date time mktime strtotime checkdate date_default_timezone_set filter_var file_put_contents file_get_contents file fopen fgets fgetcsv fputcsv fclose fwrite feof file_exists is_file is_dir mkdir unlink rename copy basename dirname pathinfo realpath var_dump print_r var_export gettype get_class is_int is_string is_array is_numeric is_null is_bool intval floatval strval boolval settype method_exists property_exists class_exists function_exists spl_autoload_register password_hash password_verify md5 sha1 hash random_int mt_rand rand uniqid usleep sleep microtime memory_get_usage array_is_list iterator_to_array call_user_func call_user_func_array func_get_args'.split(' ');
   function lintPhp(code, file, o) {
@@ -339,6 +392,8 @@
       else if (lang === 'cpp') out = lintC(code, file, opts, 'cpp');
       else if (lang === 'cs') out = lintCs(code, file, opts);
       else if (lang === 'java') out = lintJava(code, file, opts);
+      else if (lang === 'go') out = lintGo(code, file, opts);
+      else if (lang === 'rust') out = lintRust(code, file, opts);
       else if (lang === 'dart' || lang === 'kt' || lang === 'swift') out = opts.fragment ? [] : balance(code, lang, file);
       else if (lang === 'tsc' || lang === 'jsx' || lang === 'node') out = opts.fragment ? [] : JT.checkBrackets(code, lang, 'js');
     } catch (e) { /* un fallo del revisor nunca debe romper la página */ }

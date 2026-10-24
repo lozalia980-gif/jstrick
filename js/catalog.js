@@ -34,6 +34,10 @@
     java:   { ex: 30, xs: 30, q: 24, topics: ['Clases y objetos', 'Colecciones y streams', 'Genéricos y excepciones', 'Concurrencia y NIO.2'], file: 'Main.java', lang: 'java', run: 'Salida esperada + ejecución en línea',
       code: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hola, Java");\n    }\n}', out: 'Hola, Java' },
     csharp: { ex: 30, xs: 30, q: 24, topics: ['Colecciones y LINQ', 'Herencia e interfaces', 'Delegados y eventos', 'Records y pattern matching', 'Async y concurrencia'], file: 'Program.cs', lang: 'cs', run: 'Salida esperada + ejecución en línea',
-      code: 'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hola, C#");\n    }\n}', out: 'Hola, C#' }
+      code: 'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hola, C#");\n    }\n}', out: 'Hola, C#' },
+    go:     { ex: 30, xs: 30, q: 24, topics: ['Fundamentos y slices', 'Structs e interfaces', 'Concurrencia con goroutines', 'Genéricos y context'], file: 'main.go', lang: 'go', run: 'Salida esperada + ejecución en línea',
+      code: 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hola, Go")\n}', out: 'Hola, Go' },
+    rust:   { ex: 30, xs: 30, q: 24, topics: ['Ownership y préstamos', 'Structs, enums y traits', 'Colecciones y errores', 'Lifetimes, genéricos e hilos'], file: 'main.rs', lang: 'rust', run: 'Salida esperada + ejecución en línea',
+      code: 'fn main() {\n    println!("Hola, Rust");\n}', out: 'Hola, Rust' }
   };
 })();

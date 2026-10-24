@@ -18,7 +18,9 @@
     { id: 'c', name: 'C', color: '#7f8ea3', icon: 'cube', kind: 'term', lang: 'c', ext: 'c', file: 'main.c', tagline: 'Cómo funciona realmente una computadora', why: 'Te enseña memoria, tipos y control total. Base de sistemas y microcontroladores.' },
     { id: 'cpp', name: 'C++', color: '#d19a66', icon: 'cube', kind: 'term', lang: 'cpp', ext: 'cpp', file: 'main.cpp', tagline: 'Potencia y rendimiento: videojuegos y software de alto nivel', why: 'C con clases, plantillas y una biblioteca estándar enorme.' },
     { id: 'csharp', name: 'C#', color: '#98c379', icon: 'layers', kind: 'term', lang: 'cs', ext: 'cs', file: 'Program.cs', tagline: 'Apps de escritorio, web y videojuegos con Unity', why: 'Un lenguaje moderno y ordenado del ecosistema .NET.' },
-    { id: 'java', name: 'Java', color: '#e5754f', icon: 'cube', kind: 'term', lang: 'java', ext: 'java', file: 'Main.java', tagline: 'El gigante de las empresas, Android y los sistemas grandes', why: 'Tipado fuerte, orientado a objetos y con un ecosistema enorme: lleva décadas entre los lenguajes más usados.' }
+    { id: 'java', name: 'Java', color: '#e5754f', icon: 'cube', kind: 'term', lang: 'java', ext: 'java', file: 'Main.java', tagline: 'El gigante de las empresas, Android y los sistemas grandes', why: 'Tipado fuerte, orientado a objetos y con un ecosistema enorme: lleva décadas entre los lenguajes más usados.' },
+    { id: 'go', name: 'Go', color: '#56b6c2', icon: 'bolt', kind: 'term', lang: 'go', ext: 'go', file: 'main.go', tagline: 'Simple, rápido y hecho para servidores y concurrencia', why: 'Lo usan Docker, Kubernetes y media nube: se aprende en días y compila a un solo ejecutable.' },
+    { id: 'rust', name: 'Rust', color: '#d19a66', icon: 'cube', kind: 'term', lang: 'rust', ext: 'rs', file: 'main.rs', tagline: 'Velocidad de C sin los fallos de memoria', why: 'El compilador garantiza seguridad de memoria sin recolector de basura: el lenguaje más querido por quienes lo usan.' }
   ];
   JT.soon = [];
   JT.track = function (id) { for (var i = 0; i < JT.tracks.length; i++) if (JT.tracks[i].id === id) return JT.tracks[i]; return null; };

@@ -1,9 +1,11 @@
 """Comprueba que la salida esperada (out) de los ejemplos y ejercicios coincide con la ejecucion real.
 Uso: node tools/validate.js && python tools/checkterm.py
-Python y SQL (sqlite) se ejecutan de verdad; C#, Java, C, C++ y PHP se ejecutan solo si hay compilador instalado."""
+Python y SQL (sqlite) se ejecutan de verdad; C#, Java, Go, Rust, C, C++ y PHP se ejecutan solo si hay compilador instalado."""
 import io, json, os, shutil, subprocess, sys, sqlite3, tempfile
 
 here = os.path.dirname(os.path.abspath(__file__))
+for _p in (os.path.expanduser('~/toolchains/go/bin'), os.path.expanduser('~/.cargo/bin')):
+    if os.path.isdir(_p): os.environ['PATH'] = _p + os.pathsep + os.environ['PATH']
 items = json.load(io.open(os.path.join(here, '.termdump.json'), encoding='utf8'))
 bad = 0
 fill_path = sys.argv[sys.argv.index('--fill') + 1] if '--fill' in sys.argv else None
@@ -106,6 +108,18 @@ def run_native(lang, code):
             c = subprocess.run(['javac', '-encoding', 'utf8', '-Xlint:none', src], capture_output=True, text=True, encoding='utf8')
             if c.returncode: return 'COMPILE ERROR\n' + c.stderr[-1500:]
             r = subprocess.run(['java', '-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-Duser.language=en', '-Duser.country=US', '-cp', d, 'Main'], capture_output=True, text=True, encoding='utf8', timeout=30, cwd=d)
+            return (r.stdout + r.stderr).replace(chr(13), '')
+        if lang == 'go' and shutil.which('go'):
+            src = os.path.join(d, 'main.go'); io.open(src, 'w', encoding='utf8').write(code)
+            r = subprocess.run(['go', 'run', src], capture_output=True, text=True, encoding='utf8', timeout=60, cwd=d)
+            if r.returncode and 'panic' not in r.stderr and '.go:' in r.stderr and not r.stdout: return 'COMPILE ERROR\n' + r.stderr[-1500:]
+            return (r.stdout + r.stderr).replace(chr(13), '')
+        if lang == 'rust' and shutil.which('rustc'):
+            src = os.path.join(d, 'main.rs'); io.open(src, 'w', encoding='utf8').write(code)
+            exe = os.path.join(d, 'main.exe')
+            c = subprocess.run(['rustc', '--edition', '2021', '-A', 'warnings', src, '-o', exe], capture_output=True, text=True, encoding='utf8')
+            if c.returncode: return 'COMPILE ERROR\n' + c.stderr[-1500:]
+            r = subprocess.run([exe], capture_output=True, text=True, encoding='utf8', timeout=30, cwd=d)
             return (r.stdout + r.stderr).replace(chr(13), '')
         if lang == 'php' and shutil.which('php'):
             src = os.path.join(d, 'index.php'); io.open(src, 'w', encoding='utf8').write(code)
