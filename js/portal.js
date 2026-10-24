@@ -45,7 +45,7 @@
     var d = dataFor(t), c = JT.catalog[t.id] || { topics: [], ex: 0, xs: 0, q: 0 }, lang = d.lang;
     var h = '';
     /* 1. presentación */
-    h += '<section class="pt-sec pt-hero"><div class="pt-fx pt-center"><span class="pt-kick">' + icon(t.icon) + ' Curso · 3 niveles</span><h1 class="pt-title">' + esc(t.name) + '</h1><p class="pt-hl">' + esc(d.hero) + '</p><p class="pt-intro">' + esc(d.intro) + '</p>' +
+    h += '<section class="pt-sec pt-hero"><div class="pt-fx pt-center"><span class="pt-logo"><img src="assets/logos/' + t.id + '.svg" alt="Logo de ' + esc(t.name) + '" width="64" height="64"></span><br><span class="pt-kick">' + icon(t.icon) + ' Curso · 3 niveles</span><h1 class="pt-title">' + esc(t.name) + '</h1><p class="pt-hl">' + esc(d.hero) + '</p><p class="pt-intro">' + esc(d.intro) + '</p>' +
       '<div class="pt-stats"><div><b>' + (c.ex || '—') + '</b><span>ejemplos</span></div><div><b>' + (c.xs || '—') + '</b><span>ejercicios guiados</span></div><div><b>' + (c.q || '—') + '</b><span>preguntas de reto</span></div></div></div><a class="pt-scrollhint" href="#pt-learn" aria-label="Bajar"><span></span></a></section>';
     /* 2. qué aprenderás */
     if (c.topics && c.topics.length) h += '<section class="pt-sec" id="pt-learn"><div class="pt-fx"><span class="pt-eye">Qué vas a aprender</span><h2>Un camino, paso a paso</h2><p class="pt-sub">Cada bloque trae ejemplos explicados pieza por pieza y un ejercicio donde el sistema te corrige mientras escribes.</p><div class="pt-topics">' +
